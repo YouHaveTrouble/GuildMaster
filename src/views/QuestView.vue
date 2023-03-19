@@ -283,7 +283,7 @@ import type {Quest} from "@/classes/Quest";
 import type {Guild} from "@/classes/Guild";
 
 export default defineComponent({
-  name: "GuildView",
+  name: "QuestView",
   components: {AdventurerComponent},
   props: {
     guild: {

@@ -3,7 +3,9 @@
   <section class="recruit">
     <h1>Applying to recruit</h1>
     <div class="adventurers">
-
+      <div v-if="currentlyForHire">
+        <adventurer-tile :adventurer="currentlyForHire"/>
+      </div>
     </div>
   </section>
   <section class="collection">
@@ -29,10 +31,13 @@ export default defineComponent({
   components: {AdventurerTile},
   data() {
     return {
+      currentlyForHire: null as Adventurer|null,
       adventurersForHire: [
         new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
         new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3, 1.5),
         new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2, 2),
+        new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2, 2),
+        new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2, 2),
       ] as Array<Adventurer>,
     }
   },
@@ -43,8 +48,34 @@ export default defineComponent({
         return {};
       },
     },
+  },
+  methods: {
+    getRandomAdventurer(): Adventurer|null {
+      if (this.adventurersForHire.length <= 0) return null;
+      const randomId = this.adventurersForHire.length * Math.random() << 0;
+      return this.adventurersForHire[randomId];
+    },
+    getNewAdventurerForHire(): void {
+      const adventurer = this.getRandomAdventurer();
+      if (adventurer === null) {
+        this.currentlyForHire = null;
+        return;
+      }
+
+      if (this.adventurers[adventurer.id] != null) {
+        this.currentlyForHire = null;
+        return;
+      }
+
+      this.currentlyForHire = adventurer;
+
+    }
+  },
+  mounted() {
+    this.currentlyForHire = this.adventurersForHire[0]
   }
-})
+
+});
 </script>
 
 <style lang="scss" scoped>

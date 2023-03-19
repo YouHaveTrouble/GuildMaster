@@ -9,7 +9,10 @@
   <article
       class="select"
       v-else
-      @click="selection = !selection"
+      @click="() => {
+        if (Object.keys(allAdventurers).length <= 0) return;
+        selection = !selection;
+      }"
   >
     <span>+</span>
   </article>

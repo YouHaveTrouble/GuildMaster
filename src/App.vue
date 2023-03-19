@@ -53,12 +53,6 @@ export default defineComponent({
       F: null as null|number,
     },
     adventurers: {
-      "rincewind-diskworld": new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
-      "fran-sword-isekai": new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3, 1.5),
-      "kazuma-konosuba": new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2, 2),
-      "rein-beast-tamer": new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2, 2),
-      "momon-overlord": new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2, 2),
-
     } as { [key: string]: Adventurer },
     quests: {
       F: {
