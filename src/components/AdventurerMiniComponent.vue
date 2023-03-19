@@ -52,7 +52,7 @@ export default defineComponent({
     },
     allAdventurers: {
       type: Object as PropType<{[key: string]: Adventurer}>,
-    }
+    },
   },
   methods: {
     print(a:string) {
@@ -77,6 +77,7 @@ export default defineComponent({
   gap: 0.5rem;
   padding: 0.5rem;
   background-color: rgba(0,0,0, 0.2);
+  z-index: 2;
   .slot {
     width: 5rem;
     height: 5rem;

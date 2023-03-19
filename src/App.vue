@@ -97,7 +97,6 @@ export default defineComponent({
         adventurer.busy = false;
       }
       missive.adventurers = [];
-      console.log(missive.rank, missive.rank.toString(), missive.id)
       delete this.missives[missive.rank.toString() as QuestRank][missive.id];
     },
     getRandomQuest(rank: QuestRank): Quest | null {
@@ -115,7 +114,7 @@ export default defineComponent({
       this.missives[rank][newId] = quest;
     },
     saveGame() {
-      console.debug("Saving game...")
+      console.debug("Saving game...");
       window.localStorage.setItem("savedGame", JSON.stringify({
         guild: this.guild,
         adventurers: this.adventurers,
@@ -126,7 +125,8 @@ export default defineComponent({
        const rawData = window.localStorage.getItem("savedGame");
        if (!rawData) return;
        const saveData = JSON.parse(rawData);
-       this.guild = saveData.guild;
+
+       this.guild = new Guild(saveData.guild.level, saveData.guild.gold);
 
        const adventurers = {} as { [key: string]: Adventurer };
 
