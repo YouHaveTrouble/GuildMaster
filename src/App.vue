@@ -97,6 +97,7 @@ export default defineComponent({
         adventurer.busy = false;
       }
       missive.adventurers = [];
+      console.log(missive.rank, missive.rank.toString(), missive.id)
       delete this.missives[missive.rank.toString() as QuestRank][missive.id];
     },
     getRandomQuest(rank: QuestRank): Quest | null {
@@ -139,13 +140,11 @@ export default defineComponent({
 
        const missives = {} as { [key: string]: { [key: string]: Quest } };
 
-       console.log(saveData.missives)
-
        for (const id in saveData.missives) {
          const missiveRank = {} as { [key: string]: Quest }
          for (const questId in saveData.missives[id]) {
            const data = saveData.missives[id][questId];
-           const quest = new Quest(id, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
+           const quest = new Quest(questId, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
            quest.progressPoints = data.progressPoints;
            if (data.adventurers.length > 0) {
              quest.adventurers.push(this.adventurers[data.adventurers[0].id])
@@ -173,7 +172,6 @@ export default defineComponent({
     setInterval(() => {
       this.updateMissives();
     }, 1000);
-
 
     setInterval(() => {
       const keys = Object.keys(this.missives[QuestRank.F]);
