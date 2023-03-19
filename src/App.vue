@@ -52,6 +52,11 @@ export default defineComponent({
         "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 21, 1, 15),
         "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 25, 1, 19),
       } as { [key: string]: Quest },
+      E: {
+        "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 30, 1, 25),
+        "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 21, 1, 15),
+        "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 25, 1, 19),
+      } as { [key: string]: Quest },
     } as { [key: string]: { [key: string]: Quest } },
     missives: {
       F: {} as { [key: string]: Quest },
@@ -92,6 +97,7 @@ export default defineComponent({
       }
       missive.adventurers = [];
       delete this.missives[missive.rank.toString() as QuestRank][missive.id];
+      this.saveGame();
     },
     getRandomQuest(rank: QuestRank): Quest | null {
       const keys = Object.keys(this.quests[rank]);
@@ -106,9 +112,35 @@ export default defineComponent({
       const newId = Math.random().toString(16).slice(2).toString();
       quest.id = newId;
       this.missives[rank][newId] = quest;
+    },
+    saveGame() {
+      window.localStorage.setItem("savedGame", JSON.stringify({
+        guild: this.guild,
+        adventurers: this.adventurers,
+        missives: this.missives,
+      }));
+    },
+    loadGame() {
+       const rawData = window.localStorage.getItem("savedGame");
+       if (!rawData) return;
+       const saveData = JSON.parse(rawData);
+       this.guild = saveData.guild;
+
+       const adventurers = {} as { [key: string]: Adventurer };
+
+       for (const id in saveData.adventurers) {
+         const data = saveData.adventurers[id];
+         adventurers[data.id] = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel);
+       }
+
+       this.adventurers = adventurers;
+       this.missives = saveData.missives;
     }
   },
   mounted() {
+
+    this.loadGame();
+
     setInterval(() => {
       this.updateMissives();
     }, 1000);
