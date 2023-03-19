@@ -1,5 +1,5 @@
 <template>
-  <div class="guild" v-if="guild.level >= 7">
+  <div class="guild" v-if="guild.level >= 7 && Object.keys(quests.S).length > 0">
     <h1>Rank S Quests</h1>
     <section class="missives">
       <div
@@ -38,7 +38,7 @@
       </div>
     </section>
   </div>
-  <div class="guild" v-if="guild.level >= 6">
+  <div class="guild" v-if="guild.level >= 6 && Object.keys(quests.A).length > 0">
     <h1>Rank A Quests</h1>
     <section class="missives">
       <div
@@ -77,7 +77,7 @@
       </div>
     </section>
   </div>
-  <div class="guild" v-if="guild.level >= 5">
+  <div class="guild" v-if="guild.level >= 5 && Object.keys(quests.B).length > 0">
     <h1>Rank B Quests</h1>
     <section class="missives">
       <div
@@ -116,7 +116,7 @@
       </div>
     </section>
   </div>
-  <div class="guild" v-if="guild.level >= 4">
+  <div class="guild" v-if="guild.level >= 4 && Object.keys(quests.C).length > 0">
     <h1>Rank C Quests</h1>
     <section class="missives">
       <div
@@ -155,7 +155,7 @@
       </div>
     </section>
   </div>
-  <div class="guild" v-if="guild.level >= 3">
+  <div class="guild" v-if="guild.level >= 3 && Object.keys(quests.D).length > 0">
     <h1>Rank D Quests</h1>
     <section class="missives">
       <div
@@ -194,7 +194,7 @@
       </div>
     </section>
   </div>
-  <div class="guild" v-if="guild.level >= 2">
+  <div class="guild" v-if="guild.level >= 2 && Object.keys(quests.E).length > 0">
     <h1>Rank E Quests</h1>
     <section class="missives">
       <div
