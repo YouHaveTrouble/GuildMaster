@@ -6,6 +6,7 @@ import {RouterLink, RouterView} from 'vue-router'</script>
     <nav>
       <RouterLink to="/">Guild</RouterLink>
       <RouterLink to="/quests">Quests</RouterLink>
+      <RouterLink to="/adventurers">Adventurers</RouterLink>
     </nav>
   </header>
 
@@ -52,8 +53,11 @@ export default defineComponent({
       F: null as null|number,
     },
     adventurers: {
-      "1": new Adventurer("1", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
-      "2": new Adventurer("2", "Fran", "/img/adventurers/fran.png", 3, 1.5),
+      "rincewind-diskworld": new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
+      "fran-sword-isekai": new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3, 1.5),
+      "kazuma-konosuba": new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2, 2),
+      "rein-beast-tamer": new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2, 2),
+      "momon-overlord": new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2, 2),
 
     } as { [key: string]: Adventurer },
     quests: {
@@ -316,6 +320,7 @@ nav {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 2rem;
   background-size: 200px;

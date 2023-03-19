@@ -3,6 +3,7 @@
     <section class="title">
       <h1>Guild Master</h1>
       <h3>Adventurer's guild management game</h3>
+      <small>v{{version}}</small>
     </section>
     <section class="coffer">
       <p>Coffer: {{guild.gold}} gold</p>
@@ -25,8 +26,15 @@ import {defineComponent} from "vue";
 import type {PropType} from "vue";
 import type {Guild} from "@/classes/Guild";
 
+import {version} from "../../package.json"
+
 export default defineComponent({
   name: "GuildView",
+  data() {
+    return {
+      version: version,
+    }
+  },
   props: {
     guild: {
       type: Object as PropType<Guild>,
@@ -54,6 +62,11 @@ export default defineComponent({
   h3 {
     margin: 0;
     line-height: 0.9;
+  }
+  small {
+    font-size: 0.9rem;
+    font-weight: bold;
+    line-height: 0.25;
   }
 }
 .coffer {

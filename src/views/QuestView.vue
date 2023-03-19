@@ -280,13 +280,14 @@ import {defineComponent, type PropType} from "vue";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import type {Quest} from "@/classes/Quest";
+import type {Guild} from "@/classes/Guild";
 
 export default defineComponent({
   name: "GuildView",
   components: {AdventurerComponent},
   props: {
     guild: {
-      type: Object,
+      type: Object as PropType<Guild>,
     },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
