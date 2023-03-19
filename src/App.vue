@@ -89,9 +89,9 @@ export default defineComponent({
         "3": new Quest("3", QuestRank.A, "Eater of Worlds", "A giant worm emerged from the ground and appears to be consuming the ground itself.", 100000, 12, 200),
       } as { [key: string]: Quest },
       S: {
-        "1": new Quest("1", QuestRank.S, "The Demon King", "Demon King has awoken and is a threat to whole existence. Heroes needed.", 100000, 12, 200),
-        "2": new Quest("2", QuestRank.S, "Scratchy, Destruction Incarnate", "Scratchy was reborn as a machine of pure destruction and needs to be stopped.", 100000, 12, 210),
-        "3": new Quest("3", QuestRank.S, "Eater of Worlds", "A giant worm emerged from the ground and appears to be consuming the ground itself.", 25000, 12, 200),
+        "1": new Quest("1", QuestRank.S, "The Demon King", "Demon King has awoken and is a threat to whole existence. Heroes needed.", 1000000, 20, 200),
+        "2": new Quest("2", QuestRank.S, "Scratchy, Destruction Incarnate", "Scratchy was reborn as a machine of pure destruction and needs to be stopped.", 1000000, 20, 210),
+        "3": new Quest("3", QuestRank.S, "Jiggly Jungle", "A jungle south began rapidly expanding and experts think arson is our only option.", 1000000, 20, 200),
       } as { [key: string]: Quest },
     } as { [key: string]: { [key: string]: Quest } },
     missives: {
@@ -214,7 +214,7 @@ export default defineComponent({
 
       for (const id in this.lastQuestGot) {
         const lastTime = this.lastQuestGot[getFromString(id as QuestRank)];
-        if (lastTime === null) this.lastQuestGot[getFromString(id as QuestRank)] = now;
+        if (lastTime === null) this.lastQuestGot[getFromString(id as QuestRank)] = 0;
       }
 
       if (Number(now) - Number(this.lastQuestGot.F) >= 12 * 1000) {
