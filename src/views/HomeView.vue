@@ -14,6 +14,9 @@
         <span>({{ guild.displayUpgradeCost }})</span>
       </button>
     </section>
+    <section class="upgrade">
+      <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
+    </section>
   </main>
 </template>
 
@@ -62,6 +65,13 @@ export default defineComponent({
 }
 .upgrade {
   text-align: center;
+  .wipe-save {
+    display: inline-flex;
+    font-weight: bold;
+    margin-block: 1rem;
+    color: #d52121;
+    cursor: pointer;
+  }
   p {
     margin: 0;
     font-size: 1.5rem;

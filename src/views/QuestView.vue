@@ -101,14 +101,14 @@ export default defineComponent({
     quests: {
       type: Object as PropType<{ [key: string]: Quest }>,
       default() {
-        return {}
+        return {};
       },
     },
   },
   data() {
     return {};
   },
-  emits: [ 'finalizeQuest' ],
+  emits: [ 'finalizeQuest', 'wipeSave' ],
 })
 </script>
 

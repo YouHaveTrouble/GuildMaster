@@ -14,6 +14,7 @@ import {RouterLink, RouterView} from 'vue-router'</script>
         :adventurers="adventurers"
         :quests="missives"
         @finalizeQuest="finalizeQuest($event)"
+        @wipeSave="resetSave()"
     />
 </template>
 
@@ -66,7 +67,7 @@ export default defineComponent({
       B: {} as { [key: string]: Quest },
       A: {} as { [key: string]: Quest },
       S: {} as { [key: string]: Quest },
-    },
+    } as { [key: string]: { [key: string]: Quest } },
   }),
   methods: {
     async updateMissives() {
@@ -97,7 +98,6 @@ export default defineComponent({
       }
       missive.adventurers = [];
       delete this.missives[missive.rank.toString() as QuestRank][missive.id];
-      this.saveGame();
     },
     getRandomQuest(rank: QuestRank): Quest | null {
       const keys = Object.keys(this.quests[rank]);
@@ -114,6 +114,7 @@ export default defineComponent({
       this.missives[rank][newId] = quest;
     },
     saveGame() {
+      console.debug("Saving game...")
       window.localStorage.setItem("savedGame", JSON.stringify({
         guild: this.guild,
         adventurers: this.adventurers,
@@ -130,16 +131,44 @@ export default defineComponent({
 
        for (const id in saveData.adventurers) {
          const data = saveData.adventurers[id];
-         adventurers[data.id] = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel);
+         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel);
+         adventurer.busy = data.busy;
+         adventurers[data.id] = adventurer;
+       }
+       this.adventurers = adventurers;
+
+       const missives = {} as { [key: string]: { [key: string]: Quest } };
+
+       console.log(saveData.missives)
+
+       for (const id in saveData.missives) {
+         const missiveRank = {} as { [key: string]: Quest }
+         for (const questId in saveData.missives[id]) {
+           const data = saveData.missives[id][questId];
+           const quest = new Quest(id, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
+           quest.progressPoints = data.progressPoints;
+           if (data.adventurers.length > 0) {
+             quest.adventurers.push(this.adventurers[data.adventurers[0].id])
+           }
+           missiveRank[questId] = quest;
+         }
+         missives[id] = missiveRank;
        }
 
-       this.adventurers = adventurers;
-       this.missives = saveData.missives;
+       this.missives = missives;
+    },
+    resetSave() {
+      if (!confirm("You are about to wipe your save file. Are you sure?")) return;
+      window.localStorage.removeItem("savedGame");
+      window.location.reload();
     }
   },
   mounted() {
-
     this.loadGame();
+
+    setInterval(() => {
+      this.saveGame();
+    }, 30*1000)
 
     setInterval(() => {
       this.updateMissives();
