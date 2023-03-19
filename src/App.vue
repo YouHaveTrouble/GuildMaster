@@ -42,6 +42,15 @@ export default defineComponent({
   },
   data: () => ({
     guild: new Guild(1, 500),
+    lastQuestGot: {
+      S: null as null|number,
+      A: null as null|number,
+      B: null as null|number,
+      C: null as null|number,
+      D: null as null|number,
+      E: null as null|number,
+      F: null as null|number,
+    },
     adventurers: {
       "1": new Adventurer("1", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
       "2": new Adventurer("2", "Fran", "/img/adventurers/fran.png", 3, 1.5),
@@ -52,11 +61,37 @@ export default defineComponent({
         "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 30, 1, 25),
         "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 21, 1, 15),
         "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 25, 1, 19),
+        "4": new Quest("4", QuestRank.F, "Big pile of rubble", "Tavern collapsed. Again. Help clean up the debris.", 27, 1, 10),
       } as { [key: string]: Quest },
       E: {
-        "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 30, 1, 25),
-        "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 21, 1, 15),
-        "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 25, 1, 19),
+        "1": new Quest("1", QuestRank.E, "Gnoblin subjegation", "Kill 3 gnoblins.", 500, 2, 30),
+        "2": new Quest("2", QuestRank.E, "Phantom menace", "Exorcise ghosts out of someone's apartment.", 510, 2, 28),
+        "3": new Quest("3", QuestRank.E, "Scratchy in peril", "Get Scratchy the cat from the tree safe to the ground.", 550, 2, 32),
+      } as { [key: string]: Quest },
+      D: {
+        "1": new Quest("1", QuestRank.D, "Caravan escort", "Escort a merchant caravan.", 2000, 3, 47),
+        "2": new Quest("2", QuestRank.D, "Rare ore", "Obtain laudanium ore for town's blacksmith.", 2200, 3, 54),
+        "3": new Quest("3", QuestRank.D, "Demonic pests!", "Clear the fields from cabbage imps.", 2149, 3, 49),
+      } as { [key: string]: Quest },
+      C: {
+        "1": new Quest("1", QuestRank.C, "Scratchy, the butcher", "Scratchy turned evil and is terrorizing its victims. Put a stop to it!", 7500, 5, 150),
+        "2": new Quest("2", QuestRank.C, "Hobgnoblin subjegation", "Gnoblins evolved and are back for vengance.", 7600, 5, 150),
+        "3": new Quest("3", QuestRank.C, "Holy", "Gnoblins summoned their machine god and it started going haywire on everything around it. Destroy it!", 7777, 5, 49),
+      } as { [key: string]: Quest },
+      B: {
+        "1": new Quest("1", QuestRank.B, "Undead horde", "Due to the spillage of necromancy potion at nearby graveyard we now have an undead army on our doorstep.", 25000, 8, 200),
+        "2": new Quest("2", QuestRank.B, "Runaway prisoner", "During the last prison guard strike a prisoner managed to escape. Bring them back to their cell.", 26000, 8, 210),
+        "3": new Quest("3", QuestRank.B, "The aristocrats", "Royalty wants an escort for one of their carriages.", 25000, 8, 200),
+      } as { [key: string]: Quest },
+      A: {
+        "1": new Quest("1", QuestRank.A, "Ogre king", "Ogres have chosen a new king through democratic vote. They all voted for the strongest ogre.", 100000, 12, 200),
+        "2": new Quest("2", QuestRank.A, "Devilish dungeon", "New dungeon was discovered. It needs to be mapped and explored so lower rank adventurers can enter.", 100000, 12, 210),
+        "3": new Quest("3", QuestRank.A, "Eater of Worlds", "A giant worm emerged from the ground and appears to be consuming the ground itself.", 100000, 12, 200),
+      } as { [key: string]: Quest },
+      S: {
+        "1": new Quest("1", QuestRank.S, "The Demon King", "Demon King has awoken and is a threat to whole existence. Heroes needed.", 100000, 12, 200),
+        "2": new Quest("2", QuestRank.S, "Scratchy, Destruction Incarnate", "Scratchy was reborn as a machine of pure destruction and needs to be stopped.", 100000, 12, 210),
+        "3": new Quest("3", QuestRank.S, "Eater of Worlds", "A giant worm emerged from the ground and appears to be consuming the ground itself.", 25000, 12, 200),
       } as { [key: string]: Quest },
     } as { [key: string]: { [key: string]: Quest } },
     missives: {
@@ -74,7 +109,7 @@ export default defineComponent({
       for (const missiveRank in this.missives) {
         const rank = getFromString(missiveRank as QuestRank);
         for (const missiveId in this.missives[rank.toString() as QuestRank]) {
-          const missive = this.missives.F[missiveId];
+          const missive = this.missives[rank.toString()][missiveId];
           if (missive.adventurers.length <= 0) {
             missive.progressPoints = 0;
             continue;
@@ -119,6 +154,7 @@ export default defineComponent({
         guild: this.guild,
         adventurers: this.adventurers,
         missives: this.missives,
+        lastQuestGot: this.lastQuestGot,
       }));
     },
     loadGame() {
@@ -126,13 +162,15 @@ export default defineComponent({
        if (!rawData) return;
        const saveData = JSON.parse(rawData);
 
+       this.lastQuestGot = saveData.lastQuestGot;
+
        this.guild = new Guild(saveData.guild.level, saveData.guild.gold);
 
        const adventurers = {} as { [key: string]: Adventurer };
 
        for (const id in saveData.adventurers) {
          const data = saveData.adventurers[id];
-         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel);
+         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel, data.level);
          adventurer.busy = data.busy;
          adventurers[data.id] = adventurer;
        }
@@ -171,16 +209,92 @@ export default defineComponent({
 
     setInterval(() => {
       this.updateMissives();
+
+      const now = Number(new Date());
+
+      for (const id in this.lastQuestGot) {
+        const lastTime = this.lastQuestGot[getFromString(id as QuestRank)];
+        if (lastTime === null) this.lastQuestGot[getFromString(id as QuestRank)] = now;
+      }
+
+      if (Number(now) - Number(this.lastQuestGot.F) >= 12 * 1000) {
+        this.lastQuestGot.F = now;
+        const keys = Object.keys(this.missives[QuestRank.F]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.F);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.F);
+        }
+      }
+
+      if (this.guild.level < 2) return;
+      if (Number(now) - Number(this.lastQuestGot.E) >= 20 * 1000) {
+        this.lastQuestGot.E = now;
+        const keys = Object.keys(this.missives[QuestRank.E]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.E);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.E);
+        }
+      }
+
+      if (this.guild.level < 3) return;
+      if (Number(now) - Number(this.lastQuestGot.D) >= 50 * 1000) {
+        this.lastQuestGot.D = now;
+        const keys = Object.keys(this.missives[QuestRank.D]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.D);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.D);
+        }
+      }
+
+      if (this.guild.level < 4) return;
+      if (Number(now) - Number(this.lastQuestGot.C) >= 2 * 60 * 1000) {
+        this.lastQuestGot.C = now;
+        const keys = Object.keys(this.missives[QuestRank.C]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.C);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.C);
+        }
+      }
+
+      if (this.guild.level < 5) return;
+      if (Number(now) - Number(this.lastQuestGot.B) >= 2 * 60 * 1000) {
+        this.lastQuestGot.B = now;
+        const keys = Object.keys(this.missives[QuestRank.B]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.B);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.B);
+        }
+      }
+
+      if (this.guild.level < 6) return;
+      if (Number(now) - Number(this.lastQuestGot.A) >= 5 * 60 * 1000) {
+        this.lastQuestGot.A = now;
+        const keys = Object.keys(this.missives[QuestRank.A]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.A);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.A);
+        }
+      }
+
+      if (this.guild.level < 6) return;
+      if (Number(now) - Number(this.lastQuestGot.S) >= 30 * 60 * 1000) {
+        this.lastQuestGot.S = now;
+        const keys = Object.keys(this.missives[QuestRank.S]);
+        if (keys.length >= 5) return;
+        const quest = this.getRandomQuest(QuestRank.S);
+        if (quest !== null) {
+          this.createMissive(quest, QuestRank.S);
+        }
+      }
+
     }, 1000);
 
-    setInterval(() => {
-      const keys = Object.keys(this.missives[QuestRank.F]);
-      if (keys.length >= 5) return;
-      const quest = this.getRandomQuest(QuestRank.F);
-      if (quest !== null) {
-        this.createMissive(quest, QuestRank.F);
-      }
-    }, 10000);
   }
 })
 </script>

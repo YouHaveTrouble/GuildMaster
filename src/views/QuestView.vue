@@ -1,11 +1,167 @@
 <template>
-  <div class="guild">
-    <h1>Rank F Quests</h1>
+  <div class="guild" v-if="guild.level >= 7">
+    <h1>Rank S Quests</h1>
     <section class="missives">
       <div
           class="missive"
           :class="{done: missive.maxProgress <= missive.progressPoints}"
-          v-for="missive in quests.F"
+          v-for="missive in quests.S"
+          :key="missive.id"
+          @click="() => {
+            if (missive.progressPoints < missive.maxProgress) return;
+            $emit('finalizeQuest', missive)
+          }"
+      >
+        <h2>{{ missive.title }}</h2>
+        <p>{{ missive.text }}</p>
+        <div class="slots">
+          <button class="slot">
+            <AdventurerComponent
+                :adventurer="missive.adventurers[0]"
+                :all-adventurers="adventurers"
+                @hire-adventurer="(id) => {
+                adventurers[id].busy = true;
+                missive.adventurers[0] = adventurers[id];
+              }"
+                @free-adventurer="(id) => {
+                if (missive.progressPoints >= missive.maxProgress) return;
+                adventurers[id].busy = false;
+                missive.adventurers.splice(0, 1);
+                if (missive.adventurers.length <= 0) {
+                  missive.progressPoints = 0;
+                }
+              }"
+            />
+          </button>
+        </div>
+        <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+      </div>
+    </section>
+  </div>
+  <div class="guild" v-if="guild.level >= 6">
+    <h1>Rank A Quests</h1>
+    <section class="missives">
+      <div
+          class="missive"
+          :class="{done: missive.maxProgress <= missive.progressPoints}"
+          v-for="missive in quests.A"
+          :key="missive.id"
+          @click="() => {
+            if (missive.progressPoints < missive.maxProgress) return;
+            $emit('finalizeQuest', missive)
+          }"
+      >
+        <h2>{{ missive.title }}</h2>
+        <p>{{ missive.text }}</p>
+        <div class="slots">
+          <button class="slot">
+            <AdventurerComponent
+                :adventurer="missive.adventurers[0]"
+                :all-adventurers="adventurers"
+                @hire-adventurer="(id) => {
+                adventurers[id].busy = true;
+                missive.adventurers[0] = adventurers[id];
+              }"
+                @free-adventurer="(id) => {
+                if (missive.progressPoints >= missive.maxProgress) return;
+                adventurers[id].busy = false;
+                missive.adventurers.splice(0, 1);
+                if (missive.adventurers.length <= 0) {
+                  missive.progressPoints = 0;
+                }
+              }"
+            />
+          </button>
+        </div>
+        <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+      </div>
+    </section>
+  </div>
+  <div class="guild" v-if="guild.level >= 5">
+    <h1>Rank B Quests</h1>
+    <section class="missives">
+      <div
+          class="missive"
+          :class="{done: missive.maxProgress <= missive.progressPoints}"
+          v-for="missive in quests.B"
+          :key="missive.id"
+          @click="() => {
+            if (missive.progressPoints < missive.maxProgress) return;
+            $emit('finalizeQuest', missive)
+          }"
+      >
+        <h2>{{ missive.title }}</h2>
+        <p>{{ missive.text }}</p>
+        <div class="slots">
+          <button class="slot">
+            <AdventurerComponent
+                :adventurer="missive.adventurers[0]"
+                :all-adventurers="adventurers"
+                @hire-adventurer="(id) => {
+                adventurers[id].busy = true;
+                missive.adventurers[0] = adventurers[id];
+              }"
+                @free-adventurer="(id) => {
+                if (missive.progressPoints >= missive.maxProgress) return;
+                adventurers[id].busy = false;
+                missive.adventurers.splice(0, 1);
+                if (missive.adventurers.length <= 0) {
+                  missive.progressPoints = 0;
+                }
+              }"
+            />
+          </button>
+        </div>
+        <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+      </div>
+    </section>
+  </div>
+  <div class="guild" v-if="guild.level >= 4">
+    <h1>Rank C Quests</h1>
+    <section class="missives">
+      <div
+          class="missive"
+          :class="{done: missive.maxProgress <= missive.progressPoints}"
+          v-for="missive in quests.C"
+          :key="missive.id"
+          @click="() => {
+            if (missive.progressPoints < missive.maxProgress) return;
+            $emit('finalizeQuest', missive)
+          }"
+      >
+        <h2>{{ missive.title }}</h2>
+        <p>{{ missive.text }}</p>
+        <div class="slots">
+          <button class="slot">
+            <AdventurerComponent
+                :adventurer="missive.adventurers[0]"
+                :all-adventurers="adventurers"
+                @hire-adventurer="(id) => {
+                adventurers[id].busy = true;
+                missive.adventurers[0] = adventurers[id];
+              }"
+                @free-adventurer="(id) => {
+                if (missive.progressPoints >= missive.maxProgress) return;
+                adventurers[id].busy = false;
+                missive.adventurers.splice(0, 1);
+                if (missive.adventurers.length <= 0) {
+                  missive.progressPoints = 0;
+                }
+              }"
+            />
+          </button>
+        </div>
+        <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+      </div>
+    </section>
+  </div>
+  <div class="guild" v-if="guild.level >= 3">
+    <h1>Rank D Quests</h1>
+    <section class="missives">
+      <div
+          class="missive"
+          :class="{done: missive.maxProgress <= missive.progressPoints}"
+          v-for="missive in quests.D"
           :key="missive.id"
           @click="() => {
             if (missive.progressPoints < missive.maxProgress) return;
@@ -77,6 +233,46 @@
       </div>
     </section>
   </div>
+  <div class="guild">
+    <h1>Rank F Quests</h1>
+    <section class="missives">
+      <div
+          class="missive"
+          :class="{done: missive.maxProgress <= missive.progressPoints}"
+          v-for="missive in quests.F"
+          :key="missive.id"
+          @click="() => {
+            if (missive.progressPoints < missive.maxProgress) return;
+            $emit('finalizeQuest', missive)
+          }"
+      >
+        <h2>{{ missive.title }}</h2>
+        <p>{{ missive.text }}</p>
+        <div class="slots">
+          <button class="slot">
+            <AdventurerComponent
+                :adventurer="missive.adventurers[0]"
+                :all-adventurers="adventurers"
+                @hire-adventurer="(id) => {
+                adventurers[id].busy = true;
+                missive.adventurers[0] = adventurers[id];
+              }"
+                @free-adventurer="(id) => {
+                if (missive.progressPoints >= missive.maxProgress) return;
+                adventurers[id].busy = false;
+                missive.adventurers.splice(0, 1);
+                if (missive.adventurers.length <= 0) {
+                  missive.progressPoints = 0;
+                }
+              }"
+            />
+          </button>
+        </div>
+        <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+      </div>
+    </section>
+  </div>
+
 </template>
 
 <script lang="ts">
@@ -119,6 +315,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding-bottom: 0.5rem;
 
   h1 {
     font-size: 3rem;

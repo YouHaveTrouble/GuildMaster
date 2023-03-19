@@ -15,7 +15,7 @@ export class Guild {
         if (this.gold < cost) return;
         this.gold -= cost;
         this.level += 1;
-        if (this.level > 7) {
+        if (this.level >= 7) {
             this.displayUpgradeCost = "Max level";
         } else {
             const newCost = this.getUpgradeCost();
@@ -36,5 +36,4 @@ const upgradeCosts = {
     "4": 10000,
     "5": 25000,
     "6": 50000,
-    "7": 100000,
 } as {[index:string]: number}
