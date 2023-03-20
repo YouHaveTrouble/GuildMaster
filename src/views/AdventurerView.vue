@@ -1,11 +1,30 @@
 <template>
 <div class="adventurer-section">
   <section class="recruit">
-    <h1>Applying to recruit</h1>
+    <h1>Applying adventurers</h1>
     <div class="adventurers">
       <div v-if="currentlyForHire">
-        <adventurer-tile :adventurer="currentlyForHire"/>
+        <adventurer-tile class="hire-tile" :adventurer="currentlyForHire"/>
+        <div class="decision">
+          <span
+              title="Hire"
+              @click="hireAdventurer(currentlyForHire)"
+          >
+            ✔
+          </span>
+          <span
+              title="Dismiss"
+              :class="{disabled: Object.keys(adventurers).length <= 0}"
+              @click="dismissAdventurer()"
+          >
+            ✗
+          </span>
+        </div>
       </div>
+      <div v-else>
+        <span>Noone applied as of now. Check back later!</span>
+      </div>
+
     </div>
   </section>
   <section class="collection">
@@ -48,6 +67,12 @@ export default defineComponent({
         return {};
       },
     },
+    lastRecruitTime: {
+      type: Number as PropType<null|number>,
+      default() {
+        return null;
+      }
+    },
   },
   methods: {
     getRandomAdventurer(): Adventurer|null {
@@ -68,12 +93,47 @@ export default defineComponent({
       }
 
       this.currentlyForHire = adventurer;
+      window.localStorage.setItem("currentlyForHire", adventurer.id);
 
+    },
+    hireAdventurer(adventurer: Adventurer): void {
+      this.adventurers[adventurer.id] = adventurer;
+      this.currentlyForHire = null;
+      window.localStorage.removeItem("currentlyForHire");
+      this.$emit("recruitActionTaken", adventurer);
+    },
+    dismissAdventurer() {
+      this.currentlyForHire = null;
+      this.$emit("recruitActionTaken", null);
+      window.localStorage.removeItem("currentlyForHire");
     }
   },
   mounted() {
-    this.currentlyForHire = this.adventurersForHire[0]
-  }
+    if (Object.keys(this.adventurers).length <= 0) {
+      this.currentlyForHire = this.adventurersForHire[0];
+      window.localStorage.setItem("currentlyForHire", this.adventurersForHire[0].id);
+      return;
+    }
+
+    const savedCurrentForHire = window.localStorage.getItem("currentlyForHire");
+    if (savedCurrentForHire !== null) {
+      for (const id in this.adventurersForHire) {
+        const adventurer = this.adventurersForHire[id];
+        if (adventurer.id === savedCurrentForHire) {
+          this.currentlyForHire = adventurer;
+          return;
+        }
+      }
+    }
+
+    const now = Number(new Date());
+
+    if (now - this.lastRecruitTime >= 1000 * 60 * 30 && this.currentlyForHire === null) {
+      this.getNewAdventurerForHire();
+    }
+
+  },
+  emits: ["recruitActionTaken"]
 
 });
 </script>
@@ -123,6 +183,27 @@ export default defineComponent({
         width: 100%;
       }
     }
+  }
+  .decision {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    gap: 1rem;
+    span {
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+      }
+      &.disabled {
+        color: rgba(0,0,0, 0.5)
+      }
+    }
+  }
+  .hire-tile {
+    width: 8rem;
+    height: 8rem;
   }
 
 }

@@ -72,11 +72,13 @@ export default defineComponent({
   bottom: 0;
   left: 50%;
   width: max-content;
+  max-width: 16rem;
   transform: translateX(-50%) translateY(104%);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.5rem;
   background-color: rgba(0,0,0, 0.2);

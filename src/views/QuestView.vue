@@ -301,11 +301,17 @@ export default defineComponent({
         return {};
       },
     },
+    lastRecruitTime: {
+      type: Number as PropType<null|number>,
+      default() {
+        return null;
+      }
+    },
   },
   data() {
     return {};
   },
-  emits: [ 'finalizeQuest', 'wipeSave' ],
+  emits: [ 'finalizeQuest', 'wipeSave', 'recruitActionTaken'],
 })
 </script>
 

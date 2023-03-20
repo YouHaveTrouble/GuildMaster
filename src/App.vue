@@ -14,8 +14,10 @@ import {RouterLink, RouterView} from 'vue-router'</script>
         :guild="guild"
         :adventurers="adventurers"
         :quests="missives"
+        :lastRecruitTime="lastRecruitHandled"
         @finalizeQuest="finalizeQuest($event)"
         @wipeSave="resetSave()"
+        @recruitActionTaken="lastRecruitHandled = Number(new Date())"
     />
 </template>
 
@@ -52,6 +54,7 @@ export default defineComponent({
       E: null as null|number,
       F: null as null|number,
     },
+    lastRecruitHandled: null as null|number,
     adventurers: {
     } as { [key: string]: Adventurer },
     quests: {
@@ -153,6 +156,7 @@ export default defineComponent({
         adventurers: this.adventurers,
         missives: this.missives,
         lastQuestGot: this.lastQuestGot,
+        lastRecruitAction: this.lastRecruitHandled,
       }));
     },
     loadGame() {
@@ -191,6 +195,8 @@ export default defineComponent({
        }
 
        this.missives = missives;
+
+       this.lastRecruitHandled = saveData.lastRecruitAction;
     },
     resetSave() {
       if (!confirm("You are about to wipe your save file. Are you sure?")) return;
