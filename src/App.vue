@@ -1,52 +1,24 @@
 <script setup lang="ts">
-import {RouterLink, RouterView} from 'vue-router'
-</script>
+import {RouterLink, RouterView} from 'vue-router'</script>
 
 <template>
   <header>
     <nav>
-      <RouterLink
-        :to="{
-          name: 'guild',
-          params: {
-            guild: guild,
-          },
-      }"
-      >
-        Guild
-      </RouterLink>
-      <RouterLink
-        :to="{
-          name: 'quests',
-          params: {
-            guild: guild,
-            adventurers: adventurers,
-            quests: missives,
-          },
-        }"
-      >
-        Quests
-      </RouterLink>
-      <RouterLink
-        :to="{
-          name: 'adventurers',
-          params: {
-            guild: guild,
-            adventurers: adventurers,
-            lastRecruitTime: lastRecruitHandled
-          },
-        }"
-      >
-        Adventurers
-      </RouterLink>
+      <RouterLink to="/">Guild</RouterLink>
+      <RouterLink to="/quests">Quests</RouterLink>
+      <RouterLink to="/adventurers">Adventurers</RouterLink>
     </nav>
   </header>
 
-  <RouterView
-      @finalizeQuest="finalizeQuest($event)"
-      @wipeSave="resetSave()"
-      @recruitActionTaken="lastRecruitHandled = Number(new Date())"
-  />
+    <RouterView
+        :guild="guild"
+        :adventurers="adventurers"
+        :quests="missives"
+        :lastRecruitTime="lastRecruitHandled"
+        @finalizeQuest="finalizeQuest($event)"
+        @wipeSave="resetSave()"
+        @recruitActionTaken="lastRecruitHandled = Number(new Date())"
+    />
 </template>
 
 <script lang="ts">
@@ -74,16 +46,17 @@ export default defineComponent({
   data: () => ({
     guild: new Guild(1, 500),
     lastQuestGot: {
-      S: null as null | number,
-      A: null as null | number,
-      B: null as null | number,
-      C: null as null | number,
-      D: null as null | number,
-      E: null as null | number,
-      F: null as null | number,
+      S: null as null|number,
+      A: null as null|number,
+      B: null as null|number,
+      C: null as null|number,
+      D: null as null|number,
+      E: null as null|number,
+      F: null as null|number,
     },
-    lastRecruitHandled: null as null | number,
-    adventurers: {} as { [key: string]: Adventurer },
+    lastRecruitHandled: null as null|number,
+    adventurers: {
+    } as { [key: string]: Adventurer },
     quests: {
       F: {
         "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 30, 1, 25),
@@ -187,43 +160,43 @@ export default defineComponent({
       }));
     },
     loadGame() {
-      const rawData = window.localStorage.getItem("savedGame");
-      if (!rawData) return;
-      const saveData = JSON.parse(rawData);
+       const rawData = window.localStorage.getItem("savedGame");
+       if (!rawData) return;
+       const saveData = JSON.parse(rawData);
 
-      this.lastQuestGot = saveData.lastQuestGot;
+       this.lastQuestGot = saveData.lastQuestGot;
 
-      this.guild = new Guild(saveData.guild.level, saveData.guild.gold);
+       this.guild = new Guild(saveData.guild.level, saveData.guild.gold);
 
-      const adventurers = {} as { [key: string]: Adventurer };
+       const adventurers = {} as { [key: string]: Adventurer };
 
-      for (const id in saveData.adventurers) {
-        const data = saveData.adventurers[id];
-        const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel, data.level);
-        adventurer.busy = data.busy;
-        adventurers[data.id] = adventurer;
-      }
-      this.adventurers = adventurers;
+       for (const id in saveData.adventurers) {
+         const data = saveData.adventurers[id];
+         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel, data.level);
+         adventurer.busy = data.busy;
+         adventurers[data.id] = adventurer;
+       }
+       this.adventurers = adventurers;
 
-      const missives = {} as { [key: string]: { [key: string]: Quest } };
+       const missives = {} as { [key: string]: { [key: string]: Quest } };
 
-      for (const id in saveData.missives) {
-        const missiveRank = {} as { [key: string]: Quest }
-        for (const questId in saveData.missives[id]) {
-          const data = saveData.missives[id][questId];
-          const quest = new Quest(questId, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
-          quest.progressPoints = data.progressPoints;
-          if (data.adventurers.length > 0) {
-            quest.adventurers.push(this.adventurers[data.adventurers[0].id])
-          }
-          missiveRank[questId] = quest;
-        }
-        missives[id] = missiveRank;
-      }
+       for (const id in saveData.missives) {
+         const missiveRank = {} as { [key: string]: Quest }
+         for (const questId in saveData.missives[id]) {
+           const data = saveData.missives[id][questId];
+           const quest = new Quest(questId, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
+           quest.progressPoints = data.progressPoints;
+           if (data.adventurers.length > 0) {
+             quest.adventurers.push(this.adventurers[data.adventurers[0].id])
+           }
+           missiveRank[questId] = quest;
+         }
+         missives[id] = missiveRank;
+       }
 
-      this.missives = missives;
+       this.missives = missives;
 
-      this.lastRecruitHandled = saveData.lastRecruitAction;
+       this.lastRecruitHandled = saveData.lastRecruitAction;
     },
     resetSave() {
       if (!confirm("You are about to wipe your save file. Are you sure?")) return;
@@ -236,7 +209,7 @@ export default defineComponent({
 
     setInterval(() => {
       this.saveGame();
-    }, 30 * 1000)
+    }, 30*1000)
 
     setInterval(() => {
       this.updateMissives();
