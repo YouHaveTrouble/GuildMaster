@@ -103,6 +103,7 @@ export default defineComponent({
       this.$emit("recruitActionTaken", adventurer);
     },
     dismissAdventurer() {
+      if (Object.keys(this.adventurers).length <= 0) return;
       this.currentlyForHire = null;
       this.$emit("recruitActionTaken", null);
       window.localStorage.removeItem("currentlyForHire");
