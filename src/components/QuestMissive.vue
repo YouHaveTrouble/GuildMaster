@@ -25,7 +25,16 @@
         />
       </button>
     </div>
-    <progress :max="missive.maxProgress" :value="missive.progressPoints"></progress>
+    <div class="progressWrap">
+      <span>{{ this.progressPercentage }}</span>
+      <span class="progress"></span>
+
+    </div>
+    <h3>Rewards</h3>
+    <div class="rewards">
+      <span>Gold: <b>{{missive.goldReward}}</b></span>
+      <span>Exp: <b>{{missive.expReward}}</b></span>
+    </div>
   </article>
 </template>
 
@@ -46,6 +55,29 @@ export default defineComponent({
       type: Object as PropType<{[key: string]: Adventurer}>,
     },
   },
+  data() {
+    return {
+      progressPercentage: "0%",
+    }
+  },
+  methods: {
+    updateProgress() {
+      if (this.missive === undefined) return;
+      const progress = (this.missive.progressPoints / this.missive.maxProgress * 100).toFixed(2);
+      this.progressPercentage = `${progress}%`;
+    }
+  },
+  mounted() {
+    this.updateProgress();
+  },
+  watch: {
+    missive: {
+      handler() {
+        this.updateProgress();
+      },
+      deep: true,
+    }
+  }
 });
 </script>
 
@@ -57,6 +89,43 @@ export default defineComponent({
   padding: 0.5rem;
   position: relative;
   background-color: rgba(255, 255, 255, 0.2);
+  h2 {
+    font-size: 1.5rem;
+
+  }
+  h3 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .progressWrap {
+    width: 80%;
+    border: 1px solid #000;
+    margin: 0.5rem auto;
+    position: relative;
+    .progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      display: block;
+      width: v-bind(progressPercentage);
+      background-color: rgba(0, 128, 0, 0.75);
+      transition: width 250ms linear;
+      z-index: -1;
+    }
+  }
+
+
+
+  .rewards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
 
   &.done {
     cursor: pointer;

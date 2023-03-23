@@ -24,4 +24,8 @@ export class Quest {
         this.adventurers = [];
     }
 
+    getPercentProgress(): number {
+        return Math.round(this.progressPoints / this.maxProgress * 100);
+    }
+
 }

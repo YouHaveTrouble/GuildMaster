@@ -79,7 +79,7 @@ export default defineComponent({
   bottom: 0;
   left: 50%;
   width: max-content;
-  max-width: 16rem;
+  max-width: 17rem;
   transform: translateX(-50%) translateY(104%);
   display: flex;
   flex-direction: row;
@@ -90,6 +90,9 @@ export default defineComponent({
   padding: 0.5rem;
   background-color: rgba(0,0,0, 0.2);
   z-index: 2;
+  cursor: default;
+  max-height: 12rem;
+  overflow-y: auto;
   .slot {
     width: 5rem;
     height: 5rem;

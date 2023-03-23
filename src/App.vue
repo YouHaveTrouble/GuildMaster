@@ -59,10 +59,10 @@ export default defineComponent({
     } as { [key: string]: Adventurer },
     quests: {
       F: {
-        "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 30, 1, 25),
-        "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 21, 1, 15),
-        "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 25, 1, 19),
-        "4": new Quest("4", QuestRank.F, "Big pile of rubble", "Tavern collapsed. Again. Help clean up the debris.", 27, 1, 10),
+        "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 120, 1, 25),
+        "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 120, 1, 15),
+        "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 120, 1, 19),
+        "4": new Quest("4", QuestRank.F, "Big pile of rubble", "Tavern collapsed. Again. Help clean up the debris.", 120, 1, 10),
       } as { [key: string]: Quest },
       E: {
         "1": new Quest("1", QuestRank.E, "Gnoblin subjegation", "Kill 3 gnoblins.", 500, 2, 30),
@@ -297,7 +297,7 @@ export default defineComponent({
         }
       }
 
-    }, 1000);
+    }, 250);
 
   }
 })
