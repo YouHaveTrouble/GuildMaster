@@ -25,7 +25,18 @@ export class Adventurer {
     }
 
     canLevelUp(): boolean {
-        const requirement = this.level * 3;
-        return this.exp >= requirement;
+        return this.exp >= this.getNextLevelExpRequirement();
     }
+
+    getNextLevelExpRequirement(): number {
+        return this.level * 3;
+    }
+
+    /**
+     * Returns the percentage of exp to the next level
+     */
+    getExpPercentage(): number {
+        return (this.exp / this.getNextLevelExpRequirement()) * 100;
+    }
+
 }
