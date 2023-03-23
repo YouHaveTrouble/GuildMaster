@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { vOnClickOutside } from '@vueuse/components'
+</script>
+
 <template>
   <AdventurerTile
     v-if="adventurer"
@@ -16,7 +20,7 @@
   >
     <span>+</span>
   </article>
-  <div class="selection" v-if="selection">
+  <div class="selection" v-if="selection" v-on-click-outside="closeSelect">
     <button
         class="slot"
         v-for="adventurer in allAdventurers"
@@ -61,6 +65,9 @@ export default defineComponent({
     print(a:string) {
       console.log(a);
     },
+    closeSelect() {
+      this.selection = false;
+    }
   }
 })
 </script>
