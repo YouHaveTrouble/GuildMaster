@@ -68,9 +68,9 @@ export default defineComponent({
       },
     },
     lastRecruitTime: {
-      type: Number as PropType<null|number>,
+      type: Number as PropType<number>,
       default() {
-        return null;
+        return 0;
       }
     },
   },

@@ -186,7 +186,7 @@ export default defineComponent({
 
        this.missives = missives;
 
-       this.lastRecruitHandled = saveData.lastRecruitAction;
+       this.lastRecruitHandled = saveData.lastRecruitAction ?? 0;
     },
     resetSave() {
       if (!confirm("You are about to wipe your save file. Are you sure?")) return;
