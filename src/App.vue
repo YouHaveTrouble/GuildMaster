@@ -27,6 +27,7 @@ import {Adventurer} from "@/classes/Adventurer";
 import {Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
+import {GameData, loadGame, saveGame} from "@/GameData";
 
 export default defineComponent({
   name: "GuildView",
@@ -53,7 +54,7 @@ export default defineComponent({
       D: null as null|number,
       E: null as null|number,
       F: null as null|number,
-    },
+    } as { [key: string]: null|number },
     lastRecruitHandled: null as null|number,
     adventurers: {
     } as { [key: string]: Adventurer },
@@ -149,20 +150,9 @@ export default defineComponent({
       quest.id = newId;
       this.missives[rank][newId] = quest;
     },
-    saveGame() {
-      console.debug("Saving game...");
-      window.localStorage.setItem("savedGame", JSON.stringify({
-        guild: this.guild,
-        adventurers: this.adventurers,
-        missives: this.missives,
-        lastQuestGot: this.lastQuestGot,
-        lastRecruitAction: this.lastRecruitHandled,
-      }));
-    },
     loadGame() {
-       const rawData = window.localStorage.getItem("savedGame");
-       if (!rawData) return;
-       const saveData = JSON.parse(rawData);
+       const saveData = loadGame();
+       if (saveData === null) return;
 
        this.lastQuestGot = saveData.lastQuestGot;
 
@@ -172,7 +162,7 @@ export default defineComponent({
 
        for (const id in saveData.adventurers) {
          const data = saveData.adventurers[id];
-         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.defensePerLevel, data.level);
+         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.level, data.exp);
          adventurer.busy = data.busy;
          adventurers[data.id] = adventurer;
        }
@@ -208,8 +198,15 @@ export default defineComponent({
     this.loadGame();
 
     setInterval(() => {
-      this.saveGame();
-    }, 30*1000)
+      saveGame(new GameData(
+          this.guild,
+          this.adventurers,
+          this.missives,
+          this.lastQuestGot,
+          this.lastRecruitHandled
+          )
+      );
+    }, 10*1000)
 
     setInterval(() => {
       this.updateMissives();
