@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rincewind-diskworld",
+    "name": "Rincewind",
+    "portrait": "/img/adventurers/rincewind.png",
+    "attackPerLevel": 1.7
+  },
+  {
+    "id": "fran-sword-isekai",
+    "name": "Fran",
+    "portrait": "/img/adventurers/fran.png",
+    "attackPerLevel": 2.2
+  },
+  {
+    "id": "kazuma-konosuba",
+    "name": "Kazuma",
+    "portrait": "/img/adventurers/kazuma.png",
+    "attackPerLevel": 1.8
+  },
+  {
+    "id": "rein-beast-tamer",
+    "name": "Rein",
+    "portrait": "/img/adventurers/rein.png",
+    "attackPerLevel": 1.9
+  },
+  {
+    "id": "momon-overlord",
+    "name": "Momon",
+    "portrait": "/img/adventurers/momon.png",
+    "attackPerLevel": 2.1
+  },
+  {
+    "id": "goblin-slayer",
+    "name": "Goblin Slayer",
+    "portrait": "/img/adventurers/goblin-slayer.png",
+    "attackPerLevel": 2
+  }
+]
