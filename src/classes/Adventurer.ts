@@ -5,17 +5,22 @@ export class Adventurer {
     level: number;
     exp: number;
     attackPerLevel: number;
-    defensePerLevel: number;
     busy: boolean;
 
-    constructor(id: string, name: string, portrait: string, attackPerLevel: number, defensePerLevel: number, level: number = 1) {
+    constructor(
+        id: string,
+        name: string,
+        portrait: string,
+        attackPerLevel: number,
+        level: number = 1,
+        exp: number = 0
+    ) {
         this.id = id;
         this.name = name;
         this.portrait = portrait;
         this.attackPerLevel = attackPerLevel;
-        this.defensePerLevel = defensePerLevel;
         this.level = level;
-        this.exp = 0;
+        this.exp = exp;
         this.busy = false;
     }
 

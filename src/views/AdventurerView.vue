@@ -52,11 +52,11 @@ export default defineComponent({
     return {
       currentlyForHire: null as Adventurer|null,
       adventurersForHire: [
-        new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
-        new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3, 1.5),
-        new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2, 2),
-        new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2, 2),
-        new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2, 2),
+        new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2),
+        new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3),
+        new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2),
+        new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2),
+        new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2),
       ] as Array<Adventurer>,
     }
   },
