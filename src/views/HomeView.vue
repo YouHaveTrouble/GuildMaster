@@ -30,7 +30,7 @@ import {version} from "../../package.json"
 
 export default defineComponent({
   name: "GuildView",
-  data() {
+  data: () => {
     return {
       version: version,
     }

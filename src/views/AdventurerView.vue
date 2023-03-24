@@ -48,7 +48,7 @@ import {Adventurer} from "@/classes/Adventurer";
 export default defineComponent({
   name: "RecruitView",
   components: {AdventurerTile},
-  data() {
+  data: () => {
     return {
       currentlyForHire: null as Adventurer|null,
       adventurersForHire: [
