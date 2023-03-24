@@ -10,7 +10,7 @@
     </section>
     <section class="upgrade">
       <p>Guild level: {{ guild.level }}</p>
-      <button :disabled="guild.gold < 1000" @click="guild.upgrade()">
+      <button :disabled="guild.gold < guild.getUpgradeCost()" @click="guild.upgrade()">
         <span>Upgrade guild level</span><br>
         <span>({{ guild.displayUpgradeCost }})</span>
       </button>
