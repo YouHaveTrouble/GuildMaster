@@ -112,7 +112,7 @@ import {defineComponent, type PropType} from "vue";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import type {Quest} from "@/classes/Quest";
-import type {Guild} from "@/classes/Guild";
+import {Guild} from "@/classes/Guild";
 import QuestMissive from "@/components/QuestMissive.vue";
 
 export default defineComponent({
@@ -121,17 +121,20 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
+      default() {
+        return new Guild(1, 0);
+      },
     },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
-        return {};
+        return {} as { [key: string]: Adventurer };
       },
     },
     quests: {
       type: Object as PropType<{ [key: string]: Quest }>,
       default() {
-        return {};
+        return {} as { [key: string]: Quest };
       },
     },
     lastRecruitTime: {
@@ -140,9 +143,6 @@ export default defineComponent({
         return null;
       }
     },
-  },
-  data() {
-    return {};
   },
   emits: [ 'finalizeQuest', 'wipeSave', 'recruitActionTaken'],
 })

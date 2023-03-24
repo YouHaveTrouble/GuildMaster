@@ -14,7 +14,7 @@
           </span>
           <span
               title="Dismiss"
-              :class="{disabled: Object.keys(adventurers).length <= 0}"
+              :class="{disabled: Object.keys(this.adventurers).length <= 0}"
               @click="dismissAdventurer()"
           >
             ✗
@@ -64,7 +64,7 @@ export default defineComponent({
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
-        return {};
+        return {} as { [key: string]: Adventurer };
       },
     },
     lastRecruitTime: {

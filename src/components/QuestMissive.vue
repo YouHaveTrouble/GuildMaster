@@ -50,9 +50,15 @@ export default defineComponent({
   props: {
     missive: {
       type: Object as PropType<Quest>,
+      default() {
+        return {} as Quest;
+      },
     },
     adventurers: {
       type: Object as PropType<{[key: string]: Adventurer}>,
+      default() {
+        return {} as {[key: string]: Adventurer};
+      },
     },
   },
   data() {

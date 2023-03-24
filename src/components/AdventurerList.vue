@@ -23,6 +23,9 @@ export default defineComponent({
   props: {
     adventurers: {
       type: Object as PropType<{[key: string]: Adventurer}>,
+      default() {
+        return {} as {[key: string]: Adventurer};
+      },
     },
   },
 

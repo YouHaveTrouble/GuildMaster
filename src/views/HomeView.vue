@@ -24,7 +24,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
-import type {Guild} from "@/classes/Guild";
+import {Guild} from "@/classes/Guild";
 
 import {version} from "../../package.json"
 
@@ -38,6 +38,7 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
+      default: () => new Guild(1, 0) as Guild,
     },
   }
 });
