@@ -24,10 +24,10 @@ import {RouterLink, RouterView} from 'vue-router'</script>
 <script lang="ts">
 import {defineComponent} from "vue";
 import {Adventurer} from "@/classes/Adventurer";
-import {Quest} from "@/classes/Quest";
+import {getQuestWithRewards, Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
-import {GameData, loadGame, saveGame} from "@/GameData";
+import {GameData, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
 
 export default defineComponent({
   name: "GuildView",
@@ -56,8 +56,7 @@ export default defineComponent({
       F: null as null|number,
     } as { [key: string]: null|number },
     lastRecruitHandled: null as null|number,
-    adventurers: {
-    } as { [key: string]: Adventurer },
+    adventurers: {} as { [key: string]: Adventurer },
     quests: {
       F: {
         "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 120, 1, 25),
@@ -118,7 +117,7 @@ export default defineComponent({
           }
           for (const adventurerId in missive.adventurers) {
             const adventurer = missive.adventurers[adventurerId];
-            const attack = adventurer.attackPerLevel * adventurer.level;
+            const attack = adventurer.getAttack();
             missive.progressPoints = Math.min(missive.progressPoints + attack, missive.maxProgress);
           }
         }
@@ -142,7 +141,7 @@ export default defineComponent({
       const questsForRank = this.quests[rank] as { [key: string]: Quest };
       const randomId = keys.length * Math.random() << 0;
       const randomIdString = keys[randomId] as string;
-      return questsForRank[randomIdString];
+      return getQuestWithRewards(questsForRank[randomIdString]);
     },
     createMissive(questToAdd: Quest, rank: QuestRank) {
       const quest = JSON.parse(JSON.stringify(questToAdd));
@@ -162,9 +161,18 @@ export default defineComponent({
 
        for (const id in saveData.adventurers) {
          const data = saveData.adventurers[id];
-         const adventurer = new Adventurer(data.id, data.name, data.portrait, data.attackPerLevel, data.level, data.exp);
-         adventurer.busy = data.busy;
-         adventurers[data.id] = adventurer;
+         try {
+           const adventurer = new Adventurer(
+               data.id,
+               data.name,
+               data.portrait,
+               data.attackExponent ?? 1.1,
+               data.level ?? 1,
+               data.exp ?? 0
+           );
+           adventurer.busy = data.busy;
+           adventurers[data.id] = adventurer;
+         } catch (e) {}
        }
        this.adventurers = adventurers;
 
@@ -194,8 +202,9 @@ export default defineComponent({
       window.location.reload();
     }
   },
-  mounted() {
+  async mounted() {
     this.loadGame();
+    this.quests = await loadAvailableQuests();
 
     setInterval(() => {
       saveGame(new GameData(

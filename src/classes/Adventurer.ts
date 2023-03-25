@@ -4,21 +4,21 @@ export class Adventurer {
     portrait: string;
     level: number;
     exp: number;
-    attackPerLevel: number;
+    attackExponent: number;
     busy: boolean;
 
     constructor(
         id: string,
         name: string,
         portrait: string,
-        attackPerLevel: number,
+        attackExponent: number,
         level: number = 1,
         exp: number = 0
     ) {
         this.id = id;
         this.name = name;
         this.portrait = portrait;
-        this.attackPerLevel = attackPerLevel;
+        this.attackExponent = attackExponent;
         this.level = level;
         this.exp = exp;
         this.busy = false;
@@ -42,6 +42,14 @@ export class Adventurer {
      */
     getExpPercentage(): number {
         return (this.exp / this.getNextLevelExpRequirement()) * 100;
+    }
+
+    getAttack(): number {
+        return Math.floor(2 * this.level ^ this.attackExponent);
+    }
+
+    getDPS(): number {
+        return this.getAttack() * 4;
     }
 
 }

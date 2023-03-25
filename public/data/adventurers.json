@@ -3,36 +3,36 @@
     "id": "rincewind-diskworld",
     "name": "Rincewind",
     "portrait": "/img/adventurers/rincewind.png",
-    "attackPerLevel": 1.7
+    "attackExponent": 1.09
   },
   {
     "id": "fran-sword-isekai",
     "name": "Fran",
     "portrait": "/img/adventurers/fran.png",
-    "attackPerLevel": 2.2
+    "attackExponent": 1.115
   },
   {
     "id": "kazuma-konosuba",
     "name": "Kazuma",
     "portrait": "/img/adventurers/kazuma.png",
-    "attackPerLevel": 1.8
+    "attackExponent": 1.1
   },
   {
     "id": "rein-beast-tamer",
     "name": "Rein",
     "portrait": "/img/adventurers/rein.png",
-    "attackPerLevel": 1.9
+    "attackExponent": 1.1
   },
   {
     "id": "momon-overlord",
     "name": "Momon",
     "portrait": "/img/adventurers/momon.png",
-    "attackPerLevel": 2.1
+    "attackExponent": 1.11
   },
   {
     "id": "goblin-slayer",
     "name": "Goblin Slayer",
     "portrait": "/img/adventurers/goblin-slayer.png",
-    "attackPerLevel": 2
+    "attackExponent": 1.1
   }
 ]
