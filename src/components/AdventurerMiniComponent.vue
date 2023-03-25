@@ -55,9 +55,9 @@ export default defineComponent({
   },
   props: {
     adventurer: {
-      type: Object as PropType<Adventurer|any>,
+      type: Object as PropType<Adventurer|null|any>,
       default() {
-        return {} as Adventurer;
+        return null as Adventurer|null;
       },
     },
     allAdventurers: {
