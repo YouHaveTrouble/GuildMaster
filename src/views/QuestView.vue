@@ -3,14 +3,11 @@
     <h1>Rank S Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.S"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.S"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -18,14 +15,11 @@
     <h1>Rank A Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.A"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.A"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -33,14 +27,11 @@
     <h1>Rank B Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.B"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.B"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -48,14 +39,11 @@
     <h1>Rank C Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.C"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.C"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -63,14 +51,11 @@
     <h1>Rank D Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.D"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.D"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -78,14 +63,11 @@
     <h1>Rank E Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.E"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.E"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -93,14 +75,11 @@
     <h1>Rank F Quests</h1>
     <section class="missives">
       <QuestMissive
-          v-for="missive in quests.F"
-          :key="missive.id"
+          v-for="(missive, key, index) in quests.F"
+          :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="() => {
-            if (missive.progressPoints < missive.maxProgress) return;
-            $emit('finalizeQuest', missive)
-          }"
+          @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -145,6 +124,12 @@ export default defineComponent({
     },
   },
   emits: [ 'finalizeQuest', 'wipeSave', 'recruitActionTaken'],
+  methods: {
+    finalizeQuest(quest: Quest) {
+      if (quest.progressPoints < quest.maxProgress) return;
+      this.$emit('finalizeQuest', quest)
+    },
+  }
 })
 </script>
 
