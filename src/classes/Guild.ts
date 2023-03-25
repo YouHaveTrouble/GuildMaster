@@ -3,10 +3,13 @@ export class Guild {
     level: number;
     displayUpgradeCost: number|string;
 
+    upgradeCost: number|null = null;
+
     constructor(level: number, gold: number) {
         this.gold = gold;
         this.level = level;
         this.displayUpgradeCost = this.getUpgradeCost() ?? "Max level";
+        this.upgradeCost = this.getUpgradeCost();
     }
 
     upgrade(): void {
@@ -26,6 +29,10 @@ export class Guild {
 
     getUpgradeCost(): number|null {
         return upgradeCosts[this.level] ?? null;
+    }
+
+    isMaxLevel(): boolean {
+        return this.level >= 7;
     }
 }
 

@@ -14,7 +14,7 @@
           </span>
           <span
               title="Dismiss"
-              :class="{disabled: Object.keys(this.adventurers).length <= 0}"
+              :class="{disabled: Object.keys(adventurers).length <= 0}"
               @click="dismissAdventurer()"
           >
             ✗
@@ -96,7 +96,7 @@ export default defineComponent({
       window.localStorage.setItem("currentlyForHire", adventurer.id);
 
     },
-    hireAdventurer(adventurer: Adventurer): void {
+    hireAdventurer(adventurer: Adventurer|any): void {
       this.adventurers[adventurer.id] = adventurer;
       this.currentlyForHire = null;
       window.localStorage.removeItem("currentlyForHire");

@@ -55,7 +55,7 @@
           :key="key"
           :adventurers="adventurers"
           :missive="missive"
-          @click="finalizeQuest(missive)"
+          @click="finalizeQuest((missive))"
       />
     </section>
   </div>
@@ -125,7 +125,8 @@ export default defineComponent({
   },
   emits: [ 'finalizeQuest', 'wipeSave', 'recruitActionTaken'],
   methods: {
-    finalizeQuest(quest: Quest) {
+    // This is a workaround for vue not reporting Quest as Quest in v-for
+    finalizeQuest(quest: any|Quest): void {
       if (quest.progressPoints < quest.maxProgress) return;
       this.$emit('finalizeQuest', quest)
     },

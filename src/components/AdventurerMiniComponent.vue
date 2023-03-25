@@ -48,17 +48,23 @@ export default defineComponent({
   name: "AdventurerMiniComponent",
   components: {AdventurerTile},
   emits: [ "freeAdventurer", "hireAdventurer" ],
-  data() {
+  data: () => {
     return {
       selection: false,
     }
   },
   props: {
     adventurer: {
-      type: Object as PropType<Adventurer>,
+      type: Object as PropType<Adventurer|any>,
+      default() {
+        return {} as Adventurer;
+      },
     },
     allAdventurers: {
       type: Object as PropType<{[key: string]: Adventurer}>,
+      default() {
+        return {} as {[key: string]: Adventurer};
+      },
     },
   },
   methods: {

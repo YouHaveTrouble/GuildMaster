@@ -26,7 +26,7 @@
       </button>
     </div>
     <div class="progressWrap">
-      <span>{{ this.progressPercentage }}</span>
+      <span>{{ progressPercentage }}</span>
       <span class="progress"></span>
 
     </div>
@@ -50,7 +50,7 @@ export default defineComponent({
   components: {AdventurerComponent},
   props: {
     missive: {
-      type: Object as PropType<Quest>,
+      type: Object as PropType<Quest|any>,
       default() {
         return new Quest("0", QuestRank.F, "", "", 1, 0, 0) as Quest;
       },
