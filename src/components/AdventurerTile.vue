@@ -4,7 +4,7 @@
       :title="adventurer.name + (adventurer.busy ? ' (busy)' : '')"
   >
     <img :src="adventurer.portrait" :alt="adventurer.name" draggable="false">
-    <div class="level">{{adventurer.level}}</div>
+    <div class="level" :title="adventurer.isMaxLevel() ? 'Max level' : ''">{{adventurer.level}}<span v-if="adventurer.isMaxLevel()">⇪</span></div>
     <div class="exp"></div>
   </article>
 </template>

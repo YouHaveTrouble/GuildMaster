@@ -31,19 +31,6 @@ import {GameData, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
 
 export default defineComponent({
   name: "GuildView",
-  watch: {
-    adventurers: {
-      deep: true,
-      handler(newAdventurers) {
-        for (const adventurerId in newAdventurers) {
-          const adventurer = newAdventurers[adventurerId] as Adventurer;
-          if (adventurer.canLevelUp()) {
-            adventurer.levelUp();
-          }
-        }
-      }
-    }
-  },
   data: () => ({
     guild: new Guild(1, 500),
     lastQuestGot: {
@@ -129,7 +116,7 @@ export default defineComponent({
       this.guild.gold += missive.goldReward;
       for (const adventurerId in missive.adventurers) {
         const adventurer = missive.adventurers[adventurerId];
-        adventurer.exp += (missive.expReward / missive.adventurers.length);
+        adventurer.addExp(missive.expReward / missive.adventurers.length);
         adventurer.busy = false;
       }
       missive.adventurers = [];

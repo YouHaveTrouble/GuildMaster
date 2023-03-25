@@ -43,7 +43,7 @@
 import type {PropType} from "vue";
 import {defineComponent} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
-import {Adventurer} from "@/classes/Adventurer";
+import type {Adventurer} from "@/classes/Adventurer";
 import { loadAdventurersForHire } from "@/GameData";
 
 export default defineComponent({
@@ -106,7 +106,7 @@ export default defineComponent({
   },
   async mounted() {
 
-    this.adventurersForHire = await loadAdventurersForHire();
+    this.adventurersForHire = await loadAdventurersForHire(Object.keys(this.adventurers));
 
     if (Object.keys(this.adventurers).length <= 0) {
       this.currentlyForHire = this.adventurersForHire[0];

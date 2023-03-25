@@ -5,6 +5,7 @@ export class Adventurer {
     level: number;
     exp: number;
     attackExponent: number;
+    prestige: number;
     busy: boolean;
 
     constructor(
@@ -13,7 +14,8 @@ export class Adventurer {
         portrait: string,
         attackExponent: number,
         level: number = 1,
-        exp: number = 0
+        exp: number = 0,
+        prestige: number = 0
     ) {
         this.id = id;
         this.name = name;
@@ -21,6 +23,7 @@ export class Adventurer {
         this.attackExponent = attackExponent;
         this.level = level;
         this.exp = exp;
+        this.prestige = prestige;
         this.busy = false;
     }
 
@@ -29,8 +32,20 @@ export class Adventurer {
         this.level += 1;
     }
 
+    prestigeUp(): void {
+        this.level = 1;
+        this.exp = 0;
+        this.prestige += 1;
+    }
+
     canLevelUp(): boolean {
+        if (this.level >= this.getMaxLevel()) return false;
         return this.exp >= this.getNextLevelExpRequirement();
+    }
+
+    canPrestigeUp(): boolean {
+        if (this.level < getMaxLevelForPrestige(this.prestige)) return false;
+        return this.prestige < 5
     }
 
     getNextLevelExpRequirement(): number {
@@ -44,12 +59,33 @@ export class Adventurer {
         return (this.exp / this.getNextLevelExpRequirement()) * 100;
     }
 
+    addExp(exp: number): void {
+        if (this.isMaxLevel()) return;
+        this.exp += exp;
+        if (this.canLevelUp()) {
+            this.levelUp();
+        }
+    }
+
     getAttack(): number {
-        return Math.floor(2 * this.level ^ this.attackExponent);
+        const scalingFactor = Math.pow(1.05, this.level - 1);
+        return (2 * scalingFactor) * Math.pow(this.attackExponent, this.level - 1);
     }
 
     getDPS(): number {
         return this.getAttack() * 4;
     }
 
+    getMaxLevel(): number {
+        return getMaxLevelForPrestige(this.prestige);
+    }
+
+    isMaxLevel(): boolean {
+        return this.level >= this.getMaxLevel();
+    }
+
+}
+
+function getMaxLevelForPrestige(prestige: number): number {
+    return 25 + (prestige * 5);
 }

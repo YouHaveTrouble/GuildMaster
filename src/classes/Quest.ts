@@ -40,28 +40,28 @@ export function getQuestWithRewards(quest: Quest) {
 
     switch (quest.rank) {
         case QuestRank.S:
-            // at level 30 adventurers have ~2353 dps, this will take 30 seconds on level 30
-            maxProgress = 70590
+            // at level 30 adventurers have ~6513 dps, this will take 30 seconds on level 30
+            maxProgress = 195390;
             break;
         case QuestRank.A:
-            // at level 25 adventurers have ~1122 dps, this will take 15 seconds on level 25
-            maxProgress = 16800
+            // at level 25 adventurers have ~2051 dps, this will take 15 seconds on level 25
+            maxProgress = 30770;
             break;
         case QuestRank.B:
-            // at level 20 adventurers have ~564 dps, this will take 15 seconds on level 20
-            maxProgress = 8460;
+            // at level 20 adventurers have ~645 dps, this will take 15 seconds on level 20
+            maxProgress = 9690;
             break;
         case QuestRank.C:
-            // at level 15 adventurers have ~256 dps, this will take 15 seconds on level 15
-            maxProgress = 3840;
+            // at level 15 adventurers have ~203 dps, this will take 15 seconds on level 15
+            maxProgress = 3045;
             break;
         case QuestRank.D:
-            // at level 10 adventurers have ~103 dps, this will take 15 seconds on level 10
-            maxProgress = 1545;
+            // at level 10 adventurers have ~64 dps, this will take 15 seconds on level 10
+            maxProgress = 960;
             break;
         case QuestRank.E:
-            // at level 5 adventurers have ~45 dps, this will take 15 seconds on level 5
-            maxProgress = 675;
+            // at level 5 adventurers have ~20 dps, this will take 15 seconds on level 5
+            maxProgress = 300;
             break;
         case QuestRank.F:
             // at level 1 adventurers have ~8 dps, this will take 15 seconds on level 1
@@ -74,7 +74,7 @@ export function getQuestWithRewards(quest: Quest) {
 
     // add some randomness to the rewards
     goldReward = Math.floor(randomNumberBetween(goldReward * 0.95, goldReward * 1.1));
-    expReward = Math.max(1, Math.floor(randomNumberBetween(expReward * 0.95, expReward * 1.1)));
+    expReward = Math.max(1, Math.floor(randomNumberBetween(expReward * 0.95, expReward * 1.2)));
 
     return new Quest(quest.id, quest.rank, quest.title, quest.text, maxProgress, expReward, goldReward);
 }
