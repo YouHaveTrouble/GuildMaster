@@ -39,11 +39,10 @@
 </template>
 
 <script lang="ts">
-import {Quest} from "@/classes/Quest";
+import type {Quest} from "@/classes/Quest";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
-import {QuestRank} from "@/classes/QuestRank";
 
 export default defineComponent({
   name: "QuestMissive",
@@ -52,7 +51,7 @@ export default defineComponent({
     missive: {
       type: Object as PropType<Quest|any>,
       default() {
-        return new Quest("0", QuestRank.F, "", "", 1, 0, 0) as Quest;
+        return {} as Quest;
       },
     },
     adventurers: {
