@@ -109,7 +109,6 @@ export default defineComponent({
 
        const guildUpgrades = {} as { [key: string]: GuildUpgrade };
        if (saveData.guild.adventurerCapacity) {
-         console.log(saveData.guild.adventurerCapacity);
          guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
        }
 

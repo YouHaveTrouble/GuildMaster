@@ -14,8 +14,6 @@ export class Guild {
         this.displayUpgradeCost = this.getUpgradeCost() ?? "Max level";
         this.upgradeCost = this.getUpgradeCost();
 
-        console.log(upgrades)
-
         this.adventurerCapacity = upgrades.adventurerCapacity as AdventurerCapacityUpgrade ?? new AdventurerCapacityUpgrade();
 
     }
