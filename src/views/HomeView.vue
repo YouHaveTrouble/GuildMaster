@@ -10,10 +10,13 @@
     </section>
     <section class="upgrade">
       <p>Guild level: {{ guild.level }}</p>
-      <button :disabled="guild.gold < 1000" @click="guild.upgrade()">
+      <button :disabled="guild.upgradeCost ? guild.gold < guild.upgradeCost : true" @click="guild.upgrade()">
         <span>Upgrade guild level</span><br>
         <span>({{ guild.displayUpgradeCost }})</span>
       </button>
+    </section>
+    <section class="upgrade">
+      <UpgradesList :guild="guild" />
     </section>
     <section class="upgrade">
       <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
@@ -24,13 +27,15 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
-import type {Guild} from "@/classes/Guild";
+import {Guild} from "@/classes/Guild";
 
 import {version} from "../../package.json"
+import UpgradesList from "@/components/UpgradesList.vue";
 
 export default defineComponent({
   name: "GuildView",
-  data() {
+  components: {UpgradesList},
+  data: () => {
     return {
       version: version,
     }
@@ -38,6 +43,7 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
+      default: () => new Guild(1, 0) as Guild,
     },
   }
 });

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { vOnClickOutside } from '@vueuse/components'
+</script>
+
 <template>
   <AdventurerTile
     v-if="adventurer"
@@ -16,7 +20,7 @@
   >
     <span>+</span>
   </article>
-  <div class="selection" v-if="selection">
+  <div class="selection" v-if="selection" v-on-click-outside="closeSelect">
     <button
         class="slot"
         v-for="adventurer in allAdventurers"
@@ -44,23 +48,32 @@ export default defineComponent({
   name: "AdventurerMiniComponent",
   components: {AdventurerTile},
   emits: [ "freeAdventurer", "hireAdventurer" ],
-  data() {
+  data: () => {
     return {
       selection: false,
     }
   },
   props: {
     adventurer: {
-      type: Object as PropType<Adventurer>,
+      type: Object as PropType<Adventurer|null|any>,
+      default() {
+        return null as Adventurer|null;
+      },
     },
     allAdventurers: {
       type: Object as PropType<{[key: string]: Adventurer}>,
+      default() {
+        return {} as {[key: string]: Adventurer};
+      },
     },
   },
   methods: {
     print(a:string) {
       console.log(a);
     },
+    closeSelect() {
+      this.selection = false;
+    }
   }
 })
 </script>
@@ -72,7 +85,7 @@ export default defineComponent({
   bottom: 0;
   left: 50%;
   width: max-content;
-  max-width: 16rem;
+  max-width: 17rem;
   transform: translateX(-50%) translateY(104%);
   display: flex;
   flex-direction: row;
@@ -83,6 +96,9 @@ export default defineComponent({
   padding: 0.5rem;
   background-color: rgba(0,0,0, 0.2);
   z-index: 2;
+  cursor: default;
+  max-height: 12rem;
+  overflow-y: auto;
   .slot {
     width: 5rem;
     height: 5rem;

@@ -9,11 +9,12 @@
           <span
               title="Hire"
               @click="hireAdventurer(currentlyForHire)"
+              :class="{disabled: Object.keys(adventurers).length >= guild.adventurerCapacity.getAdventurerCapacity()}"
           >
             ✔
           </span>
           <span
-              title="Dismiss"
+              :title="Object.keys(adventurers).length > 0 ? 'Dismiss' : ''"
               :class="{disabled: Object.keys(adventurers).length <= 0}"
               @click="dismissAdventurer()"
           >
@@ -28,7 +29,7 @@
     </div>
   </section>
   <section class="collection">
-    <h1>Recruited adventurers</h1>
+    <h1>Recruited adventurers ({{ Object.keys(adventurers).length }} / {{ guild.adventurerCapacity.getAdventurerCapacity() }})</h1>
     <div class="adventurers">
       <div class="adventurer-tile" v-for="adventurer in adventurers" :key="adventurer.id">
         <AdventurerTile class="entry" :adventurer="adventurer" />
@@ -43,34 +44,36 @@
 import type {PropType} from "vue";
 import {defineComponent} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
-import {Adventurer} from "@/classes/Adventurer";
+import type {Adventurer} from "@/classes/Adventurer";
+import { loadAdventurersForHire } from "@/GameData";
+import type {Guild} from "@/classes/Guild";
 
 export default defineComponent({
   name: "RecruitView",
   components: {AdventurerTile},
-  data() {
+  data: () => {
     return {
       currentlyForHire: null as Adventurer|null,
-      adventurersForHire: [
-        new Adventurer("rincewind-diskworld", "Rincewind", "/img/adventurers/rincewind.png", 2, 2),
-        new Adventurer("fran-sword-isekai", "Fran", "/img/adventurers/fran.png", 3, 1.5),
-        new Adventurer("kazuma-konosuba", "Kazuma", "/img/adventurers/kazuma.png", 2, 2),
-        new Adventurer("rein-beast-tamer", "Rein", "/img/adventurers/rein.png", 2, 2),
-        new Adventurer("momon-overlord", "Momon", "/img/adventurers/momon.png", 2, 2),
-      ] as Array<Adventurer>,
+      adventurersForHire: [] as Array<Adventurer>,
     }
   },
   props: {
+    guild: {
+      type: Object as PropType<Guild>,
+      default() {
+        return {} as Guild
+      },
+    },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
-        return {};
+        return {} as { [key: string]: Adventurer };
       },
     },
     lastRecruitTime: {
-      type: Number as PropType<null|number>,
+      type: Number as PropType<number>,
       default() {
-        return null;
+        return 0;
       }
     },
   },
@@ -96,19 +99,24 @@ export default defineComponent({
       window.localStorage.setItem("currentlyForHire", adventurer.id);
 
     },
-    hireAdventurer(adventurer: Adventurer): void {
+    hireAdventurer(adventurer: Adventurer|any): void {
+      if (Object.keys(this.adventurers).length >= this.guild.adventurerCapacity.getAdventurerCapacity()) return;
       this.adventurers[adventurer.id] = adventurer;
       this.currentlyForHire = null;
       window.localStorage.removeItem("currentlyForHire");
       this.$emit("recruitActionTaken", adventurer);
     },
     dismissAdventurer() {
+      if (Object.keys(this.adventurers).length <= 0) return;
       this.currentlyForHire = null;
       this.$emit("recruitActionTaken", null);
       window.localStorage.removeItem("currentlyForHire");
     }
   },
-  mounted() {
+  async mounted() {
+
+    this.adventurersForHire = await loadAdventurersForHire(Object.keys(this.adventurers));
+
     if (Object.keys(this.adventurers).length <= 0) {
       this.currentlyForHire = this.adventurersForHire[0];
       window.localStorage.setItem("currentlyForHire", this.adventurersForHire[0].id);
@@ -197,7 +205,8 @@ export default defineComponent({
         color: #fff;
       }
       &.disabled {
-        color: rgba(0,0,0, 0.5)
+        color: rgba(0,0,0, 0.5);
+        cursor: default;
       }
     }
   }

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, type PropType} from "vue";
 import AdventurerMiniComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 
@@ -22,14 +22,12 @@ export default defineComponent({
   }),
   props: {
     adventurers: {
-      type: Array<Adventurer>
+      type: Object as PropType<{[key: string]: Adventurer}>,
+      default() {
+        return {} as {[key: string]: Adventurer};
+      },
     },
   },
-  methods: {
-    print(a: string) {
-      console.log(a);
-    }
-  }
 
 })
 </script>
