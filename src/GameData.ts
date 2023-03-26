@@ -84,9 +84,6 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
             );
         }
     }
-
-    console.log(quests);
-
     return quests;
 }
 

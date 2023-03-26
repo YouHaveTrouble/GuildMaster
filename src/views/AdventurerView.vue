@@ -9,11 +9,12 @@
           <span
               title="Hire"
               @click="hireAdventurer(currentlyForHire)"
+              :class="{disabled: Object.keys(adventurers).length >= guild.adventurerCapacity.getAdventurerCapacity()}"
           >
             ✔
           </span>
           <span
-              title="Dismiss"
+              :title="Object.keys(adventurers).length > 0 ? 'Dismiss' : ''"
               :class="{disabled: Object.keys(adventurers).length <= 0}"
               @click="dismissAdventurer()"
           >
@@ -28,7 +29,7 @@
     </div>
   </section>
   <section class="collection">
-    <h1>Recruited adventurers</h1>
+    <h1>Recruited adventurers ({{ Object.keys(adventurers).length }} / {{ guild.adventurerCapacity.getAdventurerCapacity() }})</h1>
     <div class="adventurers">
       <div class="adventurer-tile" v-for="adventurer in adventurers" :key="adventurer.id">
         <AdventurerTile class="entry" :adventurer="adventurer" />
@@ -45,6 +46,7 @@ import {defineComponent} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import { loadAdventurersForHire } from "@/GameData";
+import type {Guild} from "@/classes/Guild";
 
 export default defineComponent({
   name: "RecruitView",
@@ -56,6 +58,12 @@ export default defineComponent({
     }
   },
   props: {
+    guild: {
+      type: Object as PropType<Guild>,
+      default() {
+        return {} as Guild
+      },
+    },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
@@ -92,6 +100,7 @@ export default defineComponent({
 
     },
     hireAdventurer(adventurer: Adventurer|any): void {
+      if (Object.keys(this.adventurers).length >= this.guild.adventurerCapacity.getAdventurerCapacity()) return;
       this.adventurers[adventurer.id] = adventurer;
       this.currentlyForHire = null;
       window.localStorage.removeItem("currentlyForHire");
@@ -196,7 +205,8 @@ export default defineComponent({
         color: #fff;
       }
       &.disabled {
-        color: rgba(0,0,0, 0.5)
+        color: rgba(0,0,0, 0.5);
+        cursor: default;
       }
     }
   }

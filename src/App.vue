@@ -9,7 +9,6 @@ import {RouterLink, RouterView} from 'vue-router'</script>
       <RouterLink to="/adventurers">Adventurers</RouterLink>
     </nav>
   </header>
-
     <RouterView
         :guild="guild"
         :adventurers="adventurers"
@@ -28,6 +27,8 @@ import {getQuestWithRewards, Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
 import {GameData, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
+import type {GuildUpgrade} from "@/classes/GuildUpgrade";
+import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
 
 export default defineComponent({
   name: "GuildView",
@@ -44,44 +45,7 @@ export default defineComponent({
     } as { [key: string]: null|number },
     lastRecruitHandled: null as null|number,
     adventurers: {} as { [key: string]: Adventurer },
-    quests: {
-      F: {
-        "1": new Quest("1", QuestRank.F, "Frog Frenzy", "Kill 10 demon frogs.", 120, 1, 25),
-        "2": new Quest("2", QuestRank.F, "Rats!", "Get rid of the rats in someone's basement.", 120, 1, 15),
-        "3": new Quest("3", QuestRank.F, "Herb gethering", "Colect medicinal herbs.", 120, 1, 19),
-        "4": new Quest("4", QuestRank.F, "Big pile of rubble", "Tavern collapsed. Again. Help clean up the debris.", 120, 1, 10),
-      } as { [key: string]: Quest },
-      E: {
-        "1": new Quest("1", QuestRank.E, "Gnoblin subjegation", "Kill 3 gnoblins.", 500, 2, 30),
-        "2": new Quest("2", QuestRank.E, "Phantom menace", "Exorcise ghosts out of someone's apartment.", 510, 2, 28),
-        "3": new Quest("3", QuestRank.E, "Scratchy in peril", "Get Scratchy the cat from the tree safe to the ground.", 550, 2, 32),
-      } as { [key: string]: Quest },
-      D: {
-        "1": new Quest("1", QuestRank.D, "Caravan escort", "Escort a merchant caravan.", 2000, 3, 47),
-        "2": new Quest("2", QuestRank.D, "Rare ore", "Obtain laudanium ore for town's blacksmith.", 2200, 3, 54),
-        "3": new Quest("3", QuestRank.D, "Demonic pests!", "Clear the fields from cabbage imps.", 2149, 3, 49),
-      } as { [key: string]: Quest },
-      C: {
-        "1": new Quest("1", QuestRank.C, "Scratchy, the butcher", "Scratchy turned evil and is terrorizing its victims. Put a stop to it!", 7500, 5, 150),
-        "2": new Quest("2", QuestRank.C, "Hobgnoblin subjegation", "Gnoblins evolved and are back for vengance.", 7600, 5, 150),
-        "3": new Quest("3", QuestRank.C, "Holy", "Gnoblins summoned their machine god and it started going haywire on everything around it. Destroy it!", 7777, 5, 49),
-      } as { [key: string]: Quest },
-      B: {
-        "1": new Quest("1", QuestRank.B, "Undead horde", "Due to the spillage of necromancy potion at nearby graveyard we now have an undead army on our doorstep.", 25000, 8, 200),
-        "2": new Quest("2", QuestRank.B, "Runaway prisoner", "During the last prison guard strike a prisoner managed to escape. Bring them back to their cell.", 26000, 8, 210),
-        "3": new Quest("3", QuestRank.B, "The aristocrats", "Royalty wants an escort for one of their carriages.", 25000, 8, 200),
-      } as { [key: string]: Quest },
-      A: {
-        "1": new Quest("1", QuestRank.A, "Ogre king", "Ogres have chosen a new king through democratic vote. They all voted for the strongest ogre.", 100000, 12, 200),
-        "2": new Quest("2", QuestRank.A, "Devilish dungeon", "New dungeon was discovered. It needs to be mapped and explored so lower rank adventurers can enter.", 100000, 12, 210),
-        "3": new Quest("3", QuestRank.A, "Eater of Worlds", "A giant worm emerged from the ground and appears to be consuming the ground itself.", 100000, 12, 200),
-      } as { [key: string]: Quest },
-      S: {
-        "1": new Quest("1", QuestRank.S, "The Demon King", "Demon King has awoken and is a threat to whole existence. Heroes needed.", 1000000, 20, 200),
-        "2": new Quest("2", QuestRank.S, "Scratchy, Destruction Incarnate", "Scratchy was reborn as a machine of pure destruction and needs to be stopped.", 1000000, 20, 210),
-        "3": new Quest("3", QuestRank.S, "Jiggly Jungle", "A jungle south began rapidly expanding and experts think arson is our only option.", 1000000, 20, 200),
-      } as { [key: string]: Quest },
-    } as { [key: string]: { [key: string]: Quest } },
+    quests: {} as { [key: string]: { [key: string]: Quest } },
     missives: {
       F: {} as { [key: string]: Quest },
       E: {} as { [key: string]: Quest },
@@ -102,6 +66,7 @@ export default defineComponent({
             missive.progressPoints = 0;
             continue;
           }
+          if (missive.progressPoints >= missive.maxProgress) continue;
           for (const adventurerId in missive.adventurers) {
             const adventurer = missive.adventurers[adventurerId];
             const attack = adventurer.getAttack();
@@ -142,7 +107,13 @@ export default defineComponent({
 
        this.lastQuestGot = saveData.lastQuestGot;
 
-       this.guild = new Guild(saveData.guild.level, saveData.guild.gold);
+       const guildUpgrades = {} as { [key: string]: GuildUpgrade };
+       if (saveData.guild.adventurerCapacity) {
+         console.log(saveData.guild.adventurerCapacity);
+         guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
+       }
+
+       this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);
 
        const adventurers = {} as { [key: string]: Adventurer };
 

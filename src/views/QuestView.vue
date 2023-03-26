@@ -145,6 +145,7 @@ export default defineComponent({
 
   h1 {
     font-size: 3rem;
+    text-align: center;
   }
 
   .missives {
