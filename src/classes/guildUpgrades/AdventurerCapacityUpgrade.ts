@@ -14,13 +14,14 @@ export class AdventurerCapacityUpgrade extends GuildUpgrade {
     }
 
     getCostForLevel(level: number): number {
-        return 1500 + ((level - 1) * 1.15 * 1500);
+        const scalingFactor = Math.pow(1.25, level - 1);
+        return Math.floor(1500 * scalingFactor * Math.pow(level, 1.25));
     }
 
     /**
      * Returns the number of adventurers the guild can have
      */
     getAdventurerCapacity(): number {
-        return 2 + this.level ;
+        return 1 + this.level ;
     }
 }

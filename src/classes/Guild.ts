@@ -26,10 +26,12 @@ export class Guild {
         this.level += 1;
         if (this.level >= 7) {
             this.displayUpgradeCost = "Max level";
+            this.upgradeCost = null;
         } else {
             const newCost = this.getUpgradeCost();
             if (newCost === null) return;
             this.displayUpgradeCost = newCost;
+            this.upgradeCost = newCost;
         }
     }
 

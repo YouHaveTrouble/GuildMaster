@@ -16,6 +16,9 @@
       </button>
     </section>
     <section class="upgrade">
+      <UpgradesList :guild="guild" />
+    </section>
+    <section class="upgrade">
       <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
     </section>
   </main>
@@ -27,9 +30,11 @@ import type {PropType} from "vue";
 import {Guild} from "@/classes/Guild";
 
 import {version} from "../../package.json"
+import UpgradesList from "@/components/UpgradesList.vue";
 
 export default defineComponent({
   name: "GuildView",
+  components: {UpgradesList},
   data: () => {
     return {
       version: version,
