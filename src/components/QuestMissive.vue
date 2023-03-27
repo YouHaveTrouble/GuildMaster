@@ -3,6 +3,15 @@
       class="missive"
       :class="{done: missive.maxProgress <= missive.progressPoints}"
   >
+    <div class="parchment">
+      <img src="/img/quests/backgrounds/dirty_paper.png" alt="parchment">
+    </div>
+    <div class="stain" v-if="stain">
+      <img src="/img/quests/overlays/water_stain.png" alt="stain">
+    </div>
+    <div class="drink-stain" v-if="drinkStain.exists">
+      <img src="/img/quests/overlays/drink_stain.png" alt="stain">
+    </div>
     <h2>{{ missive.title }}</h2>
     <p>{{ missive.text }}</p>
     <div class="slots">
@@ -26,9 +35,8 @@
       </button>
     </div>
     <div class="progressWrap">
-      <span>{{ progressPercentage }}</span>
       <span class="progress"></span>
-
+      <span class="percentage">{{ progressPercentage }}</span>
     </div>
     <h3>Rewards</h3>
     <div class="rewards">
@@ -64,6 +72,12 @@ export default defineComponent({
   data: () => {
     return {
       progressPercentage: "0%",
+      stain: false,
+      drinkStain: {
+        exists: false,
+        offsetX: "0%",
+        offsetY: "0%",
+      },
     }
   },
   methods: {
@@ -71,10 +85,19 @@ export default defineComponent({
       if (this.missive === undefined) return;
       const progress = (this.missive.progressPoints / this.missive.maxProgress * 100).toFixed(2);
       this.progressPercentage = `${progress}%`;
-    }
+    },
+    randomNumber(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    },
   },
   mounted() {
     this.updateProgress();
+    this.stain = Math.random() < 0.35;
+    this.drinkStain.exists = Math.random() < 0.15;
+    if (this.drinkStain.exists) {
+      this.drinkStain.offsetX = `${this.randomNumber(-1, 1) * 100}%`;
+      this.drinkStain.offsetY = `${this.randomNumber(-1, 1) * 100}%`;
+    }
   },
   watch: {
     missive: {
@@ -94,10 +117,25 @@ export default defineComponent({
   border: 2px solid #000;
   padding: 0.5rem;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.2);
+
+  .parchment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -5;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
   h2 {
     font-size: 1.5rem;
-
+    line-height: 1;
   }
   h3 {
     font-size: 1.15rem;
@@ -109,6 +147,7 @@ export default defineComponent({
     border: 1px solid #000;
     margin: 0.5rem auto;
     position: relative;
+    height: 1.25rem;
     .progress {
       position: absolute;
       top: 0;
@@ -116,13 +155,20 @@ export default defineComponent({
       height: 100%;
       display: block;
       width: v-bind(progressPercentage);
-      background-color: rgba(0, 128, 0, 0.75);
+      background-color: rgba(0, 128, 0, 0.65);
       transition: width 250ms linear;
-      z-index: -1;
+    }
+    .percentage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
   }
-
-
 
   .rewards {
     display: flex;
@@ -163,6 +209,43 @@ export default defineComponent({
       cursor: pointer;
       border-radius: 0.2rem;
       position: relative;
+    }
+  }
+
+  .stain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    opacity: 1;
+    z-index: -4;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.8);
+    }
+  }
+
+  .drink-stain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.45;
+    z-index: -1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 45%;
+      height: 35%;
+      filter: grayscale(0.8);
+      transform: translate(v-bind("drinkStain.offsetX"), v-bind("drinkStain.offsetY"));
     }
   }
 }
