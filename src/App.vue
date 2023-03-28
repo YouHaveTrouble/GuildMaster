@@ -4,9 +4,10 @@ import {RouterLink, RouterView} from 'vue-router'</script>
 <template>
   <header>
     <nav>
-      <RouterLink to="/">Guild</RouterLink>
-      <RouterLink to="/quests">Quests</RouterLink>
-      <RouterLink to="/adventurers">Adventurers</RouterLink>
+      <RouterLink :to="{name: 'guild'}">Guild</RouterLink>
+      <RouterLink :to="{name: 'quests'}">Quests</RouterLink>
+      <RouterLink :to="{name: 'adventurers'}">Adventurers</RouterLink>
+      <RouterLink :to="{name: 'technical'}"><img class="icon" src="/img/icons/cog.svg" alt="Technical"></RouterLink>
     </nav>
   </header>
     <RouterView
@@ -290,14 +291,23 @@ nav {
   background-blend-mode: darken;
   background-color: rgba(0, 0, 0, 0.65);
 
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    fill: white;
+    filter: invert(1);
+    transform: translateY(0.35rem);
+  }
+
   a {
     font-size: 2rem;
     color: #fff;
+    text-decoration: none;
+    &.router-link-active {
+      text-decoration: underline;
+    }
   }
 
-  &.router-link-exact-active {
-
-  }
 }
 
 </style>
