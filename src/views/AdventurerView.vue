@@ -3,12 +3,12 @@
   <section class="recruit">
     <h1>Applying adventurers</h1>
     <div class="adventurers">
-      <div v-if="currentlyForHire">
-        <adventurer-tile class="hire-tile" :adventurer="currentlyForHire"/>
+      <div v-if="adventurerForHire">
+        <adventurer-tile class="hire-tile" :adventurer="adventurerForHire"/>
         <div class="decision">
           <span
               title="Hire"
-              @click="hireAdventurer(currentlyForHire)"
+              @click="hireAdventurer()"
               :class="{disabled: Object.keys(adventurers).length >= guild.adventurerCapacity.getAdventurerCapacity()}"
           >
             ✔
@@ -45,18 +45,11 @@ import type {PropType} from "vue";
 import {defineComponent} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
 import type {Adventurer} from "@/classes/Adventurer";
-import { loadAdventurersForHire } from "@/GameData";
 import type {Guild} from "@/classes/Guild";
 
 export default defineComponent({
   name: "RecruitView",
   components: {AdventurerTile},
-  data: () => {
-    return {
-      currentlyForHire: null as Adventurer|null,
-      adventurersForHire: [] as Array<Adventurer>,
-    }
-  },
   props: {
     guild: {
       type: Object as PropType<Guild>,
@@ -70,75 +63,24 @@ export default defineComponent({
         return {} as { [key: string]: Adventurer };
       },
     },
-    lastRecruitTime: {
-      type: Number as PropType<number>,
+    adventurerForHire: {
+      type: Object as PropType<Adventurer|null>,
       default() {
-        return 0;
+        return null;
       }
     },
   },
   methods: {
-    getRandomAdventurer(): Adventurer|null {
-      if (this.adventurersForHire.length <= 0) return null;
-      const randomId = this.adventurersForHire.length * Math.random() << 0;
-      return this.adventurersForHire[randomId];
-    },
-    getNewAdventurerForHire(): void {
-      const adventurer = this.getRandomAdventurer();
-      if (adventurer === null) {
-        this.currentlyForHire = null;
-        return;
-      }
-
-      if (this.adventurers[adventurer.id] != null) {
-        this.currentlyForHire = null;
-        return;
-      }
-
-      this.currentlyForHire = adventurer;
-      window.localStorage.setItem("currentlyForHire", adventurer.id);
-
-    },
-    hireAdventurer(adventurer: Adventurer|any): void {
+    hireAdventurer(): void {
       if (Object.keys(this.adventurers).length >= this.guild.adventurerCapacity.getAdventurerCapacity()) return;
-      this.adventurers[adventurer.id] = adventurer;
-      this.currentlyForHire = null;
-      window.localStorage.removeItem("currentlyForHire");
-      this.$emit("recruitActionTaken", adventurer);
+      this.$emit("recruitActionTaken", this.adventurerForHire);
     },
     dismissAdventurer() {
       if (Object.keys(this.adventurers).length <= 0) return;
-      this.currentlyForHire = null;
       this.$emit("recruitActionTaken", null);
-      window.localStorage.removeItem("currentlyForHire");
     }
   },
   async mounted() {
-
-    this.adventurersForHire = await loadAdventurersForHire(Object.keys(this.adventurers));
-
-    if (Object.keys(this.adventurers).length <= 0) {
-      this.currentlyForHire = this.adventurersForHire[0];
-      window.localStorage.setItem("currentlyForHire", this.adventurersForHire[0].id);
-      return;
-    }
-
-    const savedCurrentForHire = window.localStorage.getItem("currentlyForHire");
-    if (savedCurrentForHire !== null) {
-      for (const id in this.adventurersForHire) {
-        const adventurer = this.adventurersForHire[id];
-        if (adventurer.id === savedCurrentForHire) {
-          this.currentlyForHire = adventurer;
-          return;
-        }
-      }
-    }
-
-    const now = Number(new Date());
-
-    if (now - this.lastRecruitTime >= 1000 * 60 * 30 && this.currentlyForHire === null) {
-      this.getNewAdventurerForHire();
-    }
 
   },
   emits: ["recruitActionTaken"]
