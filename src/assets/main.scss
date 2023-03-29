@@ -1,0 +1,52 @@
+
+:root {
+
+}
+
+body {
+    margin: 0;
+    padding: 0 0 10rem;
+    min-height: calc(100vh - 10rem);
+    font-family: 'EB Garamond', serif;
+    overflow-y: scroll;
+    user-select: none;
+    background-size: 25rem;
+    background-color: rgba(87, 50, 20, 0.45);
+    background-image: url("/img/background/panels/wood.png");
+    background-blend-mode: darken;
+    background-repeat: repeat;
+}
+
+#app {
+    width: 100%;
+}
+
+.panel {
+    &.pinned-paper {
+        background-image: url("/img/quests/backgrounds/paper.png");
+        position: relative;
+        filter: drop-shadow(-0.15rem 0.2rem 0.1rem rgba(0, 0, 0, 0.25));
+        .nail {
+            position: absolute;
+            width: 2rem;
+            height: 2rem;
+            filter: drop-shadow(-0.15rem 0.2rem 0.1rem rgba(0, 0, 0, 0.5));
+            &.small {
+                width: 1rem;
+                height: 1rem;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            &.top-left {
+                top: 1rem;
+                left: 1rem;
+            }
+            &.top-right {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+    }
+}
