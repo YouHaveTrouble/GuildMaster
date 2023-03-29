@@ -10,9 +10,11 @@ body {
     font-family: 'EB Garamond', serif;
     overflow-y: scroll;
     user-select: none;
-    background-size: 30%;
-    background: rgba(87, 50, 20, 0.75) url("/img/background/panels/plaster.png") repeat;
+    background-size: 25rem;
+    background-color: rgba(87, 50, 20, 0.45);
+    background-image: url("/img/background/panels/wood.png");
     background-blend-mode: darken;
+    background-repeat: repeat;
 }
 
 #app {
