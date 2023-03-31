@@ -67,18 +67,27 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
     }, {});
 }
 
-export async function loadAdventurersForHire(currentAdventurerIds: Set<string> = new Set()): Promise<Adventurer[]> {
+export async function loadAdventurersForHire(currentAdventurerIds: Array<string> = []): Promise<Array<Adventurer>> {
     const response = await fetch("data/adventurers.json");
-    if (!response.ok) {
+    if (response.status !== 200) {
         console.error("Failed to load adventurers");
         alert("Failed to load adventurers. Please try refreshing the page.");
         return [];
     }
     const adventurerData = await response.json();
-    const adventurers = [];
-    for (const { id, name, portrait, attackExponent, level, exp } of adventurerData) {
-        if (currentAdventurerIds.has(id)) continue;
-        adventurers.push(new Adventurer(id, name, portrait, attackExponent, level, exp));
+
+    const adventurers = [] as Array<Adventurer>;
+    for (const adventurer of adventurerData) {
+        if (currentAdventurerIds.includes(adventurer.id)) continue;
+        adventurers.push(new Adventurer(
+            adventurer.id,
+            adventurer.name,
+            adventurer.portrait,
+            adventurer.attackExponent,
+            adventurer.level,
+            adventurer.exp,
+        ));
     }
+
     return adventurers;
 }
