@@ -1,29 +1,27 @@
 <template>
-    <section class="technical-view">
-        <div class="socials panel pinned-paper">
-            <div class="nail top-left small">
-                <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
-            </div>
-            <div class="nail top-right small">
-                <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
-            </div>
-            <h1>Socials</h1>
-            <div class="links">
-                <a class="link" href="https://discord.gg/j8KK5dGBps">
-                    <img class="icon" src="/img/icons/discord.svg" alt="Discord"/>
-                    Discord
-                </a>
-                <a class="link" href="https://github.com/YouHaveTrouble/GuildMaster">
-                    <img class="icon" src="/img/icons/github.svg" alt="GitHub"/>
-                    GitHub
-                </a>
-            </div>
+  <section class="technical-view">
+    <div class="socials panel pinned-paper">
+      <div class="nail top-left small">
+        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      </div>
+      <div class="nail top-right small">
+        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      </div>
+      <h1>Socials</h1>
+      <div class="links">
+        <a class="link" href="https://discord.gg/j8KK5dGBps">
+          <img class="icon" src="/img/icons/discord.svg" alt="Discord"/>
+          Discord
+        </a>
+        <a class="link" href="https://github.com/YouHaveTrouble/GuildMaster">
+          <img class="icon" src="/img/icons/github.svg" alt="GitHub"/>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <ChangelogComponent/>
 
-        </div>
-
-        <ChangelogComponent/>
-
-    </section>
+  </section>
 </template>
 
 <script lang="ts">
@@ -31,8 +29,8 @@ import {defineComponent} from "vue";
 import ChangelogComponent from "@/components/ChangelogComponent.vue";
 
 export default defineComponent({
-    name: "TechnicalView",
-    components: {ChangelogComponent},
+  name: "TechnicalView",
+  components: {ChangelogComponent},
 
 })
 </script>

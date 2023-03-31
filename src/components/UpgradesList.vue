@@ -1,21 +1,21 @@
 <template>
-<section class="upgrades">
-<h2>Upgrades</h2>
-  <div class="upgrade">
-    <span>Adventurer capacity (level {{ guild.adventurerCapacity.level }})</span>
-    <button
-        v-if="guild.adventurerCapacity.nextLevelCost"
-        :disabled="guild.gold < guild.adventurerCapacity.nextLevelCost"
-        @click="upgradeAdventurerCapacity()"
-    >
-      Upgrade ({{guild.adventurerCapacity.nextLevelCost.toFixed(0)}} gold)
-    </button>
-  </div>
-</section>
+  <section class="upgrades">
+    <h2>Upgrades</h2>
+    <div class="upgrade">
+      <span>Adventurer capacity (level {{ guild.adventurerCapacity.level }})</span>
+      <button
+          v-if="guild.adventurerCapacity.nextLevelCost"
+          :disabled="guild.gold < guild.adventurerCapacity.nextLevelCost"
+          @click="upgradeAdventurerCapacity()"
+      >
+        Upgrade ({{ guild.adventurerCapacity.nextLevelCost.toFixed(0) }} gold)
+      </button>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
-import { Guild } from "@/classes/Guild";
+import {Guild} from "@/classes/Guild";
 import {defineComponent, type PropType} from "vue";
 
 export default defineComponent({
@@ -25,7 +25,8 @@ export default defineComponent({
       type: Object as PropType<Guild>,
       default() {
         return new Guild(1, 0) as Guild;
-      }
+      },
+      required: true,
     }
   },
   methods: {
@@ -47,11 +48,13 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 1rem;
+
   h2 {
     font-size: 1.75rem;
     margin: 2rem 0 0;
     padding: 0;
   }
+
   .upgrade {
     text-align: center;
     font-size: 1.25rem;

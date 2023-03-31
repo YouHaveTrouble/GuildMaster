@@ -1,18 +1,18 @@
 <template>
-    <div class="changelog panel pinned-paper">
-        <div class="nail top-left">
-            <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
-        </div>
-        <div class="nail top-right">
-            <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
-        </div>
-        <h1>Changelog</h1>
-        <div class="changelog-entry" v-for="release in releases">
-            <hr>
-            <h2>Version {{ release.name }}</h2>
-            <pre>{{ release.body }}</pre>
-        </div>
+  <div class="changelog panel pinned-paper">
+    <div class="nail top-left">
+      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
     </div>
+    <div class="nail top-right">
+      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+    </div>
+    <h1>Changelog</h1>
+    <div class="changelog-entry" v-for="release in releases">
+      <hr>
+      <h2>Version {{ release.name }}</h2>
+      <pre>{{ release.body }}</pre>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -20,48 +20,48 @@ import {defineComponent} from "vue";
 
 
 export default defineComponent({
-    name: "ChangelogComponent",
-    data: () => ({
-        releases: [] as Array<any>,
-        lastPage: 1,
-    }),
-    methods: {
-        async getReleases(page: number): Promise<void> {
-            const result = await fetch("https://api.github.com/repos/YouHaveTrouble/GuildMaster/releases?per_page=10")
-                .catch((e) => {
-                    return null;
-                });
+  name: "ChangelogComponent",
+  data: () => ({
+    releases: [] as Array<any>,
+    lastPage: 1,
+  }),
+  methods: {
+    async getReleases(page: number): Promise<void> {
+      const result = await fetch("https://api.github.com/repos/YouHaveTrouble/GuildMaster/releases?per_page=10")
+          .catch((e) => {
+            return null;
+          });
 
-            if (result === null) return;
-            const json = await result.json();
+      if (result === null) return;
+      const json = await result.json();
 
 
-            for (const release of json) {
-                const version = {} as any;
-                version.body = release.body.trim();
-                version.name = release.name;
-                if (release.body.length === 0) continue;
-                this.releases.push(version);
-            }
-        }
-    },
-    async mounted() {
-        this.getReleases(1);
-
+      for (const release of json) {
+        const version = {} as any;
+        version.body = release.body.trim();
+        version.name = release.name;
+        if (release.body.length === 0) continue;
+        this.releases.push(version);
+      }
     }
+  },
+  async mounted() {
+    this.getReleases(1);
+
+  }
 });
 </script>
 
 <style lang="scss" scoped>
 .changelog {
-  padding: 3rem;
+  padding-block: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
   max-width: 45rem;
-    width: 100%;
+  width: 100%;
 
   h1 {
     font-size: 3rem;
@@ -75,10 +75,12 @@ export default defineComponent({
 
     h2 {
       margin: 0;
+      padding-inline: 1rem;
     }
 
     hr {
       border: 0;
+      width: calc(100% - 2rem);
       border-bottom: 1px solid black;
     }
 
@@ -87,6 +89,7 @@ export default defineComponent({
       margin: 0;
       white-space: pre-wrap;
       font-family: 'EB Garamond', serif;
+      padding-inline: 1rem;
     }
   }
 }

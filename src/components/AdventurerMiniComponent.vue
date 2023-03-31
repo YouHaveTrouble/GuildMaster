@@ -65,12 +65,10 @@ export default defineComponent({
       default() {
         return {} as {[key: string]: Adventurer};
       },
+      required: true,
     },
   },
   methods: {
-    print(a:string) {
-      console.log(a);
-    },
     closeSelect() {
       this.selection = false;
     }
