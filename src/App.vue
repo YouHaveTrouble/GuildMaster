@@ -4,21 +4,23 @@ import {RouterLink, RouterView} from 'vue-router'</script>
 <template>
   <header>
     <nav>
-      <RouterLink :to="{name: 'guild'}">Guild</RouterLink>
-      <RouterLink :to="{name: 'quests'}">Quests</RouterLink>
-      <RouterLink :to="{name: 'adventurers'}">Adventurers</RouterLink>
-      <RouterLink :to="{name: 'technical'}"><img class="icon" src="/img/icons/cog.svg" alt="Technical"></RouterLink>
+      <RouterLink :to="{ name: 'guild' }">Guild</RouterLink>
+      <RouterLink :to="{ name: 'quests' }">Quests</RouterLink>
+      <RouterLink :to="{ name: 'adventurers' }">Adventurers</RouterLink>
+      <RouterLink :to="{ name: 'technical' }">
+        <img class="icon" src="/img/icons/cog.svg" alt="Technical">
+      </RouterLink>
     </nav>
   </header>
-    <RouterView
-        :guild="guild"
-        :adventurers="adventurers"
-        :quests="missives"
-        :lastRecruitTime="lastRecruitHandled"
-        @finalizeQuest="finalizeQuest($event)"
-        @wipeSave="resetSave()"
-        @recruitActionTaken="lastRecruitHandled = Number(new Date())"
-    />
+  <RouterView
+    :guild="guild"
+    :adventurers="adventurers"
+    :quests="missives"
+    :lastRecruitTime="lastRecruitHandled"
+    @finalizeQuest="finalizeQuest($event)"
+    @wipeSave="resetSave()"
+    @recruitActionTaken="lastRecruitHandled = Number(new Date())"
+  />
 </template>
 
 <script lang="ts">
@@ -268,46 +270,55 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-header {
-  line-height: 1;
-  max-height: 100vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-nav {
-  width: max-content;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 2rem;
-  background-size: 200px;
-  background-blend-mode: darken;
-  background-color: rgba(0, 0, 0, 0.65);
-
-  .icon {
-    width: 2rem;
-    height: 2rem;
-    fill: white;
-    filter: invert(1);
-    transform: translateY(0.35rem);
+  header {
+    position: relative;
+    height: 8rem;
+    background-color: rgba(87, 50, 20, 0.75) url(/img/background/panels/plaster.png) repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
-
-  a {
-    font-size: 2rem;
-    color: #fff;
-    text-decoration: none;
-    &.router-link-active {
-      text-decoration: underline;
+  nav {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    background-color: rgba(87, 50, 20, 0.75);
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(1rem);
+    z-index: 1;
+    transition: transform 0.3s ease-in-out;
+    &:hover {
+      transform: translate(-50%, -1rem);
+    }
+    .icon {
+      width: 2rem;
+      height: 2rem;
+      fill: white;
+      filter: invert(1);
+      transform: translateY(0.35rem);
+      transition: transform 0.3s ease-in-out;
+    }
+    a {
+      font-size: 2rem;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+      &.router-link-active {
+        text-decoration: underline;
+      }
+      &:hover {
+        color: #f1c40f;
+      }
     }
   }
-
-}
-
 </style>
+
+
