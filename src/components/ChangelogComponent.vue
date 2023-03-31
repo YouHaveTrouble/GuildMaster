@@ -1,7 +1,14 @@
 <template>
-  <div class="changelog">
+  <div class="changelog panel pinned-paper">
+    <div class="nail top-left">
+      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+    </div>
+    <div class="nail top-right">
+      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+    </div>
     <h1>Changelog</h1>
     <div class="changelog-entry" v-for="release in releases">
+      <hr>
       <h2>Version {{ release.name }}</h2>
       <pre>{{ release.body }}</pre>
     </div>
@@ -47,29 +54,42 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .changelog {
-  padding: 3rem;
+  padding-block: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
   max-width: 45rem;
+  width: 100%;
+
   h1 {
     font-size: 3rem;
     line-height: 1;
     margin: 0;
     text-align: center;
   }
+
   .changelog-entry {
     width: 100%;
+
     h2 {
       margin: 0;
+      padding-inline: 1rem;
     }
+
+    hr {
+      border: 0;
+      width: calc(100% - 2rem);
+      border-bottom: 1px solid black;
+    }
+
     pre {
       line-height: 1.2;
       margin: 0;
       white-space: pre-wrap;
       font-family: 'EB Garamond', serif;
+      padding-inline: 1rem;
     }
   }
 }

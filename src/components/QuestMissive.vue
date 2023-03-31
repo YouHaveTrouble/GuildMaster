@@ -40,8 +40,8 @@
     </div>
     <h3>Rewards</h3>
     <div class="rewards">
-      <span>Gold: <b>{{missive.goldReward}}</b></span>
-      <span>Exp: <b>{{missive.expReward}}</b></span>
+      <span>Gold: <b>{{ missive.goldReward }}</b></span>
+      <span>Exp: <b>{{ missive.expReward }}</b></span>
     </div>
   </article>
 </template>
@@ -57,16 +57,18 @@ export default defineComponent({
   components: {AdventurerComponent},
   props: {
     missive: {
-      type: Object as PropType<Quest|any>,
+      type: Object as PropType<Quest | any>,
       default() {
         return {} as Quest;
       },
+      required: true,
     },
     adventurers: {
-      type: Object as PropType<{[key: string]: Adventurer}>,
+      type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
-        return {} as {[key: string]: Adventurer};
+        return {} as { [key: string]: Adventurer };
       },
+      required: true,
     },
   },
   data: () => {
@@ -126,6 +128,7 @@ export default defineComponent({
     height: 100%;
     z-index: -5;
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
@@ -137,6 +140,7 @@ export default defineComponent({
     font-size: 1.5rem;
     line-height: 1;
   }
+
   h3 {
     font-size: 1.15rem;
     margin: 0;
@@ -148,6 +152,7 @@ export default defineComponent({
     margin: 0.5rem auto;
     position: relative;
     height: 1.25rem;
+
     .progress {
       position: absolute;
       top: 0;
@@ -158,6 +163,7 @@ export default defineComponent({
       background-color: rgba(0, 128, 0, 0.65);
       transition: width 250ms linear;
     }
+
     .percentage {
       position: absolute;
       top: 0;
@@ -221,6 +227,7 @@ export default defineComponent({
     background-size: contain;
     opacity: 1;
     z-index: -4;
+
     img {
       width: 100%;
       height: 100%;
@@ -241,6 +248,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
+
     img {
       width: 45%;
       height: 35%;

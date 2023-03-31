@@ -103,18 +103,21 @@ export default defineComponent({
       default() {
         return new Guild(1, 0);
       },
+      required: true,
     },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
         return {} as { [key: string]: Adventurer };
       },
+      required: true,
     },
     quests: {
       type: Object as PropType<{ [key: string]: Quest }>,
       default() {
         return {} as { [key: string]: Quest };
       },
+      required: true,
     },
     lastRecruitTime: {
       type: Number as PropType<number>,
@@ -123,10 +126,10 @@ export default defineComponent({
       }
     },
   },
-  emits: [ 'finalizeQuest', 'wipeSave', 'recruitActionTaken'],
+  emits: ['finalizeQuest', 'wipeSave', 'recruitActionTaken'],
   methods: {
     // This is a workaround for vue not reporting Quest as Quest in v-for
-    finalizeQuest(quest: any|Quest): void {
+    finalizeQuest(quest: any | Quest): void {
       if (quest.progressPoints < quest.maxProgress) return;
       this.$emit('finalizeQuest', quest)
     },
