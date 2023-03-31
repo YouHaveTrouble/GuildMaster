@@ -4,7 +4,8 @@
       :title="adventurer.name + (adventurer.busy ? ' (busy)' : '')"
   >
     <img :src="adventurer.portrait" :alt="adventurer.name" draggable="false">
-    <div class="level" :title="adventurer.isMaxLevel() ? 'Max level' : ''">{{adventurer.level}}<span v-if="adventurer.isMaxLevel()">⇪</span></div>
+    <div class="level" :title="adventurer.isMaxLevel() ? 'Max level' : ''">{{ adventurer.level }}<span
+        v-if="adventurer.isMaxLevel()">⇪</span></div>
     <div class="exp"></div>
   </article>
 </template>
@@ -12,7 +13,7 @@
 <script lang="ts">
 
 import type {Adventurer} from "@/classes/Adventurer";
-import {defineComponent, type PropType } from "vue";
+import {defineComponent, type PropType} from "vue";
 
 export default defineComponent({
   name: "AdventurerTile",
@@ -22,6 +23,7 @@ export default defineComponent({
       default() {
         return {} as Adventurer;
       },
+      required: true,
     }
   },
   data: () => ({
@@ -49,19 +51,21 @@ export default defineComponent({
   overflow: clip;
   font-size: 5rem;
   line-height: 1;
-  color: rgba(0,0,0, 0.75);
+  color: rgba(0, 0, 0, 0.75);
   position: relative;
+
   .level {
     position: absolute;
     top: 0;
     left: 0;
     font-size: 1rem;
     min-width: 1rem;
-    background-color: rgba(0,0,0, 0.75);
+    background-color: rgba(0, 0, 0, 0.75);
     border-bottom-right-radius: 0.2rem;
     padding: 0.1rem;
     color: #fff;
   }
+
   .exp {
     position: absolute;
     bottom: 0;
@@ -71,6 +75,7 @@ export default defineComponent({
     background-color: rgba(203, 33, 213, 0.75);
     transition: width 1s linear;
   }
+
   img {
     width: 100%;
     height: 100%;
