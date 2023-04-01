@@ -84,7 +84,7 @@ export default defineComponent({
   left: 50%;
   width: max-content;
   max-width: 17rem;
-  transform: translateX(-50%) translateY(104%);
+  transform: translateX(-50%) translateY(140%);
   display: flex;
   flex-direction: row;
   justify-content: center;

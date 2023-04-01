@@ -56,7 +56,6 @@ export default defineComponent({
   }
 });
 </script>
-
 <style lang="scss">
 button {
   background-color: #4CAF50; /* Green */
@@ -73,13 +72,11 @@ button {
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease 0s;
 }
-
 button:hover {
   background-color: #3e8e41; /* Dark green */
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
   transform: translateY(-7px);
 }
-
 main {
   display: flex;
   flex-direction: column;
@@ -92,7 +89,6 @@ main {
     width: 100%;
   }
 }
-
 .title {
   display: flex;
   flex-direction: column;
@@ -119,7 +115,6 @@ main {
     line-height: 0.25;
   }
 }
-
 .coffer {
   text-align: center;
   p {
@@ -127,7 +122,6 @@ main {
     font-weight: bold;
   }
 }
-
 .upgrade {
   text-align: center;
   .wipe-save {

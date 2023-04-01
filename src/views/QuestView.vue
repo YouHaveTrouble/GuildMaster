@@ -93,7 +93,6 @@ import type {Adventurer} from "@/classes/Adventurer";
 import type {Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import QuestMissive from "@/components/QuestMissive.vue";
-
 export default defineComponent({
   name: "QuestView",
   components: {QuestMissive, AdventurerComponent},
@@ -145,12 +144,10 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   padding-bottom: 0.5rem;
-
   h1 {
     font-size: 3rem;
     text-align: center;
   }
-
   .missives {
     display: flex;
     flex-direction: row;
