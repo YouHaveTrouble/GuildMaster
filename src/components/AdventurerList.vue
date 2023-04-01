@@ -18,14 +18,15 @@ export default defineComponent({
   name: "AdventurerList",
   components: {AdventurerMiniComponent},
   data: () => ({
-    currentAdventurer: null as Adventurer|null
+    currentAdventurer: null as Adventurer | null
   }),
   props: {
     adventurers: {
-      type: Object as PropType<{[key: string]: Adventurer}>,
+      type: Object as PropType<{ [key: string]: Adventurer }>,
       default() {
-        return {} as {[key: string]: Adventurer};
+        return {} as { [key: string]: Adventurer };
       },
+      required: true,
     },
   },
 
@@ -39,12 +40,13 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+
   .slot {
     padding: 0;
     width: 5rem;
     height: 5rem;
     border: 2px solid #000;
-    background-color: rgba(0,0,0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border-radius: 0.2rem;
   }
