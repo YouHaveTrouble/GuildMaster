@@ -3,7 +3,7 @@
     <section class="title">
       <h1>Guild Master</h1>
       <h3>Adventurer's guild management game</h3>
-      <small>v{{version}}</small>
+      <small>v{{ version }}</small>
     </section>
     <section class="coffer">
       <p>Coffer: {{guild.gold}} gold</p>
@@ -21,6 +21,7 @@
     <section class="wipe">
       <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
     </section>
+
   </main>
 </template>
 
@@ -44,6 +45,7 @@ export default defineComponent({
     guild: {
       type: Object as PropType<Guild>,
       default: () => new Guild(1, 0) as Guild,
+      required: true,
     },
   }
 });
@@ -65,8 +67,10 @@ export default defineComponent({
   align-items: center;
   margin-bottom: 2rem;
   text-align: center;
-
+  width: 100%;
+  max-width: 45rem;
   gap: 0.5rem;
+
   h1 {
     font-size: 5rem;
     line-height: 0.75;
@@ -75,6 +79,7 @@ export default defineComponent({
     color: #292929;
     text-shadow: 2px 2px 4px #a6a6a6;
   }
+
   h3 {
     margin: 0;
     line-height: 0.9;
@@ -82,6 +87,7 @@ export default defineComponent({
     color: #292929;
     text-shadow: 2px 2px 4px #a6a6a6;
   }
+
   small {
     font-size: 1rem;
     font-weight: bold;
