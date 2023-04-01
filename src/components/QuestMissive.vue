@@ -51,6 +51,7 @@ import type {Quest} from "@/classes/Quest";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
+
 export default defineComponent({
   name: "QuestMissive",
   components: {AdventurerComponent},
@@ -118,6 +119,7 @@ export default defineComponent({
   border: 2px solid #000;
   padding: 0.5rem;
   position: relative;
+
   .parchment {
     position: absolute;
     top: 0;
@@ -126,26 +128,31 @@ export default defineComponent({
     height: 100%;
     z-index: -5;
     overflow: hidden;
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
+
   h2 {
     font-size: 1.5rem;
     line-height: 1;
   }
+
   h3 {
     font-size: 1.15rem;
     margin: 0;
   }
+
   .progressWrap {
     width: 80%;
     border: 1px solid #000;
     margin: 0.5rem auto;
     position: relative;
     height: 1.25rem;
+
     .progress {
       position: absolute;
       top: 0;
@@ -156,6 +163,7 @@ export default defineComponent({
       background-color: rgba(0, 128, 0, 0.65);
       transition: width 250ms linear;
     }
+
     .percentage {
       position: absolute;
       top: 0;
@@ -167,6 +175,7 @@ export default defineComponent({
       width: 100%;
     }
   }
+
   .rewards {
     display: flex;
     flex-direction: row;
@@ -175,8 +184,10 @@ export default defineComponent({
     align-items: center;
     gap: 1rem;
   }
+
   &.done {
     cursor: pointer;
+
     &::after {
       position: absolute;
       top: 0;
@@ -187,12 +198,14 @@ export default defineComponent({
       transform: translate(45%, -40%);
     }
   }
+
   .slots {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+
     .slot {
       padding: 0;
       width: 5rem;
@@ -204,6 +217,7 @@ export default defineComponent({
       position: relative;
     }
   }
+
   .stain {
     position: absolute;
     top: 0;
@@ -213,6 +227,7 @@ export default defineComponent({
     background-size: contain;
     opacity: 1;
     z-index: -4;
+
     img {
       width: 100%;
       height: 100%;
@@ -220,6 +235,7 @@ export default defineComponent({
       filter: grayscale(0.8);
     }
   }
+
   .drink-stain {
     position: absolute;
     top: 0;
@@ -232,6 +248,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
+
     img {
       width: 45%;
       height: 35%;
