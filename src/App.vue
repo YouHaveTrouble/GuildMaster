@@ -289,7 +289,7 @@ export default defineComponent({
     align-items: center;
     gap: 2rem;
     padding: 2rem;
-    background-color: rgba(87, 50, 20, 0.75);
+    background-color: rgba(0, 0, 0, 0.65);;
     border-radius: 1rem 1rem 0 0;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(1rem);

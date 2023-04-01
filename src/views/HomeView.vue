@@ -1,25 +1,33 @@
 <template>
-  <main class="guild-view">
-    <section class="title">
+  <main>
+    <section class="title panel note-paper">
       <h1>Guild Master</h1>
       <h3>Adventurer's guild management game</h3>
       <small>v{{ version }}</small>
     </section>
-    <section class="coffer">
-      <p>Coffer: {{guild.gold}} gold</p>
-    </section>
-    <section class="upgrade">
-      <p>Guild level: {{ guild.level }}</p>
-      <button class="upgrade-button" :disabled="guild.upgradeCost ? guild.gold < guild.upgradeCost : true" @click="guild.upgrade()">
-        <span>Upgrade guild level</span><br>
-        <span>({{ guild.displayUpgradeCost }})</span>
-      </button>
-    </section>
-    <section class="upgrades">
-      <UpgradesList :guild="guild" />
-    </section>
-    <section class="wipe">
-      <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
+    <section class="upgrades panel pinned-paper">
+      <div class="nail top-left">
+        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      </div>
+      <div class="nail top-right">
+        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      </div>
+      <section class="coffer">
+        <p>Coffer: {{ guild.gold }} gold</p>
+      </section>
+      <section class="upgrade">
+        <p>Guild level: {{ guild.level }}</p>
+        <button :disabled="guild.upgradeCost ? guild.gold < guild.upgradeCost : true" @click="guild.upgrade()">
+          <span>Upgrade guild level</span><br>
+          <span>({{ guild.displayUpgradeCost }})</span>
+        </button>
+      </section>
+      <section class="upgrade">
+        <UpgradesList :guild="guild"/>
+      </section>
+      <section class="upgrade">
+        <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
+      </section>
     </section>
 
   </main>
@@ -29,10 +37,8 @@
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
 import {Guild} from "@/classes/Guild";
-
 import {version} from "../../package.json"
 import UpgradesList from "@/components/UpgradesList.vue";
-
 export default defineComponent({
   name: "GuildView",
   components: {UpgradesList},
@@ -50,124 +56,66 @@ export default defineComponent({
   }
 });
 </script>
-<style lang="scss">
-.guild-view {
-  background-color: #f5f5f5;
-  padding: 2rem;
-  background-image: url("https://wallpaperaccess.com/full/628286.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
 
+<style lang="scss">
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-block: 1rem;
+  gap: 1rem;
+  .upgrades {
+    max-width: 45rem;
+    width: 100%;
+  }
+}
 .title {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  padding-block: 2.5rem;
   text-align: center;
   width: 100%;
   max-width: 45rem;
   gap: 0.5rem;
-
   h1 {
-    font-size: 5rem;
+    font-size: 4rem;
     line-height: 0.75;
+    white-space: pre-wrap;
     margin: 0;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
   }
-
   h3 {
     margin: 0;
     line-height: 0.9;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
   }
-
   small {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     line-height: 0.25;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
   }
 }
-
 .coffer {
   text-align: center;
-  margin-bottom: 2rem;
   p {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
   }
 }
-
 .upgrade {
   text-align: center;
-  margin-bottom: 2rem;
+  .wipe-save {
+    display: inline-flex;
+    font-weight: bold;
+    margin-block: 1rem;
+    color: #d52121;
+    cursor: pointer;
+  }
   p {
+    margin: 0;
     font-size: 1.5rem;
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
-  }
-  .upgrade-button {
-    background-color: #00b3e3;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 0.5rem 2rem;
-    border-radius: 1rem;
-    border: none;
-    box-shadow: 2px 2px 4px #a6a6a6;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    
-    &:hover {
-      background-color: #008CBA;
-      box-shadow: 2px 2px 8px #a6a6a6;
-    }
   }
 }
-.upgrades 
-  h2[data-v-fa2248b8] {
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
-}
-  .upgrade[data-v-fa2248b8] {
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: 'Roboto', sans-serif;
-    color: #292929;
-    text-shadow: 2px 2px 4px #a6a6a6;
-}
-  button:disabled {
-    background-color: #00b3e3;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 0.5rem 2rem;
-    border-radius: 1rem;
-    border: none;
-    box-shadow: 2px 2px 4px #a6a6a6;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-    
-    &:hover {
-      background-color: #008CBA;
-      box-shadow: 2px 2px 8px #a6a6a6;
-    }
-  }
 </style>
