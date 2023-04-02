@@ -14,10 +14,10 @@ import {RouterLink, RouterView} from 'vue-router'</script>
         :guild="guild"
         :adventurers="adventurers"
         :quests="missives"
-        :lastRecruitTime="lastRecruitHandled"
+        :adventurerForHire="adventurerForHire"
         @finalizeQuest="finalizeQuest($event)"
         @wipeSave="resetSave()"
-        @recruitActionTaken="lastRecruitHandled = Number(new Date())"
+        @recruitActionTaken="recruitAction($event)"
     />
 </template>
 
@@ -27,9 +27,10 @@ import {Adventurer} from "@/classes/Adventurer";
 import {getQuestWithRewards, Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
-import {GameData, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
+import {GameData, loadAdventurersForHire, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
 import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
+import {getNewAdventurerForHire} from "@/classes/Recruitment";
 
 export default defineComponent({
   name: "GuildView",
@@ -45,6 +46,8 @@ export default defineComponent({
       F: null as null|number,
     } as { [key: string]: null|number },
     lastRecruitHandled: null as null|number,
+    adventurerForHire: null as Adventurer|null,
+    adventurersDatabase: {} as Array<Adventurer>,
     adventurers: {} as { [key: string]: Adventurer },
     quests: {} as { [key: string]: { [key: string]: Quest } },
     missives: {
@@ -76,6 +79,28 @@ export default defineComponent({
         }
       }
 
+    },
+    async checkForNewRecruit(currentTimestamp: number) {
+      if (this.lastRecruitHandled === null) {
+        this.lastRecruitHandled = 0;
+      }
+      if (currentTimestamp - this.lastRecruitHandled >= 1000 * 60 * 30 && this.adventurerForHire === null) {
+        this.adventurerForHire = getNewAdventurerForHire(this.adventurersDatabase);
+      }
+    },
+    recruitAction(adventurer: Adventurer|null): void {
+      this.lastRecruitHandled = Number(new Date());
+      this.adventurerForHire = null;
+      if (adventurer === null) return;
+
+      this.adventurers[adventurer.id] = adventurer;
+      for (const id in this.adventurersDatabase) {
+        const databaseAdventurer = this.adventurersDatabase[id];
+        if (databaseAdventurer.id === adventurer.id) {
+          this.adventurersDatabase.splice(Number(id), 1);
+          break;
+        }
+      }
     },
     finalizeQuest(missive: Quest) {
       missive.progressPoints = 0;
@@ -134,6 +159,8 @@ export default defineComponent({
        }
        this.adventurers = adventurers;
 
+
+
        const missives = {} as { [key: string]: { [key: string]: Quest } };
 
        for (const id in saveData.missives) {
@@ -153,6 +180,21 @@ export default defineComponent({
        this.missives = missives;
 
        this.lastRecruitHandled = saveData.lastRecruitAction ?? 0;
+
+      if (Object.keys(this.adventurers).length <= 0) {
+        this.adventurerForHire = this.adventurersDatabase[0];
+        return;
+      }
+
+      if (saveData.currentlyForHireId !== null) {
+        for (const id in this.adventurersDatabase) {
+          const adventurer = this.adventurersDatabase[id];
+          if (adventurer.id === saveData.currentlyForHireId) {
+            this.adventurerForHire = adventurer;
+            return;
+          }
+        }
+      }
     },
     resetSave() {
       if (!confirm("You are about to wipe your save file. Are you sure?")) return;
@@ -163,6 +205,7 @@ export default defineComponent({
   async mounted() {
     this.loadGame();
     this.quests = await loadAvailableQuests();
+    this.adventurersDatabase = await loadAdventurersForHire(Object.keys(this.adventurers));
 
     setInterval(() => {
       saveGame(new GameData(
@@ -170,7 +213,8 @@ export default defineComponent({
           this.adventurers,
           this.missives,
           this.lastQuestGot,
-          this.lastRecruitHandled
+          this.lastRecruitHandled,
+          this.adventurerForHire?.id ?? null
           )
       );
     }, 10*1000)
@@ -179,6 +223,8 @@ export default defineComponent({
       this.updateMissives();
 
       const now = Number(new Date());
+
+      this.checkForNewRecruit(now);
 
       for (const id in this.lastQuestGot) {
         const lastTime = this.lastQuestGot[getFromString(id as QuestRank)];
