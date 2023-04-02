@@ -1,5 +1,6 @@
 import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
+import formatGold from "@/classes/NumberMagic";
 
 export class Guild {
     gold: number;
@@ -30,7 +31,7 @@ export class Guild {
         } else {
             const newCost = this.getUpgradeCost();
             if (newCost === null) return;
-            this.displayUpgradeCost = newCost;
+            this.displayUpgradeCost = formatGold(newCost);
             this.upgradeCost = newCost;
         }
     }

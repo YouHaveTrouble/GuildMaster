@@ -8,7 +8,7 @@
           :disabled="guild.gold < guild.adventurerCapacity.nextLevelCost"
           @click="upgradeAdventurerCapacity()"
       >
-        Upgrade ({{ guild.adventurerCapacity.nextLevelCost.toFixed(0) }} gold)
+        Upgrade ({{ formatGold(guild.adventurerCapacity.nextLevelCost) }} gold)
       </button>
     </div>
   </section>
@@ -17,6 +17,7 @@
 <script lang="ts">
 import {Guild} from "@/classes/Guild";
 import {defineComponent, type PropType} from "vue";
+import formatGold from "../classes/NumberMagic";
 
 export default defineComponent({
   name: "UpgradesList",
@@ -30,6 +31,7 @@ export default defineComponent({
     }
   },
   methods: {
+    formatGold,
     upgradeAdventurerCapacity(): void {
       if (!this.guild.adventurerCapacity) return;
       if (!this.guild.adventurerCapacity.nextLevelCost) return;

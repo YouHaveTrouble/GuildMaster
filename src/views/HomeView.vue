@@ -13,7 +13,7 @@
         <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
       </div>
       <section class="coffer">
-        <p>Coffer: {{ guild.gold }} gold</p>
+        <p>Coffer: {{ formatGold(guild.gold) }} gold</p>
       </section>
       <section class="upgrade">
         <p>Guild level: {{ guild.level }}</p>
@@ -40,9 +40,11 @@ import {Guild} from "@/classes/Guild";
 
 import {version} from "../../package.json"
 import UpgradesList from "@/components/UpgradesList.vue";
+import formatGold from "../classes/NumberMagic";
 
 export default defineComponent({
   name: "GuildView",
+  methods: {formatGold},
   components: {UpgradesList},
   data: () => {
     return {
