@@ -9,13 +9,21 @@ export class GameData {
     missives: { [key: string]: { [key: string]: Quest } };
     lastQuestGot: { [key: string]: null | number };
     lastRecruitAction: null | number;
+    currentlyForHireId: string|null;
 
-    constructor(guild: Guild, adventurers: { [key: string]: Adventurer }, missives: { [key: string]: { [key: string]: Quest } }, lastQuestGot: { [key: string]: null | number }, lastRecruitAction: null | number) {
+    constructor(
+        guild: Guild, adventurers: { [key: string]: Adventurer },
+        missives: { [key: string]: { [key: string]: Quest } },
+        lastQuestGot: { [key: string]: null | number },
+        lastRecruitAction: null | number,
+        currentlyForHireId: string|null = null
+    ) {
         this.guild = guild;
         this.adventurers = adventurers;
         this.missives = missives;
         this.lastQuestGot = lastQuestGot;
         this.lastRecruitAction = lastRecruitAction;
+        this.currentlyForHireId = currentlyForHireId;
     }
 }
 
@@ -33,6 +41,7 @@ export function saveGame(
         missives: data.missives,
         lastQuestGot: data.lastQuestGot,
         lastRecruitAction: data.lastRecruitAction,
+        adventurerForHireId: data.currentlyForHireId,
     }));
 }
 
