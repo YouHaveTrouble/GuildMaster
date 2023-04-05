@@ -1,5 +1,10 @@
 <template>
   <div class="adventurer-section">
+    <AdventurerDetails
+        :adventurer="selectedAdventurer"
+        v-if="selectedAdventurer !== null"
+
+    />
     <section class="recruit panel pinned-paper">
       <h1>Applying adventurers</h1>
       <div class="adventurers">
@@ -32,7 +37,12 @@
       <h1>Recruited adventurers ({{ Object.keys(adventurers).length }} /
         {{ guild.adventurerCapacity.getAdventurerCapacity() }})</h1>
       <div class="adventurers">
-        <div class="adventurer-tile" v-for="adventurer in adventurers" :key="adventurer.id">
+        <div
+            class="adventurer-tile"
+            v-for="adventurer in adventurers"
+            :key="adventurer.id"
+            @click="selectedAdventurer = adventurer"
+        >
           <AdventurerTile class="entry" :adventurer="adventurer"/>
           <b>{{ adventurer.name }}</b>
         </div>
@@ -46,16 +56,17 @@ import type {PropType} from "vue";
 import {defineComponent} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
 import type {Adventurer} from "@/classes/Adventurer";
-import {loadAdventurersForHire} from "@/GameData";
 import type {Guild} from "@/classes/Guild";
+import AdventurerDetails from "@/components/AdventurerDetails.vue";
 
 export default defineComponent({
   name: "RecruitView",
-  components: {AdventurerTile},
+  components: {AdventurerDetails, AdventurerTile},
   data: () => {
     return {
       currentlyForHire: null as Adventurer | null,
       adventurersForHire: [] as Array<Adventurer>,
+      selectedAdventurer: null as Adventurer | null,
     }
   },
   props: {
