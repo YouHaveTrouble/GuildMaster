@@ -10,15 +10,15 @@ import {RouterLink, RouterView} from 'vue-router'</script>
       <RouterLink :to="{name: 'technical'}"><img class="icon" src="/img/icons/cog.svg" alt="Technical"></RouterLink>
     </nav>
   </header>
-    <RouterView
-        :guild="guild"
-        :adventurers="adventurers"
-        :quests="missives"
-        :adventurerForHire="adventurerForHire"
-        @finalizeQuest="finalizeQuest($event)"
-        @wipeSave="resetSave()"
-        @recruitActionTaken="recruitAction($event)"
-    />
+  <RouterView
+      :guild="guild"
+      :adventurers="adventurers"
+      :quests="missives"
+      :adventurerForHire="adventurerForHire"
+      @finalizeQuest="finalizeQuest($event)"
+      @wipeSave="resetSave()"
+      @recruitActionTaken="recruitAction($event)"
+  />
 </template>
 
 <script lang="ts">
@@ -37,16 +37,16 @@ export default defineComponent({
   data: () => ({
     guild: new Guild(1, 500),
     lastQuestGot: {
-      S: null as null|number,
-      A: null as null|number,
-      B: null as null|number,
-      C: null as null|number,
-      D: null as null|number,
-      E: null as null|number,
-      F: null as null|number,
-    } as { [key: string]: null|number },
-    lastRecruitHandled: null as null|number,
-    adventurerForHire: null as Adventurer|null,
+      S: null as null | number,
+      A: null as null | number,
+      B: null as null | number,
+      C: null as null | number,
+      D: null as null | number,
+      E: null as null | number,
+      F: null as null | number,
+    } as { [key: string]: null | number },
+    lastRecruitHandled: null as null | number,
+    adventurerForHire: null as Adventurer | null,
     adventurersDatabase: {} as Array<Adventurer>,
     adventurers: {} as { [key: string]: Adventurer },
     quests: {} as { [key: string]: { [key: string]: Quest } },
@@ -81,14 +81,20 @@ export default defineComponent({
 
     },
     async checkForNewRecruit(currentTimestamp: number) {
-      if (this.lastRecruitHandled === null) {
+
+      if (this.lastRecruitHandled == null) {
         this.lastRecruitHandled = 0;
       }
-      if (currentTimestamp - this.lastRecruitHandled >= 1000 * 60 * 30 && this.adventurerForHire === null) {
+
+      if (Object.keys(this.adventurers).length <= 0) {
+        this.adventurerForHire = this.adventurersDatabase[0];
+      }
+
+      if (currentTimestamp - this.lastRecruitHandled >= 1000 * 60 * 30 && this.adventurerForHire == null) {
         this.adventurerForHire = getNewAdventurerForHire(this.adventurersDatabase);
       }
     },
-    recruitAction(adventurer: Adventurer|null): void {
+    recruitAction(adventurer: Adventurer | null): void {
       this.lastRecruitHandled = Number(new Date());
       this.adventurerForHire = null;
       if (adventurer === null) return;
@@ -128,68 +134,62 @@ export default defineComponent({
       this.missives[rank][newId] = quest;
     },
     loadGame() {
-       const saveData = loadGame();
-       if (saveData === null) return;
+      const saveData = loadGame();
+      if (saveData === null) return;
 
-       this.lastQuestGot = saveData.lastQuestGot;
+      this.lastQuestGot = saveData.lastQuestGot;
 
-       const guildUpgrades = {} as { [key: string]: GuildUpgrade };
-       if (saveData.guild.adventurerCapacity) {
-         guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
-       }
-
-       this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);
-
-       const adventurers = {} as { [key: string]: Adventurer };
-
-       for (const id in saveData.adventurers) {
-         const data = saveData.adventurers[id];
-         try {
-           const adventurer = new Adventurer(
-               data.id,
-               data.name,
-               data.portrait,
-               data.attackExponent ?? 1.1,
-               data.level ?? 1,
-               data.exp ?? 0
-           );
-           adventurer.busy = data.busy;
-           adventurers[data.id] = adventurer;
-         } catch (e) {}
-       }
-       this.adventurers = adventurers;
-
-
-
-       const missives = {} as { [key: string]: { [key: string]: Quest } };
-
-       for (const id in saveData.missives) {
-         const missiveRank = {} as { [key: string]: Quest }
-         for (const questId in saveData.missives[id]) {
-           const data = saveData.missives[id][questId];
-           const quest = new Quest(questId, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
-           quest.progressPoints = data.progressPoints;
-           if (data.adventurers.length > 0) {
-             quest.adventurers.push(this.adventurers[data.adventurers[0].id])
-           }
-           missiveRank[questId] = quest;
-         }
-         missives[id] = missiveRank;
-       }
-
-       this.missives = missives;
-
-       this.lastRecruitHandled = saveData.lastRecruitAction ?? 0;
-
-      if (Object.keys(this.adventurers).length <= 0) {
-        this.adventurerForHire = this.adventurersDatabase[0];
-        return;
+      const guildUpgrades = {} as { [key: string]: GuildUpgrade };
+      if (saveData.guild.adventurerCapacity) {
+        guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
       }
 
-      if (saveData.currentlyForHireId !== null) {
+      this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);
+
+      const adventurers = {} as { [key: string]: Adventurer };
+
+      for (const id in saveData.adventurers) {
+        const data = saveData.adventurers[id];
+        try {
+          const adventurer = new Adventurer(
+            data.id,
+            data.name,
+            data.portrait,
+            data.attackExponent ?? 1.1,
+            data.level ?? 1,
+            data.exp ?? 0
+          );
+          adventurer.busy = data.busy;
+          adventurers[data.id] = adventurer;
+        } catch (e) {
+        }
+      }
+      this.adventurers = adventurers;
+
+      const missives = {} as { [key: string]: { [key: string]: Quest } };
+
+      for (const id in saveData.missives) {
+        const missiveRank = {} as { [key: string]: Quest }
+        for (const questId in saveData.missives[id]) {
+          const data = saveData.missives[id][questId];
+          const quest = new Quest(questId, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
+          quest.progressPoints = data.progressPoints;
+          if (data.adventurers.length > 0) {
+            quest.adventurers.push(this.adventurers[data.adventurers[0].id])
+          }
+          missiveRank[questId] = quest;
+        }
+        missives[id] = missiveRank;
+      }
+
+      this.missives = missives;
+
+      this.lastRecruitHandled = saveData.lastRecruitAction ?? 0;
+
+      if (saveData.adventurerForHireId != null) {
         for (const id in this.adventurersDatabase) {
           const adventurer = this.adventurersDatabase[id];
-          if (adventurer.id === saveData.currentlyForHireId) {
+          if (adventurer.id === saveData.adventurerForHireId) {
             this.adventurerForHire = adventurer;
             return;
           }
@@ -203,21 +203,20 @@ export default defineComponent({
     }
   },
   async mounted() {
-    this.loadGame();
     this.quests = await loadAvailableQuests();
     this.adventurersDatabase = await loadAdventurersForHire(Object.keys(this.adventurers));
+    this.loadGame();
 
     setInterval(() => {
-      saveGame(new GameData(
-          this.guild,
-          this.adventurers,
-          this.missives,
-          this.lastQuestGot,
-          this.lastRecruitHandled,
-          this.adventurerForHire?.id ?? null
-          )
-      );
-    }, 10*1000)
+      saveGame(new GameData({
+        adventurers: this.adventurers,
+        guild: this.guild,
+        missives: this.missives,
+        lastQuestGot: this.lastQuestGot,
+        lastRecruitAction: this.lastRecruitHandled,
+        adventurerForHireId: this.adventurerForHire?.id ?? null,
+      }));
+    }, 10 * 1000)
 
     setInterval(() => {
       this.updateMissives();
@@ -349,6 +348,7 @@ nav {
     font-size: 2rem;
     color: #fff;
     text-decoration: none;
+
     &.router-link-active {
       text-decoration: underline;
     }
