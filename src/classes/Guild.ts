@@ -12,7 +12,8 @@ export class Guild {
     constructor(level: number, gold: number, upgrades: {[index:string]: GuildUpgrade} = {}) {
         this.gold = gold;
         this.level = level;
-        this.displayUpgradeCost = this.getUpgradeCost() ?? "Max level";
+        const rawDisplayUpgradeCost = this.getUpgradeCost();
+        this.displayUpgradeCost = rawDisplayUpgradeCost ? formatGold(rawDisplayUpgradeCost) : "Max level";
         this.upgradeCost = this.getUpgradeCost();
 
         this.adventurerCapacity = upgrades.adventurerCapacity as AdventurerCapacityUpgrade ?? new AdventurerCapacityUpgrade();
