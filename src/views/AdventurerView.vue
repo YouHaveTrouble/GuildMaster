@@ -3,6 +3,7 @@
     <AdventurerDetails
         :adventurer="selectedAdventurer"
         v-if="selectedAdventurer !== null"
+        @closeButtonClicked="selectedAdventurer = null"
 
     />
     <section class="recruit panel pinned-paper">
@@ -85,7 +86,7 @@ export default defineComponent({
       required: true,
     },
     adventurerForHire: {
-      type: Object as PropType<Adventurer|null>,
+      type: Object as PropType<Adventurer | null>,
       default() {
         return null;
       }
@@ -148,6 +149,7 @@ export default defineComponent({
       flex-direction: column;
       gap: 0.25rem;
       font-size: 1.1rem;
+      cursor: pointer;
 
       .entry {
         height: 7rem;
