@@ -4,6 +4,7 @@
     <div class="upgrade">
       <span>Adventurer capacity (level {{ guild.adventurerCapacity.level }})</span>
       <button
+          class="button metal"
           v-if="guild.adventurerCapacity.nextLevelCost"
           :disabled="guild.gold < guild.adventurerCapacity.nextLevelCost"
           @click="upgradeAdventurerCapacity()"
@@ -17,7 +18,7 @@
 <script lang="ts">
 import {Guild} from "@/classes/Guild";
 import {defineComponent, type PropType} from "vue";
-import formatGold from "../classes/NumberMagic";
+import {formatGold} from "@/classes/NumberMagic";
 
 export default defineComponent({
   name: "UpgradesList",
@@ -67,7 +68,7 @@ export default defineComponent({
     width: min(25rem, 100%);
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.2rem;
   }
 }
 </style>

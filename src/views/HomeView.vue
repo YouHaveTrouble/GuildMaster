@@ -17,8 +17,12 @@
       </section>
       <section class="upgrade">
         <p>Guild level: {{ guild.level }}</p>
-        <button :disabled="guild.upgradeCost ? guild.gold < guild.upgradeCost : true" @click="guild.upgrade()">
-          <span>Upgrade guild level</span><br>
+        <button
+            class="button metal"
+            :disabled="guild.upgradeCost ? guild.gold < guild.upgradeCost : true"
+            @click="guild.upgrade()"
+        >
+          <span>Upgrade guild level </span>
           <span>({{ guild.displayUpgradeCost }})</span>
         </button>
       </section>
@@ -40,7 +44,7 @@ import {Guild} from "@/classes/Guild";
 
 import {version} from "../../package.json"
 import UpgradesList from "@/components/UpgradesList.vue";
-import formatGold from "../classes/NumberMagic";
+import {formatGold} from "@/classes/NumberMagic";
 
 export default defineComponent({
   name: "GuildView",
