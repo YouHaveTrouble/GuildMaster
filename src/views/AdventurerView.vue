@@ -35,8 +35,10 @@
       </div>
     </section>
     <section class="collection panel pinned-paper">
-      <h1>Recruited adventurers ({{ Object.keys(adventurers).length }} /
-        {{ guild.adventurerCapacity.getAdventurerCapacity() }})</h1>
+      <h1>
+        Recruited adventurers ({{ Object.keys(adventurers).length }} / {{ guild.adventurerCapacity.getAdventurerCapacity() }})
+      </h1>
+      <small>Click an adventurer to see details about them</small>
       <div class="adventurers">
         <div
             class="adventurer-tile"
@@ -132,6 +134,14 @@ export default defineComponent({
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
+  }
+
+  .collection {
+    small {
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
   }
 
   .adventurers {

@@ -13,6 +13,19 @@
       <p>Exp: {{ adventurer.exp }} / {{ adventurer.getNextLevelExpRequirement() }}</p>
       <p>DPS: {{ adventurer.getDPS().toPrecision(2) }}</p>
     </div>
+    <div class="adventurer-upgrades">
+      <button
+          :disabled="!adventurer.canPrestigeUp()"
+          :title="!adventurer.canPrestigeUp() ? 'Adventurer needs to be at max level to prestige up' : ''"
+          @click="() => {
+            if (adventurer === null) return;
+            if (!adventurer.canPrestigeUp()) return;
+            adventurer.prestigeUp();
+          }"
+      >
+        Prestige up
+      </button>
+    </div>
 
   </dialog>
 </template>
@@ -73,6 +86,7 @@ export default defineComponent({
     background: transparent;
     border: none;
     font-family: 'EB Garamond', serif;
+    transition: color 0.05s linear;
 
     &:hover {
       color: #ff0000;
