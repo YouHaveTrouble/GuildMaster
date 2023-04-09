@@ -1,6 +1,7 @@
 import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
-import formatGold from "@/classes/NumberMagic";
+import {formatGold} from "@/classes/NumberMagic";
+
 
 export class Guild {
     gold: number;

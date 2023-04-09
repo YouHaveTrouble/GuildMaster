@@ -11,10 +11,11 @@
       <p>Prestige level: {{ adventurer.prestige }}</p>
 
       <p>Exp: {{ adventurer.exp }} / {{ adventurer.getNextLevelExpRequirement() }}</p>
-      <p>DPS: {{ adventurer.getDPS().toPrecision(2) }}</p>
+      <p>DPS: {{ formatDamage(adventurer.getDPS()) }}</p>
     </div>
     <div class="adventurer-upgrades">
       <button
+          class="button metal"
           :disabled="!adventurer.canPrestigeUp()"
           :title="!adventurer.canPrestigeUp() ? 'Adventurer needs to be at max level to prestige up' : ''"
           @click="() => {
@@ -33,9 +34,11 @@
 <script lang="ts">
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
+import {formatDamage} from "../classes/NumberMagic";
 
 export default defineComponent({
   name: "AdventurerDetails",
+  methods: {formatDamage},
   props: {
     adventurer: {
       type: Object as PropType<Adventurer | null>,

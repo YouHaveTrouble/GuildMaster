@@ -157,7 +157,8 @@ export default defineComponent({
             data.portrait,
             data.attackExponent ?? 1.1,
             data.level ?? 1,
-            data.exp ?? 0
+            data.exp ?? 0,
+            data.prestige ?? 0,
           );
           adventurer.busy = data.busy;
           adventurers[data.id] = adventurer;
