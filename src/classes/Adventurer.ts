@@ -44,12 +44,13 @@ export class Adventurer {
     }
 
     canPrestigeUp(): boolean {
+        if (this.busy) return false;
         if (this.level < getMaxLevelForPrestige(this.prestige)) return false;
         return this.prestige < 5
     }
 
     getNextLevelExpRequirement(): number {
-        return this.level * 3;
+        return Math.max(1, Math.floor((3 * Math.pow(1.2, this.level - 1)) * Math.pow(1.025, this.level - 1)));
     }
 
     /**
