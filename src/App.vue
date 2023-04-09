@@ -27,7 +27,14 @@ import {Adventurer} from "@/classes/Adventurer";
 import {getQuestWithRewards, Quest} from "@/classes/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
-import {GameData, loadAdventurersForHire, loadAvailableQuests, loadGame, saveGame} from "@/GameData";
+import {
+  GameData,
+  loadAdventurersForHire,
+  loadAvailableQuests,
+  loadGame,
+  removeAlreadyHiredAdventurers,
+  saveGame
+} from "@/GameData";
 import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
 import {getNewAdventurerForHire} from "@/classes/Recruitment";
@@ -205,8 +212,10 @@ export default defineComponent({
   },
   async mounted() {
     this.quests = await loadAvailableQuests();
-    this.adventurersDatabase = await loadAdventurersForHire(Object.keys(this.adventurers));
+    this.adventurersDatabase = await loadAdventurersForHire();
     this.loadGame();
+
+    this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
 
     setInterval(() => {
       saveGame(new GameData({

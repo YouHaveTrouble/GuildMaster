@@ -86,7 +86,7 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
   return quests;
 }
 
-export async function loadAdventurersForHire(currentAdventurerIds: Array<string> = []): Promise<Array<Adventurer>> {
+export async function loadAdventurersForHire(): Promise<Array<Adventurer>> {
   const response = await fetch("data/adventurers.json");
   if (response.status !== 200) {
     console.error("Failed to load adventurers");
@@ -95,9 +95,8 @@ export async function loadAdventurersForHire(currentAdventurerIds: Array<string>
   }
   const adventurerData = await response.json();
 
-  const adventurers = [] as Array<Adventurer>;
+  const adventurers: Array<Adventurer> = [];
   for (const adventurer of adventurerData) {
-    if (currentAdventurerIds.includes(adventurer.id)) continue;
     adventurers.push(new Adventurer(
       adventurer.id,
       adventurer.name,
@@ -109,4 +108,16 @@ export async function loadAdventurersForHire(currentAdventurerIds: Array<string>
   }
 
   return adventurers;
+}
+
+export function removeAlreadyHiredAdventurers(
+  adventurers: Array<Adventurer>,
+  adventurersHired: { [key: string]: Adventurer }
+): Array<Adventurer> {
+  const adventurersForHire: Array<Adventurer> = [];
+  for (const adventurer of adventurers) {
+    if (adventurersHired[adventurer.id]) continue;
+    adventurersForHire.push(adventurer);
+  }
+  return adventurersForHire;
 }
