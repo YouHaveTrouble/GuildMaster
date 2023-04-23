@@ -9,7 +9,7 @@
     <h1>Changelog</h1>
     <div class="changelog-entry" v-for="release in releases">
       <hr>
-      <h2>Version {{ release.name }}</h2>
+      <h2><span>Version {{ release.name }}</span><small class="date">{{ timeFormat.format(release.createdAt) }}</small></h2>
       <pre>{{ release.body }}</pre>
     </div>
   </div>
@@ -22,7 +22,12 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "ChangelogComponent",
   data: () => ({
-    releases: [] as Array<any>,
+    timeFormat: Intl.DateTimeFormat(Intl.DateTimeFormat().resolvedOptions().locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }),
+    releases: [] as Array<{body: string, name: string, createdAt: Date}>,
     lastPage: 1,
   }),
   methods: {
@@ -40,6 +45,7 @@ export default defineComponent({
         const version = {} as any;
         version.body = release.body.trim();
         version.name = release.name;
+        version.createdAt = new Date(release.published_at);
         if (release.body.length === 0) continue;
         this.releases.push(version);
       }
@@ -74,8 +80,19 @@ export default defineComponent({
     width: 100%;
 
     h2 {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-end;
       margin: 0;
       padding-inline: 1rem;
+      gap: 0.5rem;
+    }
+
+    .date {
+      color: rgba(0,0,0, 0.6);
+      font-size: 1rem;
     }
 
     hr {
