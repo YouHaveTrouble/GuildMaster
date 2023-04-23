@@ -1,6 +1,6 @@
 import {GuildUpgrade} from "@/classes/GuildUpgrade";
 
-export class AdventurerCapacityUpgrade extends GuildUpgrade {
+export default class AdventurerCapacityUpgrade extends GuildUpgrade {
     constructor(level: number = 1) {
         super();
         this.level = level;

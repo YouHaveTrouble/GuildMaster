@@ -36,8 +36,9 @@ import {
   saveGame
 } from "@/GameData";
 import type {GuildUpgrade} from "@/classes/GuildUpgrade";
-import {AdventurerCapacityUpgrade} from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
+import AdventurerCapacityUpgrade from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
 import {getNewAdventurerForHire} from "@/classes/Recruitment";
+import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
 
 export default defineComponent({
   name: "GuildView",
@@ -132,7 +133,7 @@ export default defineComponent({
       const questsForRank = this.quests[rank] as { [key: string]: Quest };
       const randomId = keys.length * Math.random() << 0;
       const randomIdString = keys[randomId] as string;
-      return getQuestWithRewards(questsForRank[randomIdString]);
+      return getQuestWithRewards(questsForRank[randomIdString], this.guild.expModifier.getModifier());
     },
     createMissive(questToAdd: Quest, rank: QuestRank) {
       const quest = JSON.parse(JSON.stringify(questToAdd));
@@ -149,6 +150,9 @@ export default defineComponent({
       const guildUpgrades = {} as { [key: string]: GuildUpgrade };
       if (saveData.guild.adventurerCapacity) {
         guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
+      }
+      if (saveData.guild.expModifier) {
+        guildUpgrades.expModifier = new QuestExpUpgrade(saveData.guild.expModifier.level);
       }
 
       this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);
