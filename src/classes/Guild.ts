@@ -2,6 +2,7 @@ import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import AdventurerCapacityUpgrade from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
 import {formatGold} from "@/classes/NumberMagic";
 import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
+import QuestGoldUpgrade from "@/classes/guildUpgrades/QuestGoldUpgrade";
 
 const MAX_LEVEL: number = 8;
 
@@ -12,6 +13,7 @@ export class Guild {
     upgradeCost: number|null = null;
     adventurerCapacity: AdventurerCapacityUpgrade;
     expModifier: QuestExpUpgrade;
+    goldModifier: QuestGoldUpgrade;
 
     constructor(level: number, gold: number, upgrades: {[index:string]: GuildUpgrade} = {}) {
         this.gold = gold;
@@ -22,6 +24,7 @@ export class Guild {
 
         this.adventurerCapacity = upgrades.adventurerCapacity as AdventurerCapacityUpgrade ?? new AdventurerCapacityUpgrade();
         this.expModifier = upgrades.expModifier as QuestExpUpgrade ?? new QuestExpUpgrade();
+        this.goldModifier = upgrades.goldModifier as QuestGoldUpgrade ?? new QuestGoldUpgrade();
 
     }
 

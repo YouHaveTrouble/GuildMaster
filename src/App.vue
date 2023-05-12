@@ -39,6 +39,7 @@ import type {GuildUpgrade} from "@/classes/GuildUpgrade";
 import AdventurerCapacityUpgrade from "@/classes/guildUpgrades/AdventurerCapacityUpgrade";
 import {getNewAdventurerForHire} from "@/classes/Recruitment";
 import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
+import QuestGoldUpgrade from "@/classes/guildUpgrades/QuestGoldUpgrade";
 
 export default defineComponent({
   name: "GuildView",
@@ -153,6 +154,9 @@ export default defineComponent({
       }
       if (saveData.guild.expModifier) {
         guildUpgrades.expModifier = new QuestExpUpgrade(saveData.guild.expModifier.level);
+      }
+      if (saveData.guild.goldModifier) {
+        guildUpgrades.goldModifier = new QuestGoldUpgrade(saveData.guild.goldModifier.level);
       }
 
       this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);

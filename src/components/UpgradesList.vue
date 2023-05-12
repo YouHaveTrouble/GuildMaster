@@ -25,6 +25,18 @@
         Upgrade ({{ formatGold(guild.expModifier.nextLevelCost) }} gold)
       </button>
     </div>
+    <div class="upgrade" v-if="guild.level >= guild.goldModifier.guildLevelRequirement">
+      <span>Quest gold modifier (level {{ guild.goldModifier.level }})</span>
+      <small>Increases gold from newly offered quests by 10% per level</small>
+      <button
+          class="button metal"
+          v-if="guild.goldModifier.nextLevelCost"
+          :disabled="guild.gold < guild.goldModifier.nextLevelCost"
+          @click="upgradeQuestGoldModifier()"
+      >
+        Upgrade ({{ formatGold(guild.goldModifier.nextLevelCost) }} gold)
+      </button>
+    </div>
   </section>
 </template>
 
@@ -59,6 +71,13 @@ export default defineComponent({
       if (this.guild.gold < this.guild.expModifier.nextLevelCost) return;
       this.guild.gold -= this.guild.expModifier.nextLevelCost;
       this.guild.expModifier.upgrade();
+    },
+    upgradeQuestGoldModifier(): void {
+      if (!this.guild.goldModifier) return;
+      if (!this.guild.goldModifier.nextLevelCost) return;
+      if (this.guild.gold < this.guild.goldModifier.nextLevelCost) return;
+      this.guild.gold -= this.guild.goldModifier.nextLevelCost;
+      this.guild.goldModifier.upgrade();
     },
   }
 });
