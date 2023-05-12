@@ -14,8 +14,8 @@ export default class AdventurerCapacityUpgrade extends GuildUpgrade {
     }
 
     getCostForLevel(level: number): number {
-        const scalingFactor = Math.pow(1.25, level - 1);
-        return Math.floor(1500 * scalingFactor * Math.pow(level, 1.25));
+        const scalingFactor = Math.pow(1.35, level - 1);
+        return Math.floor(1500 * scalingFactor * Math.pow(level, 1.35));
     }
 
     /**
