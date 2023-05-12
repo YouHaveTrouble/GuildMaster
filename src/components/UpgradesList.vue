@@ -18,10 +18,11 @@
       <small>Automatically finish quests when they are completed.</small>
       <button
           class="button metal"
+          v-if="guild.autoFinishQuestsUpgrade.nextLevelCost"
           :disabled="guild.gold < guild.autoFinishQuestsUpgrade.nextLevelCost || guild.autoFinishQuestsUpgrade.isMaxLevel()"
           @click="upgradeAutoFinishQuests()"
       >
-        <span v-if="!guild.autoFinishQuestsUpgrade.isMaxLevel()">Upgrade ({{ formatGold(guild.autoFinishQuestsUpgrade.nextLevelCost) }} gold)</span>
+        <span v-if="!guild.autoFinishQuestsUpgrade.isMaxLevel()">Upgrade ({{  formatGold(guild.autoFinishQuestsUpgrade.nextLevelCost) }} gold)</span>
         <span v-else>Max level</span>
       </button>
     </div>

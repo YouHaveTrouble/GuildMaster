@@ -11,7 +11,8 @@ const damageFormatter = new Intl.NumberFormat('en-US', {
     notation: "compact",
 });
 
-export function formatGold(number: number): string {
+export function formatGold(number: number | null): string {
+    if (number === null) return "";
     return goldFormatter.format(number);
 }
 
