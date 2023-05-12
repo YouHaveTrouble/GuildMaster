@@ -3,6 +3,7 @@ import AdventurerCapacityUpgrade from "@/classes/guildUpgrades/AdventurerCapacit
 import {formatGold} from "@/classes/NumberMagic";
 import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
 
+const MAX_LEVEL: number = 8;
 
 export class Guild {
     gold: number;
@@ -30,7 +31,7 @@ export class Guild {
         if (this.gold < cost) return;
         this.gold -= cost;
         this.level += 1;
-        if (this.level >= 7) {
+        if (this.level >= MAX_LEVEL) {
             this.displayUpgradeCost = "Max level";
             this.upgradeCost = null;
         } else {
@@ -46,7 +47,7 @@ export class Guild {
     }
 
     isMaxLevel(): boolean {
-        return this.level >= 8;
+        return this.level >= MAX_LEVEL;
     }
 }
 
