@@ -45,6 +45,8 @@ export default defineComponent({
   name: "GuildView",
   data: () => ({
     guild: new Guild(1, 500),
+    gameTickTask: null as null | number,
+    gameSaveTask: null as null | number,
     lastQuestGot: {
       S: null as null | number,
       A: null as null | number,
@@ -225,7 +227,7 @@ export default defineComponent({
 
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
 
-    setInterval(() => {
+    this.gameSaveTask = setInterval(() => {
       saveGame(new GameData({
         adventurers: this.adventurers,
         guild: this.guild,
@@ -236,7 +238,7 @@ export default defineComponent({
       }));
     }, 10 * 1000)
 
-    setInterval(() => {
+    this.gameTickTask = setInterval(() => {
       this.updateMissives();
 
       const now = Number(new Date());
@@ -326,6 +328,10 @@ export default defineComponent({
 
     }, 250);
 
+  },
+  beforeUnmount() {
+    if (this.gameSaveTask) clearInterval(this.gameSaveTask);
+    if (this.gameTickTask) clearInterval(this.gameTickTask);
   }
 })
 </script>
