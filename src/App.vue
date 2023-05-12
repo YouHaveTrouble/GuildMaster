@@ -40,6 +40,7 @@ import AdventurerCapacityUpgrade from "@/classes/guildUpgrades/AdventurerCapacit
 import {getNewAdventurerForHire} from "@/classes/Recruitment";
 import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
 import QuestGoldUpgrade from "@/classes/guildUpgrades/QuestGoldUpgrade";
+import AutoFinishQuestsUpgrade from "@/classes/guildUpgrades/AutoFinishQuestsUpgrade";
 
 export default defineComponent({
   name: "GuildView",
@@ -81,7 +82,13 @@ export default defineComponent({
             missive.progressPoints = 0;
             continue;
           }
-          if (missive.progressPoints >= missive.maxProgress) continue;
+          if (missive.progressPoints >= missive.maxProgress) {
+            if (this.guild.autoFinishQuestsUpgrade.getRanksToAutoFinishQuestsIn().includes(rank)) {
+              this.finalizeQuest(missive);
+              continue;
+            }
+            continue;
+          }
           for (const adventurerId in missive.adventurers) {
             const adventurer = missive.adventurers[adventurerId];
             const attack = adventurer.getAttack();
@@ -159,6 +166,9 @@ export default defineComponent({
       }
       if (saveData.guild.goldModifier) {
         guildUpgrades.goldModifier = new QuestGoldUpgrade(saveData.guild.goldModifier.level);
+      }
+      if (saveData.guild.autoFinishQuestsUpgrade) {
+        guildUpgrades.autoFinishQuestsUpgrade = new AutoFinishQuestsUpgrade(saveData.guild.autoFinishQuestsUpgrade.level);
       }
 
       this.guild = new Guild(saveData.guild.level, saveData.guild.gold, guildUpgrades);

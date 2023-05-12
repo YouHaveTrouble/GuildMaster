@@ -13,6 +13,18 @@
         Upgrade ({{ formatGold(guild.adventurerCapacity.nextLevelCost) }} gold)
       </button>
     </div>
+    <div class="upgrade" v-if="guild.level >= guild.autoFinishQuestsUpgrade.guildLevelRequirement">
+      <span>Auto-finish quests (level {{ guild.autoFinishQuestsUpgrade.level - 1 }})</span>
+      <small>Automatically finish quests when they are completed.</small>
+      <button
+          class="button metal"
+          :disabled="guild.gold < guild.autoFinishQuestsUpgrade.nextLevelCost || guild.autoFinishQuestsUpgrade.isMaxLevel()"
+          @click="upgradeAutoFinishQuests()"
+      >
+        <span v-if="!guild.autoFinishQuestsUpgrade.isMaxLevel()">Upgrade ({{ formatGold(guild.autoFinishQuestsUpgrade.nextLevelCost) }} gold)</span>
+        <span v-else>Max level</span>
+      </button>
+    </div>
     <div class="upgrade" v-if="guild.level >= guild.expModifier.guildLevelRequirement">
       <span>Quest exp modifier (level {{ guild.expModifier.level }})</span>
       <small>Increases exp from newly offered quests by 10% per level</small>
@@ -64,6 +76,14 @@ export default defineComponent({
       if (this.guild.gold < this.guild.adventurerCapacity.nextLevelCost) return;
       this.guild.gold -= this.guild.adventurerCapacity.nextLevelCost;
       this.guild.adventurerCapacity.upgrade();
+    },
+    upgradeAutoFinishQuests(): void {
+      if (!this.guild.autoFinishQuestsUpgrade) return;
+      if (this.guild.autoFinishQuestsUpgrade.isMaxLevel()) return;
+      if (!this.guild.autoFinishQuestsUpgrade.nextLevelCost) return;
+      if (this.guild.gold < this.guild.autoFinishQuestsUpgrade.nextLevelCost) return;
+      this.guild.gold -= this.guild.autoFinishQuestsUpgrade.nextLevelCost;
+      this.guild.autoFinishQuestsUpgrade.upgrade();
     },
     upgradeQuestExpModifier(): void {
       if (!this.guild.expModifier) return;
