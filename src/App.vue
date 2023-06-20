@@ -248,11 +248,22 @@ export default defineComponent({
     }
   },
   async mounted() {
-    this.quests = await loadAvailableQuests();
-    this.adventurersDatabase = await loadAdventurersForHire();
-    this.loadGame();
+    console.debug("Loading game data")
+    const promises = await Promise.all([
+      loadAvailableQuests(),
+      loadAdventurersForHire(),
+    ]);
 
+    this.quests = promises[0] as { [key: string]: { [key: string]: Quest } };
+    this.adventurersDatabase = promises[1] as Array<Adventurer>;
+    console.debug("Game data loaded!")
+    this.loadGame();
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
+
+    // Wait a second to make sure at least most images load in behind the loader
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
 
     this.gameSaveTask = Number(setInterval(() => {
       saveGame(new GameData({
@@ -264,11 +275,6 @@ export default defineComponent({
         adventurerForHireId: this.adventurerForHire?.id ?? null,
       }));
     }, 10 * 1000));
-
-    // Wait a second to make sure at least most images load in behind the loader
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
 
 
     this.gameTickTask = Number(setInterval(() => {
