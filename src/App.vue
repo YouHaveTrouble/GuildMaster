@@ -237,7 +237,7 @@ export default defineComponent({
 
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
 
-    this.gameSaveTask = setInterval(() => {
+    this.gameSaveTask = Number(setInterval(() => {
       saveGame(new GameData({
         adventurers: this.adventurers,
         guild: this.guild,
@@ -246,9 +246,9 @@ export default defineComponent({
         lastRecruitAction: this.lastRecruitHandled,
         adventurerForHireId: this.adventurerForHire?.id ?? null,
       }));
-    }, 10 * 1000)
+    }, 10 * 1000));
 
-    this.gameTickTask = setInterval(() => {
+    this.gameTickTask = Number(setInterval(() => {
       this.updateMissives();
 
       const now = Number(new Date());
@@ -336,7 +336,7 @@ export default defineComponent({
         }
       }
 
-    }, 250);
+    }, 250));
 
   },
   beforeUnmount() {
