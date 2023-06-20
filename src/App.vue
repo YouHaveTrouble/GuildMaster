@@ -1,7 +1,23 @@
 <script setup lang="ts">
-import {RouterLink, RouterView} from 'vue-router'</script>
+import {RouterLink, RouterView} from 'vue-router'
+import {version} from "../package.json"
+</script>
 
 <template>
+  <div class="loading-screen" :class="{disabled: !loading}">
+    <section class="title panel note-paper">
+      <h1>Guild Master</h1>
+      <h3>Adventurer's guild management game</h3>
+      <small>v{{ version }}</small>
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <h3>Loading assets...</h3>
+    </section>
+  </div>
   <header>
     <nav>
       <RouterLink :to="{name: 'guild'}">Guild</RouterLink>
@@ -45,6 +61,7 @@ import AutoFinishQuestsUpgrade from "@/classes/guildUpgrades/AutoFinishQuestsUpg
 export default defineComponent({
   name: "GuildView",
   data: () => ({
+    loading: true as boolean,
     guild: new Guild(1, 500),
     gameTickTask: null as null | number,
     gameSaveTask: null as null | number,
@@ -179,13 +196,13 @@ export default defineComponent({
         const data = saveData.adventurers[id];
         try {
           const adventurer = new Adventurer(
-            data.id,
-            data.name,
-            data.portrait,
-            data.attackExponent ?? 1.1,
-            data.level ?? 1,
-            data.exp ?? 0,
-            data.prestige ?? 0,
+              data.id,
+              data.name,
+              data.portrait,
+              data.attackExponent ?? 1.1,
+              data.level ?? 1,
+              data.exp ?? 0,
+              data.prestige ?? 0,
           );
           adventurer.busy = data.busy;
           adventurers[data.id] = adventurer;
@@ -247,6 +264,12 @@ export default defineComponent({
         adventurerForHireId: this.adventurerForHire?.id ?? null,
       }));
     }, 10 * 1000));
+
+    // Wait a second to make sure at least most images load in behind the loader
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
+
 
     this.gameTickTask = Number(setInterval(() => {
       this.updateMissives();
@@ -388,6 +411,66 @@ nav {
     }
   }
 
+}
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  user-select: none;
+  background-size: 25rem;
+  background-color: rgba(87, 50, 20, 0.45);
+  background-image: url("/img/background/wood/cut_wood_background.png");
+  background-blend-mode: darken;
+  background-repeat: repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.25s linear;
+
+  &.disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #000 transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 }
 
 </style>
