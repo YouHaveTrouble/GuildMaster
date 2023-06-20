@@ -262,7 +262,7 @@ export default defineComponent({
 
     // Wait a second to make sure at least most images load in behind the loader
     setTimeout(() => {
-      //this.loading = false;
+      this.loading = false;
     }, 1000);
 
     this.gameSaveTask = Number(setInterval(() => {
