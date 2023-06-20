@@ -4,8 +4,8 @@ import {version} from "../package.json"
 </script>
 
 <template>
-  <div class="loading-screen" :class="{disabled: !loading}">
-    <section class="title panel note-paper">
+  <section class="loading-screen" :class="{disabled: !loading}">
+    <div class="title panel note-paper">
       <h1>Guild Master</h1>
       <h3>Adventurer's guild management game</h3>
       <small>v{{ version }}</small>
@@ -16,8 +16,8 @@ import {version} from "../package.json"
         <div></div>
       </div>
       <h3>Loading assets...</h3>
-    </section>
-  </div>
+    </div>
+  </section>
   <header>
     <nav>
       <RouterLink :to="{name: 'guild'}">Guild</RouterLink>
@@ -262,7 +262,7 @@ export default defineComponent({
 
     // Wait a second to make sure at least most images load in behind the loader
     setTimeout(() => {
-      this.loading = false;
+      //this.loading = false;
     }, 1000);
 
     this.gameSaveTask = Number(setInterval(() => {
