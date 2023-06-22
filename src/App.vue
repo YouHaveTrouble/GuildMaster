@@ -20,10 +20,30 @@ import {version} from "../package.json"
   </section>
   <header>
     <nav>
-      <RouterLink :to="{name: 'guild'}">Guild</RouterLink>
-      <RouterLink :to="{name: 'quests'}">Quests</RouterLink>
-      <RouterLink :to="{name: 'adventurers'}">Adventurers</RouterLink>
-      <RouterLink :to="{name: 'technical'}"><img class="icon" src="/img/icons/cog.svg" alt="Technical"></RouterLink>
+      <RouterLink
+          data-tooltip="Guild view"
+          :to="{name: 'guild'}"
+      >
+        Guild
+      </RouterLink>
+      <RouterLink
+          data-tooltip="Adventures!"
+          :to="{name: 'quests'}"
+      >
+        Quests
+      </RouterLink>
+      <RouterLink
+          data-tooltip="Manage your adventurers"
+          :to="{name: 'adventurers'}"
+      >
+        Adventurers
+      </RouterLink>
+      <RouterLink
+          data-tooltip="Technical information"
+          :to="{name: 'technical'}"
+      >
+        <img class="icon" src="/img/icons/cog.svg" alt="Technical">
+      </RouterLink>
     </nav>
   </header>
   <RouterView
@@ -394,22 +414,24 @@ nav {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  padding: 2rem;
-  background-size: 200px;
-  background-blend-mode: darken;
-  background-color: rgba(0, 0, 0, 0.65);
+  padding-inline: 2rem;
+  padding-bottom: 2rem;
+  padding-top: 0.5rem;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-image: url("/img/background/panels/wall_panel_empty.png");
+  filter: drop-shadow(0 0 0.5rem rgba(0,0,0, 0.25));
 
   .icon {
     width: 2rem;
     height: 2rem;
-    fill: white;
-    filter: invert(1);
     transform: translateY(0.35rem);
   }
 
   a {
     font-size: 2rem;
-    color: #fff;
+    color: #000;
     text-decoration: none;
 
     &.router-link-active {

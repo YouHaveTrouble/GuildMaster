@@ -112,3 +112,29 @@ body {
     line-height: 0.25;
   }
 }
+
+[data-tooltip] {
+  position: relative;
+  &:after {
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+    opacity: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: attr(data-tooltip);
+    bottom: calc(-100% - 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    min-height: 2rem;
+    background-color: rgba(0,0,0, 0.5);
+    color: #fff;
+    font-size: 1rem;
+    padding: 0.25rem;
+  }
+  &:hover:after {
+    opacity: 100%;
+  }
+}
