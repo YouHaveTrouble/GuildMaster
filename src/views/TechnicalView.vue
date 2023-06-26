@@ -19,6 +19,7 @@
         </a>
       </div>
     </div>
+    <SaveManagerComponent/>
     <ChangelogComponent/>
 
   </section>
@@ -26,11 +27,12 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import ChangelogComponent from "@/components/ChangelogComponent.vue";
+import ChangelogComponent from "@/components/technical/ChangelogComponent.vue";
+import SaveManagerComponent from "@/components/technical/SaveManagerComponent.vue";
 
 export default defineComponent({
   name: "TechnicalView",
-  components: {ChangelogComponent},
+  components: {SaveManagerComponent, ChangelogComponent},
 
 })
 </script>

@@ -51,7 +51,6 @@ import {version} from "../package.json"
       :adventurerForHire="adventurerForHire"
       :news="news"
       @finalizeQuest="finalizeQuest($event)"
-      @wipeSave="resetSave()"
       @recruitActionTaken="recruitAction($event)"
   />
 </template>
@@ -261,11 +260,6 @@ export default defineComponent({
           }
         }
       }
-    },
-    resetSave() {
-      if (!confirm("You are about to wipe your save file. Are you sure?")) return;
-      window.localStorage.removeItem("savedGame");
-      window.location.reload();
     },
     async updateNews() {
       const result = await fetch("https://raw.githubusercontent.com/YouHaveTrouble/GuildMaster/master/news.txt").catch(() => {

@@ -53,7 +53,6 @@ export default defineComponent({
   },
   async mounted() {
     this.getReleases(1);
-
   }
 });
 </script>

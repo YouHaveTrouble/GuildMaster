@@ -30,9 +30,6 @@
       <section class="upgrade">
         <UpgradesList :guild="guild"/>
       </section>
-      <section class="upgrade">
-        <span class="wipe-save" @click="$emit('wipeSave')">Wipe your save data</span>
-      </section>
     </section>
 
   </main>
@@ -82,6 +79,7 @@ main {
   .upgrades {
     max-width: 45rem;
     width: 100%;
+    padding-bottom: 1rem;
   }
 }
 
