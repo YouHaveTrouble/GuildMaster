@@ -21,25 +21,23 @@ import {version} from "../package.json"
   <header>
     <nav>
       <RouterLink
-          data-tooltip="Guild view"
           :to="{name: 'guild'}"
       >
         Guild
       </RouterLink>
       <RouterLink
-          data-tooltip="Adventures!"
           :to="{name: 'quests'}"
       >
         Quests
       </RouterLink>
       <RouterLink
-          data-tooltip="Manage your adventurers"
           :to="{name: 'adventurers'}"
       >
         Adventurers
       </RouterLink>
       <RouterLink
           data-tooltip="Technical information"
+          data-tooltip-position="bottom"
           :to="{name: 'technical'}"
       >
         <img class="icon" src="/img/icons/cog.svg" alt="Technical">

@@ -123,17 +123,45 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    content: attr(data-tooltip);
-    bottom: calc(-100% - 0.5rem);
-    left: 50%;
-    transform: translateX(-50%);
     width: max-content;
     min-height: 2rem;
     background-color: rgba(0,0,0, 0.5);
     color: #fff;
     font-size: 1rem;
-    padding: 0.25rem;
+    padding-block: 0.25rem;
+    padding-inline: 0.5rem;
+    white-space: break-spaces;
   }
+
+  &[data-tooltip-position="bottom"]:after {
+    content: attr(data-tooltip);
+    bottom: calc(-100% - 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200%;
+  }
+  &[data-tooltip-position="top"]:after {
+    content: attr(data-tooltip);
+    top: calc(-100% - 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200%;
+  }
+  &[data-tooltip-position="left"]:after {
+    content: attr(data-tooltip);
+    top: 50%;
+    right: calc(100% + 0.5rem);
+    transform: translateY(-50%);
+    max-width: 20rem;
+  }
+  &[data-tooltip-position="right"]:after {
+    content: attr(data-tooltip);
+    top: 50%;
+    left: calc(100% + 0.5rem);
+    transform: translateY(-50%);
+    max-width: 20rem;
+  }
+
   &:hover:after {
     opacity: 100%;
   }
