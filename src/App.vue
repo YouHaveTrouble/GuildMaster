@@ -49,6 +49,7 @@ import {version} from "../package.json"
       :adventurers="adventurers"
       :quests="missives"
       :adventurerForHire="adventurerForHire"
+      :news="news"
       @finalizeQuest="finalizeQuest($event)"
       @wipeSave="resetSave()"
       @recruitActionTaken="recruitAction($event)"
@@ -84,6 +85,7 @@ export default defineComponent({
     guild: new Guild(1, 500),
     gameTickTask: null as null | number,
     gameSaveTask: null as null | number,
+    news: "" as string,
     lastQuestGot: {
       S: null as null | number,
       A: null as null | number,
@@ -264,6 +266,13 @@ export default defineComponent({
       if (!confirm("You are about to wipe your save file. Are you sure?")) return;
       window.localStorage.removeItem("savedGame");
       window.location.reload();
+    },
+    async updateNews() {
+      const result = await fetch("https://raw.githubusercontent.com/YouHaveTrouble/GuildMaster/master/news.txt").catch(() => {
+        return null;
+      });
+      if (result === null) return;
+      this.news = await result.text();
     }
   },
   async mounted() {
@@ -281,6 +290,12 @@ export default defineComponent({
       loadAvailableQuests(),
       loadAdventurersForHire(),
     ]);
+
+    this.updateNews().then(() => {
+      setInterval(() => {
+        this.updateNews();
+      }, 1000 * 60 * 60);
+    });
 
     this.quests = promises[0] as { [key: string]: { [key: string]: Quest } };
     this.adventurersDatabase = promises[1] as Array<Adventurer>;

@@ -4,6 +4,7 @@
       <h1>Guild Master</h1>
       <h3>Adventurer's guild management game</h3>
       <small>v{{ version }}</small>
+      <p class="news">{{ news }}</p>
     </section>
     <section class="upgrades panel pinned-paper">
       <div class="nail top-left">
@@ -56,6 +57,10 @@ export default defineComponent({
     }
   },
   props: {
+    news: {
+      type: String,
+      default: "",
+    },
     guild: {
       type: Object as PropType<Guild>,
       default: () => new Guild(1, 0) as Guild,
@@ -78,6 +83,11 @@ main {
     max-width: 45rem;
     width: 100%;
   }
+}
+
+.news {
+  max-width: 75%;
+  color: #ab0707;
 }
 
 .coffer {
