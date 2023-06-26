@@ -80,6 +80,7 @@ export default defineComponent({
   name: "GuildView",
   data: () => ({
     loading: true as boolean,
+    screenWakeLock: null as null | WakeLockSentinel,
     guild: new Guild(1, 500),
     gameTickTask: null as null | number,
     gameSaveTask: null as null | number,
@@ -266,6 +267,15 @@ export default defineComponent({
     }
   },
   async mounted() {
+
+    setInterval(async () => {
+      if (this.screenWakeLock) return;
+      try {
+        this.screenWakeLock = await navigator.wakeLock.request("screen");
+        console.debug("Screen wake lock acquired");
+      } catch (e) {}
+    }, 1000);
+
     console.debug("Loading game data")
     const promises = await Promise.all([
       loadAvailableQuests(),
