@@ -70,7 +70,9 @@ export default defineComponent({
   },
   methods: {
     closeSelect() {
-      this.selection = false;
+      setTimeout(() => {
+        this.selection = false;
+      }, 0);
     }
   }
 })
