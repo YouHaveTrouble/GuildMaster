@@ -27,7 +27,7 @@
       </button>
     </div>
     <div class="upgrade" v-if="guild.level >= guild.expModifier.guildLevelRequirement">
-      <span>Quest exp modifier (level {{ guild.expModifier.level }})</span>
+      <span>Quest exp modifier (level {{ guild.expModifier.level - 1 }})</span>
       <small>Increases exp from newly offered quests by 10% per level</small>
       <button
           class="button metal"
@@ -39,7 +39,7 @@
       </button>
     </div>
     <div class="upgrade" v-if="guild.level >= guild.goldModifier.guildLevelRequirement">
-      <span>Quest gold modifier (level {{ guild.goldModifier.level }})</span>
+      <span>Quest gold modifier (level {{ guild.goldModifier.level - 1 }})</span>
       <small>Increases gold from newly offered quests by 10% per level</small>
       <button
           class="button metal"

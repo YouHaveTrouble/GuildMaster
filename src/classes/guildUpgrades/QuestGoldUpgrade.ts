@@ -14,8 +14,8 @@ export default class QuestGoldUpgrade extends GuildUpgrade {
   }
 
   getCostForLevel(level: number): number {
-    const scalingFactor = Math.pow(1.05, level - 1);
-    return Math.floor(2500000 * scalingFactor * Math.pow(level, 1.01));
+    if (level === 1) return 1000000;
+    return Math.floor(1000000 * (level * 1.05));
   }
 
   getModifier(): number {

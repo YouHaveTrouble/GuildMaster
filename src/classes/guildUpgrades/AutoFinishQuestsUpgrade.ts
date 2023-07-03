@@ -20,8 +20,26 @@ export default class AutoFinishQuestsUpgrade extends GuildUpgrade implements Max
     }
 
     getCostForLevel(level: number): number {
-        const scalingFactor = Math.pow(4.2, level - 1);
-        return Math.floor(25000 * scalingFactor * Math.pow(level, 1.05));
+        switch (level) {
+            case 1:
+                return 25000;
+            case 2:
+                return 50000;
+            case 3:
+                return 75000;
+            case 4:
+                return 150000;
+            case 5:
+                return 275000;
+            case 6:
+                return 750000;
+            case 7:
+                return 1500000;
+            case 8:
+                return 2500000;
+            default:
+                return 0;
+        }
     }
 
     isMaxLevel(): boolean {
