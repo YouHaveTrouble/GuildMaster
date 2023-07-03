@@ -381,7 +381,7 @@ export default defineComponent({
       }
 
       if (this.guild.level < 6) return;
-      if (Number(now) - Number(this.lastQuestGot.A) >= 5 * 60 * 1000) {
+      if (Number(now) - Number(this.lastQuestGot.A) >= 3 * 60 * 1000) {
         this.lastQuestGot.A = now;
         const keys = Object.keys(this.missives[QuestRank.A]);
         if (keys.length >= 5) return;
@@ -392,7 +392,7 @@ export default defineComponent({
       }
 
       if (this.guild.level < 6) return;
-      if (Number(now) - Number(this.lastQuestGot.S) >= 30 * 60 * 1000) {
+      if (Number(now) - Number(this.lastQuestGot.S) >= 5 * 60 * 1000) {
         this.lastQuestGot.S = now;
         const keys = Object.keys(this.missives[QuestRank.S]);
         if (keys.length >= 5) return;
