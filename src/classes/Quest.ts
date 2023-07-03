@@ -34,8 +34,9 @@ export class Quest {
  * Generate rewards for a quest and return it
  * @param quest
  * @param expModifier - multiplification modifier for the exp reward
+ * @param goldModifier - multiplification modifier for the gold reward
  */
-export function getQuestWithRewards(quest: Quest, expModifier: number = 1) {
+export function getQuestWithRewards(quest: Quest, expModifier: number = 1, goldModifier: number = 1) {
 
     let maxProgress = 1;
 
@@ -70,7 +71,7 @@ export function getQuestWithRewards(quest: Quest, expModifier: number = 1) {
             break;
     }
 
-    let goldReward = Math.floor(maxProgress/6);
+    let goldReward = Math.floor(maxProgress/6 * goldModifier);
     let expReward = Math.floor((Math.floor(maxProgress/120) - maxProgress/1000) * expModifier);
 
     // add some randomness to the rewards
