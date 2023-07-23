@@ -4,13 +4,13 @@
       :class="{done: missive.maxProgress <= missive.progressPoints}"
   >
     <div class="parchment">
-      <img src="/img/quests/backgrounds/dirty_paper.png" alt="parchment">
+      <Parchment/>
     </div>
     <div class="stain" v-if="stain">
-      <img src="/img/quests/overlays/water_stain.png" alt="stain">
+      <WaterStain/>
     </div>
     <div class="drink-stain" v-if="drinkStain.exists">
-      <img src="/img/quests/overlays/drink_stain.png" alt="stain">
+      <DrinkStain/>
     </div>
     <h2>{{ missive.title }}</h2>
     <p>{{ missive.text }}</p>
@@ -51,10 +51,13 @@ import type {Quest} from "@/classes/Quest";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
+import DrinkStain from "@/components/misc/DrinkStain.vue";
+import WaterStain from "@/components/misc/WaterStain.vue";
+import Parchment from "@/components/misc/Parchment.vue";
 
 export default defineComponent({
   name: "QuestMissive",
-  components: {AdventurerComponent},
+  components: {Parchment, WaterStain, DrinkStain, AdventurerComponent},
   props: {
     missive: {
       type: Object as PropType<Quest | any>,

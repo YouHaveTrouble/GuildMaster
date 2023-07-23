@@ -8,10 +8,10 @@
     </section>
     <section class="upgrades panel pinned-paper">
       <div class="nail top-left">
-        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+        <Nail/>
       </div>
       <div class="nail top-right">
-        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+        <Nail/>
       </div>
       <section class="coffer">
         <p>Coffer: {{ formatGold(guild.gold) }} gold</p>
@@ -43,11 +43,12 @@ import {Guild} from "@/classes/Guild";
 import {version} from "../../package.json"
 import UpgradesList from "@/components/UpgradesList.vue";
 import {formatGold} from "@/classes/NumberMagic";
+import Nail from "@/components/misc/Nail.vue";
 
 export default defineComponent({
   name: "GuildView",
   methods: {formatGold},
-  components: {UpgradesList},
+  components: {Nail, UpgradesList},
   data: () => {
     return {
       version: version,

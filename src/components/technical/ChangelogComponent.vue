@@ -1,10 +1,10 @@
 <template>
   <div class="changelog panel pinned-paper">
     <div class="nail top-left">
-      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      <Nail/>
     </div>
     <div class="nail top-right">
-      <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+      <Nail/>
     </div>
     <h1>Changelog</h1>
     <div class="changelog-entry" v-for="release in releases">
@@ -17,10 +17,12 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import Nail from "@/components/misc/Nail.vue";
 
 
 export default defineComponent({
   name: "ChangelogComponent",
+  components: {Nail},
   data: () => ({
     timeFormat: Intl.DateTimeFormat(Intl.DateTimeFormat().resolvedOptions().locale, {
       year: "numeric",

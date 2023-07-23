@@ -2,10 +2,10 @@
   <section class="technical-view">
     <div class="socials panel pinned-paper">
       <div class="nail top-left small">
-        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+        <Nail/>
       </div>
       <div class="nail top-right small">
-        <img src="/img/quests/overlays/nail.png" alt="" draggable="false"/>
+        <Nail/>
       </div>
       <h1>Socials</h1>
       <div class="links">
@@ -29,10 +29,11 @@
 import {defineComponent} from "vue";
 import ChangelogComponent from "@/components/technical/ChangelogComponent.vue";
 import SaveManagerComponent from "@/components/technical/SaveManagerComponent.vue";
+import Nail from "@/components/misc/Nail.vue";
 
 export default defineComponent({
   name: "TechnicalView",
-  components: {SaveManagerComponent, ChangelogComponent},
+  components: {Nail, SaveManagerComponent, ChangelogComponent},
 
 })
 </script>
