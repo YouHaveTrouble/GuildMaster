@@ -75,16 +75,10 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
-      default() {
-        return {} as Guild
-      },
       required: true,
     },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
-      default() {
-        return {} as { [key: string]: Adventurer };
-      },
       required: true,
     },
     adventurerForHire: {

@@ -34,7 +34,7 @@
 <script lang="ts">
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
-import {formatDamage} from "../classes/NumberMagic";
+import {formatDamage} from "@/classes/NumberMagic";
 
 export default defineComponent({
   name: "AdventurerDetails",
@@ -42,9 +42,6 @@ export default defineComponent({
   props: {
     adventurer: {
       type: Object as PropType<Adventurer | null>,
-      default() {
-        return null as Adventurer | null;
-      },
       required: true,
     },
   },
@@ -52,7 +49,6 @@ export default defineComponent({
     const refs = this.$refs as any;
     refs.modal.showModal();
   },
-
 });
 </script>
 

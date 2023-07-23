@@ -65,7 +65,6 @@ export default defineComponent({
       default() {
         return {} as {[key: string]: Adventurer};
       },
-      required: true,
     },
   },
   methods: {

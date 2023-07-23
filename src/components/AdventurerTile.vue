@@ -20,9 +20,6 @@ export default defineComponent({
   props: {
     adventurer: {
       type: Object as PropType<Adventurer>,
-      default() {
-        return {} as Adventurer;
-      },
       required: true,
     }
   },

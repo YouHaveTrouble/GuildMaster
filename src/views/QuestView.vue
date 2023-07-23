@@ -101,23 +101,14 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
-      default() {
-        return new Guild(1, 0);
-      },
       required: true,
     },
     adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
-      default() {
-        return {} as { [key: string]: Adventurer };
-      },
       required: true,
     },
     quests: {
       type: Object as PropType<{ [key: string]: Quest }>,
-      default() {
-        return {} as { [key: string]: Quest };
-      },
       required: true,
     },
     lastRecruitTime: {
@@ -135,7 +126,7 @@ export default defineComponent({
       this.$emit('finalizeQuest', quest)
     },
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

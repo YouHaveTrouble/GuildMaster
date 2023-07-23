@@ -34,8 +34,7 @@ import Nail from "@/components/misc/Nail.vue";
 export default defineComponent({
   name: "TechnicalView",
   components: {Nail, SaveManagerComponent, ChangelogComponent},
-
-})
+});
 </script>
 
 <style lang="scss" scoped>

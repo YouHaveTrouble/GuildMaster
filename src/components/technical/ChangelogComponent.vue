@@ -42,7 +42,6 @@ export default defineComponent({
       if (result === null) return;
       const json = await result.json();
 
-
       for (const release of json) {
         const version = {} as any;
         version.body = release.body.trim();

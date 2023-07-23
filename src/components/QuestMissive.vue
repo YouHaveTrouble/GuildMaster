@@ -61,9 +61,6 @@ export default defineComponent({
   props: {
     missive: {
       type: Object as PropType<Quest | any>,
-      default() {
-        return {} as Quest;
-      },
       required: true,
     },
     adventurers: {

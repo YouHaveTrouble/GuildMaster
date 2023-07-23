@@ -61,7 +61,6 @@ export default defineComponent({
     },
     guild: {
       type: Object as PropType<Guild>,
-      default: () => new Guild(1, 0) as Guild,
       required: true,
     },
   }

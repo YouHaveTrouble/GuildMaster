@@ -63,9 +63,6 @@ export default defineComponent({
   props: {
     guild: {
       type: Object as PropType<Guild>,
-      default() {
-        return new Guild(1, 0) as Guild;
-      },
       required: true,
     }
   },
