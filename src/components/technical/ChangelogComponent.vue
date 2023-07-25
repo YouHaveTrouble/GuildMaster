@@ -7,10 +7,12 @@
       <Nail/>
     </div>
     <h1>Changelog</h1>
-    <div class="changelog-entry" v-for="release in releases">
-      <hr>
-      <h2><span>Version {{ release.name }}</span><small class="date">{{ timeFormat.format(release.createdAt) }}</small></h2>
-      <pre>{{ release.body }}</pre>
+    <div class="changelog-list">
+      <div class="changelog-entry" v-for="release in releases">
+        <hr>
+        <h2><span>Version {{ release.name }}</span><small class="date">{{ timeFormat.format(release.createdAt) }}</small></h2>
+        <pre>{{ release.body }}</pre>
+      </div>
     </div>
   </div>
 </template>
@@ -63,17 +65,30 @@ export default defineComponent({
   padding-block: 3rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
   max-width: 45rem;
+  min-height: 30rem;
+  max-height: 30rem;
   width: 100%;
+  overflow-y: auto;
 
   h1 {
     font-size: 3rem;
     line-height: 1;
     margin: 0;
     text-align: center;
+  }
+
+  .changelog-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    overflow-y: auto;
   }
 
   .changelog-entry {
