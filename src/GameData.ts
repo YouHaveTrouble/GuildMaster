@@ -31,9 +31,17 @@ export function saveGame(
   data: GameData
 ): void {
   console.debug("Saving game...");
+
+  const adventurers = {} as { [key: string]: any };
+  for (const adventurerId in data.adventurers) {
+    const adventurer: {[key: string]: any} = JSON.parse(JSON.stringify(data.adventurers[adventurerId]));
+    delete adventurer.portrait;
+    adventurers[adventurerId] = adventurer;
+  }
+
   window.localStorage.setItem("savedGame", JSON.stringify({
     guild: data.guild,
-    adventurers: data.adventurers,
+    adventurers: adventurers,
     missives: data.missives,
     lastQuestGot: data.lastQuestGot,
     lastRecruitAction: data.lastRecruitAction,

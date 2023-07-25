@@ -97,6 +97,7 @@ export default defineComponent({
     lastRecruitHandled: null as null | number,
     adventurerForHire: null as Adventurer | null,
     adventurersDatabase: {} as Array<Adventurer>,
+    allAdventurers: {} as { [key: string]: Adventurer },
     adventurers: {} as { [key: string]: Adventurer },
     quests: {} as { [key: string]: { [key: string]: Quest } },
     missives: {
@@ -214,11 +215,18 @@ export default defineComponent({
 
       for (const id in saveData.adventurers) {
         const data = saveData.adventurers[id];
+        let portrait: string = "";
+
+        const adventurer = this.allAdventurers[data.id];
+        if (adventurer) {
+          portrait = adventurer.portrait;
+        }
+
         try {
           const adventurer = new Adventurer(
               data.id,
               data.name,
-              data.portrait,
+              portrait,
               data.attackExponent ?? 1.1,
               data.level ?? 1,
               data.exp ?? 0,
@@ -293,6 +301,11 @@ export default defineComponent({
 
     this.quests = promises[0] as { [key: string]: { [key: string]: Quest } };
     this.adventurersDatabase = promises[1] as Array<Adventurer>;
+    for (const adventurerId in this.adventurersDatabase) {
+      const adventurer = this.adventurersDatabase[adventurerId];
+      this.allAdventurers[adventurer.id] = new Adventurer(adventurer.id, adventurer.name, adventurer.portrait, adventurer.attackExponent, adventurer.level, adventurer.exp, adventurer.prestige);
+    }
+
     console.debug("Game data loaded!")
     this.loadGame();
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
