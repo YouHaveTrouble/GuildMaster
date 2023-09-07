@@ -1,0 +1,102 @@
+[
+  {
+    "id": "aldek",
+    "name": "Aldek",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "aria",
+    "name": "Aria",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "burnett",
+    "name": "Burnett",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "charlotte",
+    "name": "Charlotte",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "ella",
+    "name": "Ella",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "elyza",
+    "name": "Elyza",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "emille",
+    "name": "Emille",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "garret",
+    "name": "Garret",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "gryza",
+    "name": "Gryza",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "lestat",
+    "name": "Lestat",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "lydia",
+    "name": "Lydia",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "noor",
+    "name": "Noor",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "noron",
+    "name": "Noron",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "oola",
+    "name": "Oola",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "owen",
+    "name": "Owen",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "ryslette",
+    "name": "Ryslette",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "sally",
+    "name": "Sally",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "tovu",
+    "name": "Tovu",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "wrydio",
+    "name": "Wrydio",
+    "attackExponent": 1.1
+  },
+  {
+    "id": "xarya",
+    "name": "Xarya",
+    "attackExponent": 1.1
+  }
+]
