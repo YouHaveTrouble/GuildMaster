@@ -50,6 +50,8 @@ export default defineComponent({
   line-height: 1;
   color: rgba(0, 0, 0, 0.75);
   position: relative;
+  background: rgb(2,0,36);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgb(69, 69, 84) 57%, rgb(85, 112, 117) 100%);
 
   .level {
     position: absolute;

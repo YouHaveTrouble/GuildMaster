@@ -104,6 +104,8 @@ export default defineComponent({
     width: 100%;
     max-width: 15rem;
     aspect-ratio: 1/1;
+    background: rgb(2,0,36);
+    background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgb(69, 69, 84) 57%, rgb(85, 112, 117) 100%);
 
     img {
       width: 100%;
