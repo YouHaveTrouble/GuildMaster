@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "dev-public": "vite --host",
     "build": "run-p type-check build-only && cp -r CNAME dist/CNAME",
     "preview": "vite preview",
     "build-only": "vite build",
