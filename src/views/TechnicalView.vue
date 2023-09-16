@@ -10,11 +10,11 @@
       <h1>Socials</h1>
       <div class="links">
         <a class="link" href="https://discord.gg/j8KK5dGBps">
-          <img class="icon" src="/img/icons/discord.svg" alt="Discord"/>
+          <DiscordLogo/>
           Discord
         </a>
         <a class="link" href="https://github.com/YouHaveTrouble/GuildMaster">
-          <img class="icon" src="/img/icons/github.svg" alt="GitHub"/>
+          <GithubLogo/>
           GitHub
         </a>
       </div>
@@ -30,10 +30,18 @@ import {defineComponent} from "vue";
 import ChangelogComponent from "@/components/technical/ChangelogComponent.vue";
 import SaveManagerComponent from "@/components/technical/SaveManagerComponent.vue";
 import Nail from "@/components/misc/Nail.vue";
+import DiscordLogo from "@/components/misc/DiscordLogo.vue";
+import GithubLogo from "@/components/misc/GithubLogo.vue";
 
 export default defineComponent({
   name: "TechnicalView",
-  components: {Nail, SaveManagerComponent, ChangelogComponent},
+  components: {
+    DiscordLogo,
+    GithubLogo,
+    Nail,
+    SaveManagerComponent,
+    ChangelogComponent,
+  },
 });
 </script>
 
