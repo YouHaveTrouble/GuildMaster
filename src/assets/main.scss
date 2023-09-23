@@ -1,6 +1,10 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 0 0 10rem;
+  padding: 0 0 2rem;
   min-height: calc(100vh - 10rem);
   font-family: 'EB Garamond', serif;
   overflow-y: scroll;

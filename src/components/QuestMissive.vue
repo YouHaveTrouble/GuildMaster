@@ -114,11 +114,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .missive {
-  width: min(100%, 14rem);
+  width: 14rem;
+  min-width: 14rem;
   text-align: center;
   border: 2px solid #000;
   padding: 0.5rem;
   position: relative;
+  scroll-snap-align: center;
 
   .parchment {
     position: absolute;
@@ -257,4 +259,5 @@ export default defineComponent({
     }
   }
 }
+
 </style>
