@@ -21,7 +21,7 @@ import {version} from "../package.json"
   <header>
     <nav>
       <RouterLink
-          :to="{name: 'guild'}"
+        :to="{name: 'guild'}"
       >
         Guild
       </RouterLink>
@@ -32,23 +32,65 @@ import {version} from "../package.json"
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import AdventurerIdentity from "@/models/AdventurerIdentity.ts";
+import Adventurer from "@/models/Adventurer.ts";
 
 export default defineComponent({
-  name: "GuildView",
+  name: "GuildMaster",
   data: () => ({
     loading: true,
     screenWakeLock: null as null | WakeLockSentinel,
+    possibleRecruits: {} as { [key: string]: AdventurerIdentity },
+    adventurers: {} as { [key: string]: Adventurer },
   }),
   methods: {
+    async acquireScreenWakeLock(): Promise<void> {
+      if (!("wakeLock" in navigator)) {
+        return;
+      }
+      if (this.screenWakeLock !== null) {
+        return;
+      }
+      try {
+        this.screenWakeLock = await navigator.wakeLock.request("screen");
+      } catch (e) {
+        setTimeout(() => {
+          this.acquireScreenWakeLock();
+        }, 1000);
+      }
+    },
+    async loadAdventurers(): Promise<void> {
+      await fetch("/data/adventurers.json")
+        .then(response => response.json())
+        .then(data => {
+          if (!Array.isArray(data)) throw new Error("Data was expected to be an array");
 
+          for (const rawData of data) {
+            if (typeof rawData.id !== "string" || typeof rawData.name !== "string" || typeof rawData.portrait !== "string") {
+              console.error("Failed to load one of the adventurer's data: invalid data");
+              continue;
+            }
+            this.possibleRecruits[rawData.id] = new AdventurerIdentity(
+              rawData.id,
+              rawData.name,
+              rawData.portrait,
+            );
+          }
+
+          // TODO load adventurers from save file and remove their data from possible recruits
+
+        })
+        .catch(error => {
+          console.error("Failed to load adventurer data:", error);
+        });
+
+    },
   },
   async mounted() {
 
-    try {
-      this.screenWakeLock = await navigator.wakeLock.request("screen");
-    } catch (e) {
-      console.log("Failed to acquire screen wake lock", e);
-    }
+    await this.acquireScreenWakeLock();
+
+    await this.loadAdventurers();
 
     this.loading = false;
     console.debug("Game loaded");
@@ -82,7 +124,7 @@ nav {
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: bottom;
-  filter: drop-shadow(0 0 0.5rem rgba(0,0,0, 0.25));
+  filter: drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.25));
 
   .icon {
     width: 2rem;
@@ -135,6 +177,7 @@ nav {
     width: 80px;
     height: 80px;
   }
+
   .lds-ring div {
     box-sizing: border-box;
     display: block;
@@ -147,15 +190,19 @@ nav {
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #000 transparent transparent transparent;
   }
+
   .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;
   }
+
   .lds-ring div:nth-child(2) {
     animation-delay: -0.3s;
   }
+
   .lds-ring div:nth-child(3) {
     animation-delay: -0.15s;
   }
+
   @keyframes lds-ring {
     0% {
       transform: rotate(0deg);
