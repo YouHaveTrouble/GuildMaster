@@ -61,6 +61,16 @@ body {
   background-color: rgb(19, 16, 14);
   background-blend-mode: darken;
   background-repeat: repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main {
+  max-width: 69rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #app {
