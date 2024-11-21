@@ -1,22 +1,23 @@
 import type StatHolder from "@/models/StatHolder.ts";
-import type AdventurerInventory from "@/models/AdventurerInventory.ts";
+import AdventurerInventory from "@/models/AdventurerInventory.ts";
+import type AdventurerIdentity from "@/models/AdventurerIdentity.ts";
 
 export default class Adventurer implements StatHolder {
 
-  name: string;
+  identity: AdventurerIdentity;
   experience: number = 0;
   basePower: number = 0;
   baseDefense: number = 0;
   inventory: AdventurerInventory;
 
   constructor(
-    name: string,
+    identity: AdventurerIdentity,
     experience: number = 0,
     basePower: number = 0,
     baseDefense: number = 0,
-    inventory: AdventurerInventory
+    inventory: AdventurerInventory = new AdventurerInventory()
   ) {
-    this.name = name;
+    this.identity = identity;
     this.experience = experience;
     this.basePower = basePower;
     this.baseDefense = baseDefense;
