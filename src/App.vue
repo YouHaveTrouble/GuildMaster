@@ -33,7 +33,7 @@ import {version} from "../package.json"
 <script lang="ts">
 import {defineComponent} from "vue";
 import AdventurerIdentity from "@/models/AdventurerIdentity.ts";
-import Adventurer from "@/models/Adventurer.ts";
+import SaveData from "@/models/SaveData.ts";
 
 export default defineComponent({
   name: "GuildMaster",
@@ -41,7 +41,7 @@ export default defineComponent({
     loading: true,
     screenWakeLock: null as null | WakeLockSentinel,
     possibleRecruits: {} as { [key: string]: AdventurerIdentity },
-    adventurers: {} as { [key: string]: Adventurer },
+    saveData: null as null | SaveData,
   }),
   methods: {
     async acquireScreenWakeLock(): Promise<void> {
@@ -59,12 +59,11 @@ export default defineComponent({
         }, 1000);
       }
     },
-    async loadAdventurers(): Promise<void> {
+    async loadAdventurerData(): Promise<void> {
       await fetch("/data/adventurers.json")
         .then(response => response.json())
         .then(data => {
           if (!Array.isArray(data)) throw new Error("Data was expected to be an array");
-
           for (const rawData of data) {
             if (typeof rawData.id !== "string" || typeof rawData.name !== "string" || typeof rawData.portrait !== "string") {
               console.error("Failed to load one of the adventurer's data: invalid data");
@@ -76,24 +75,44 @@ export default defineComponent({
               rawData.portrait,
             );
           }
-
-          // TODO load adventurers from save file and remove their data from possible recruits
-
         })
         .catch(error => {
           console.error("Failed to load adventurer data:", error);
         });
-
     },
+    saveGame(): void {
+      window.localStorage.setItem("saveData", JSON.stringify(this.saveData));
+      console.debug("Game saved");
+    },
+    loadGame(): void {
+      const saveData = window.localStorage.getItem("saveData");
+      if (saveData === null) {
+        this.saveData = new SaveData({}, this.possibleRecruits);
+        return;
+      }
+      const jsonData = JSON.parse(saveData);
+      if (jsonData === null) return;
+      this.saveData = new SaveData(jsonData, this.possibleRecruits);
+      for (const adventurer of this.saveData.adventurers) {
+        delete this.possibleRecruits[adventurer?.identity?.id];
+      }
+
+    }
   },
   async mounted() {
 
     await this.acquireScreenWakeLock();
 
-    await this.loadAdventurers();
+    await this.loadAdventurerData();
+
+    this.loadGame();
 
     this.loading = false;
     console.debug("Game loaded");
+
+    setInterval(() => {
+      this.saveGame();
+    }, 10 * 1000);
 
   },
 })
