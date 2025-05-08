@@ -7,12 +7,22 @@ export class Quest {
     title:  string;
     text: string;
     adventurers: Array<Adventurer>;
+    maxAdventurers: number;
     progressPoints: number;
     maxProgress: number;
     expReward: number;
     goldReward: number;
 
-    constructor(id: string, rank: QuestRank, title: string, text: string, maxProgress: number, expReward: number, goldReward: number) {
+    constructor(
+      id: string,
+      rank: QuestRank,
+      title: string,
+      text: string,
+      maxProgress: number,
+      expReward: number,
+      goldReward: number,
+      maxAdventurers: number = 1
+    ) {
         this.id = id;
         this.rank = rank;
         this.title = title;
@@ -22,6 +32,7 @@ export class Quest {
         this.goldReward = goldReward;
         this.progressPoints = 0;
         this.adventurers = [];
+        this.maxAdventurers = maxAdventurers;
     }
 
     getPercentProgress(): number {

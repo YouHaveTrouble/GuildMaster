@@ -6,7 +6,7 @@ import {getFromString, QuestRank} from "@/classes/QuestRank";
 export class GameData {
   guild: Guild;
   adventurers: { [key: string]: Adventurer };
-  missives: { [key: string]: { [key: string]: Quest } };
+  missives: Array<Quest>;
   lastQuestGot: { [key: string]: null | number };
   lastRecruitAction: null | number;
   adventurerForHireId: string | null;
@@ -16,7 +16,7 @@ export class GameData {
   ) {
     this.guild = data.guild ?? new Guild(1, 0);
     this.adventurers = data.adventurers ?? {} as { [key: string]: Adventurer };
-    this.missives = data.missives ?? {} as { [key: string]: { [key: string]: Quest } };
+    this.missives = data.missives ?? [] as Array<Quest>;
     this.lastQuestGot = data.lastQuestGot ?? {} as { [key: string]: null | number };
     this.lastRecruitAction = data.lastRecruitAction ?? null;
     this.adventurerForHireId = data.adventurerForHireId ?? null;

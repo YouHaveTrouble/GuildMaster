@@ -1,55 +1,18 @@
 <template>
   <section>
     <QuestGroup
-        v-if="guild.level >= 7 && Object.keys(quests.S).length > 0"
         :adventurers="adventurers"
-        :quests="quests.S"
+        :quests="quests.filter(quest => quest.progressPoints < quest.maxProgress)"
         :finalizeQuest="finalizeQuest"
-        label="Rank S Quests"
+        label="Quests"
+        v-show="quests.filter(quest => quest.progressPoints < quest.maxProgress).length > 0"
     />
     <QuestGroup
-        v-if="guild.level >= 6 && Object.keys(quests.A).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.A"
-        :finalizeQuest="finalizeQuest"
-        label="Rank A Quests"
-    />
-    <QuestGroup
-        v-if="guild.level >= 5 && Object.keys(quests.B).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.B"
-        :finalizeQuest="finalizeQuest"
-        label="Rank B Quests"
-    />
-
-    <QuestGroup
-        v-if="guild.level >= 4 && Object.keys(quests.C).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.C"
-        :finalizeQuest="finalizeQuest"
-        label="Rank C Quests"
-    />
-
-    <QuestGroup
-        v-if="guild.level >= 3 && Object.keys(quests.D).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.D"
-        :finalizeQuest="finalizeQuest"
-        label="Rank D Quests"
-    />
-    <QuestGroup
-        v-if="guild.level >= 2 && Object.keys(quests.E).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.E"
-        :finalizeQuest="finalizeQuest"
-        label="Rank E Quests"
-    />
-    <QuestGroup
-        v-if="Object.keys(quests.F).length > 0"
-        :adventurers="adventurers"
-        :quests="quests.F"
-        :finalizeQuest="finalizeQuest"
-        label="Rank F Quests"
+      :finalize-quest="finalizeQuest"
+      :adventurers="adventurers"
+      :quests="quests.filter(quest => quest.progressPoints >= quest.maxProgress)"
+      label="Completed Quests"
+      v-show="quests.filter(quest => quest.progressPoints >= quest.maxProgress).length > 0"
     />
   </section>
 </template>
@@ -76,7 +39,7 @@ export default defineComponent({
       required: true,
     },
     quests: {
-      type: Object as PropType<{ [key: string]: Quest }>,
+      type: Object as PropType<Array<Quest>>,
       required: true,
     },
     lastRecruitTime: {
@@ -98,13 +61,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.guild {
+section {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   padding-bottom: 0.5rem;
+}
+
+@media(min-width: 800px) {
+  section {
+    flex-direction: column-reverse;
+  }
 }
 
 </style>

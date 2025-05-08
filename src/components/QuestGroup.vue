@@ -59,27 +59,31 @@ h1 {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: start;
-  align-items: stretch;
+  justify-content: flex-start;
   gap: 1rem;
   padding-block: 0.5rem;
-  padding-inline: 40%;
+  padding-inline: 5rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  width: max-content;
+  width: 100vw;
   max-width: 100%;
 }
 
 @media(min-width: 800px) {
   .missives-wrapper {
     padding-inline: 1rem;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   .missives {
-    justify-content: center;
-    flex-wrap: wrap;
-    overflow-x: inherit;
+    display: grid;
     padding-inline: 0;
+    max-width: 1200px;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    grid-auto-rows: auto;
+    gap: 1rem;
+
   }
 }
 </style>

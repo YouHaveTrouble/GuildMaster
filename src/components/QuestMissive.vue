@@ -12,6 +12,7 @@
     <div class="drink-stain" v-if="drinkStain.exists">
       <DrinkStain/>
     </div>
+    <div class="rank">{{missive.rank}}</div>
     <h2>{{ missive.title }}</h2>
     <p>{{ missive.text }}</p>
     <div class="slots">
@@ -36,7 +37,7 @@
     </div>
     <div class="progressWrap">
       <span class="progress"></span>
-      <span class="percentage">{{ progressPercentage }}</span>
+      <span class="percentage">{{ `${progressPercentage.toFixed(2)}%` }}</span>
     </div>
     <h3>Rewards</h3>
     <div class="rewards">
@@ -58,6 +59,11 @@ import Parchment from "@/components/misc/Parchment.vue";
 export default defineComponent({
   name: "QuestMissive",
   components: {Parchment, WaterStain, DrinkStain, AdventurerComponent},
+  computed: {
+    progressPercentageValue(): string {
+      return `${this.missive.progressPoints / this.missive.maxProgress * 100}%`;
+    },
+  },
   props: {
     missive: {
       type: Object as PropType<Quest | any>,
@@ -73,7 +79,7 @@ export default defineComponent({
   },
   data: () => {
     return {
-      progressPercentage: "0%",
+      progressPercentage: 0,
       stain: false,
       drinkStain: {
         exists: false,
@@ -85,8 +91,7 @@ export default defineComponent({
   methods: {
     updateProgress() {
       if (this.missive === undefined) return;
-      const progress = (this.missive.progressPoints / this.missive.maxProgress * 100).toFixed(2);
-      this.progressPercentage = `${progress}%`;
+      this.progressPercentage = this.missive.progressPoints / this.missive.maxProgress * 100;
     },
     randomNumber(min: number, max: number) {
       return Math.random() * (max - min) + min;
@@ -102,7 +107,7 @@ export default defineComponent({
     }
   },
   watch: {
-    missive: {
+    "missive.progressPoints": {
       handler() {
         this.updateProgress();
       },
@@ -121,6 +126,7 @@ export default defineComponent({
   padding: 0.5rem;
   position: relative;
   scroll-snap-align: center;
+  margin: 0 auto;
 
   .parchment {
     position: absolute;
@@ -161,7 +167,7 @@ export default defineComponent({
       left: 0;
       height: 100%;
       display: block;
-      width: v-bind(progressPercentage);
+      width: v-bind(progressPercentageValue);
       background-color: rgba(0, 128, 0, 0.65);
       transition: width 250ms linear;
     }
@@ -176,6 +182,16 @@ export default defineComponent({
       justify-content: center;
       width: 100%;
     }
+  }
+
+  .rank {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.25rem;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ab0707;
+    z-index: -1;
   }
 
   .rewards {
