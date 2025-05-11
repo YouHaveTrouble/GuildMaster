@@ -22,9 +22,9 @@ export default defineComponent({
   }),
   props: {
     adventurers: {
-      type: Object as PropType<{ [key: string]: Adventurer }>,
+      type: Object as PropType<Array<Adventurer>>,
       default() {
-        return {} as { [key: string]: Adventurer };
+        return [] as Array<Adventurer>;
       },
     },
   },
