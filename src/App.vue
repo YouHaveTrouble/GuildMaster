@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {RouterLink, RouterView} from 'vue-router'
+import {version} from "@/../package.json";
 </script>
 
 <template>
@@ -104,7 +105,7 @@ export default defineComponent({
   methods: {
     async updateMissives() {
       for (const missive of this.missives) {
-        if (missive.adventurers.length <= 0) {
+        if (missive.adventurers.length < missive.maxAdventurers) {
           missive.progressPoints = 0;
           continue;
         }

@@ -21,7 +21,9 @@ import { vOnClickOutside } from '@vueuse/components'
     <span>+</span>
   </article>
   <div class="selection" v-if="selection" v-on-click-outside="closeSelect">
-    <button
+    <span>Choose adventurer</span>
+    <div class="list">
+      <button
         class="slot"
         v-for="adventurer in allAdventurers"
         :key="adventurer.id"
@@ -31,11 +33,12 @@ import { vOnClickOutside } from '@vueuse/components'
           $emit('hireAdventurer', adventurer.id);
           selection = false;
         }"
-    >
-      <AdventurerTile
-        :adventurer="adventurer"
-      />
-    </button>
+      >
+        <AdventurerTile
+          :adventurer="adventurer"
+        />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -61,9 +64,9 @@ export default defineComponent({
       },
     },
     allAdventurers: {
-      type: Object as PropType<{[key: string]: Adventurer}>,
+      type: Object as PropType<Array<Adventurer>>,
       default() {
-        return {} as {[key: string]: Adventurer};
+        return [] as Array<Adventurer>;
       },
     },
   },
@@ -82,22 +85,35 @@ export default defineComponent({
 .selection {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  width: max-content;
-  max-width: 17rem;
-  transform: translateX(-50%) translateY(104%);
+  left: 0;
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.5rem;
-  background-color: rgba(0,0,0, 0.2);
+  background-color: rgba(0,0,0, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 2;
   cursor: default;
-  max-height: 12rem;
-  overflow-y: auto;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  .list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 100%;
+  }
+  span {
+    font-size: 1.5rem;
+    color: #fff;
+  }
   .slot {
     width: 5rem;
     height: 5rem;
@@ -132,5 +148,8 @@ export default defineComponent({
   height: 100%;
   font-size: 4.5rem;
   color: #000;
+  span {
+    transform: translateY(-0.5rem);
+  }
 }
 </style>

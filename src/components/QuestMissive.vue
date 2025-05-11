@@ -19,7 +19,7 @@
       <button class="slot">
         <AdventurerComponent
             :adventurer="missive.adventurers[0]"
-            :all-adventurers="adventurers"
+            :all-adventurers="notBusyAdventurers"
             @hire-adventurer="(id) => {
                 adventurers[id].busy = true;
                 missive.adventurers[0] = adventurers[id];
@@ -62,6 +62,9 @@ export default defineComponent({
   computed: {
     progressPercentageValue(): string {
       return `${this.missive.progressPoints / this.missive.maxProgress * 100}%`;
+    },
+    notBusyAdventurers(): Adventurer[] {
+      return Object.values(this.adventurers).filter(adventurer => !adventurer.busy);
     },
   },
   props: {
@@ -232,7 +235,6 @@ export default defineComponent({
       background-color: rgba(0, 0, 0, 0.2);
       cursor: pointer;
       border-radius: 0.2rem;
-      position: relative;
     }
   }
 

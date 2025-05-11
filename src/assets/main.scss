@@ -1,12 +1,13 @@
 * {
   box-sizing: border-box;
+  font-family: 'EB Garamond', serif;
+  scrollbar-color: #8f7256 rgba(0, 0, 0, 0.1);
 }
 
 body {
   margin: 0;
   padding: 0 0 2rem;
   min-height: calc(100vh - 10rem);
-  font-family: 'EB Garamond', serif;
   overflow-y: scroll;
   user-select: none;
   background-size: 25rem;

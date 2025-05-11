@@ -83,7 +83,7 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     grid-auto-rows: auto;
     gap: 1rem;
-
+    overflow-x: visible;
   }
 }
 </style>
