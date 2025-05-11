@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {RouterLink, RouterView} from 'vue-router'
-import {version} from "../package.json"
 </script>
 
 <template>
@@ -112,6 +111,7 @@ export default defineComponent({
         for (const adventurerId in missive.adventurers) {
           const adventurer = missive.adventurers[adventurerId];
           const attack = adventurer.getAttack();
+          adventurer.busy = true;
           missive.progressPoints = Math.min(missive.progressPoints + attack, missive.maxProgress);
         }
         if (
@@ -213,7 +213,7 @@ export default defineComponent({
         }
 
         try {
-          const adventurer = new Adventurer(
+          adventurers[data.id] = new Adventurer(
             data.id,
             data.name,
             portrait,
@@ -222,8 +222,6 @@ export default defineComponent({
             data.exp ?? 0,
             data.prestige ?? 0,
           );
-          adventurer.busy = data.busy;
-          adventurers[data.id] = adventurer;
         } catch (e) {
         }
       }
