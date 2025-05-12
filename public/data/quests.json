@@ -1,0 +1,106 @@
+{
+  "ranks": {
+    "A": [
+      {
+        "title": "Ogre king",
+        "text": "Ogres have chosen a new king through democratic vote. They all voted for the strongest ogre."
+      },
+      {
+        "title": "Devilish dungeon",
+        "text": "New dungeon was discovered. It needs to be mapped and explored so lower rank adventurers can enter."
+      },
+      {
+        "title": "Eater of Worlds",
+        "text": "A giant worm emerged from the ground and appears to be consuming the ground itself."
+      }
+    ],
+    "B": [
+      {
+        "title": "Undead horde",
+        "text": "Due to the spillage of necromancy potion at nearby graveyard we now have an undead army on our doorstep."
+      },
+      {
+        "title": "Runaway prisoner",
+        "text": "During the last prison guard strike a prisoner managed to escape. Bring them back to their cell."
+      },
+      {
+        "title": "The aristocrats",
+        "text": "Royalty wants an escort for one of their carriages."
+      }
+    ],
+    "C": [
+      {
+        "title": "Scratchy, the butcher",
+        "text": "Scratchy turned evil and is terrorizing its victims. Put a stop to it!"
+      },
+      {
+        "title": "Hobgnoblin subjugation",
+        "text": "Gnoblins evolved and are back for vengeance."
+      },
+      {
+        "title": "Holy",
+        "text": "Gnoblins summoned their machine god and it started going haywire on everything around it. Destroy it!"
+      }
+    ],
+    "D": [
+      {
+        "title": "Caravan escort",
+        "text": "Escort a merchant caravan."
+      },
+      {
+        "title": "Rare ore",
+        "text": "Obtain laudanium ore for town's blacksmith."
+      },
+      {
+        "title": "Demonic pests!",
+        "text": "Clear the fields from cabbage imps."
+      }
+    ],
+    "E": [
+      {
+        "title": "Gnoblin subjugation",
+        "text": "Kill 3 gnoblins."
+      },
+      {
+        "title": "Phantom menace",
+        "text": "Exorcise ghosts out of someone's apartment."
+      },
+      {
+        "title": "Scratchy in peril",
+        "text": "Get Scratchy the cat from the tree safe onto the ground."
+      }
+    ],
+    "F": [
+      {
+        "title": "Frog Frenzy",
+        "text": "Kill 10 demon frogs."
+      },
+      {
+        "title": "Rats!",
+        "text": "Get rid of the rats from someone's basement."
+      },
+      {
+        "title": "Herb gathering",
+        "text": "Collect medicinal herbs."
+      },
+      {
+        "title": "Big pile of rubble",
+        "text": "Tavern collapsed. Again. Help clean up the debris."
+      }
+    ],
+    "S": [
+      {
+        "title": "The Demon King",
+        "text": "Demon King has awoken and is a threat to whole existence. Heroes needed."
+      },
+      {
+        "title": "Scratchy, Destruction Incarnate",
+        "text": "Scratchy was reborn as a machine of pure destruction and needs to be stopped."
+      },
+      {
+        "title": "Jiggly Jungle",
+        "text": "A jungle south began rapidly expanding and experts think arson is our only option."
+      }
+    ]
+  }
+}

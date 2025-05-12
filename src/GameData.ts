@@ -68,26 +68,31 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
     F: {} as { [key: string]: Quest },
   } as { [key: string]: { [key: string]: Quest } };
 
-  for (const rank in quests) {
-    const response = await fetch(`data/quests/Rank${rank}.json`);
-    if (response.status !== 200) {
-      console.error("Failed to load quests");
-      alert("Failed to load quests. Please try refreshing the page.");
-      return quests;
-    }
-    const questData = await response.json();
+  const questsResponse = await fetch(`data/quests.json`);
 
-    let id = 0;
-    for (const quest of questData) {
-      id++;
-      quests[rank.toString()][id] = new Quest(
-        id.toString(),
-        getFromString(rank as QuestRank),
+  if (questsResponse.status !== 200) {
+    console.error("Failed to load quests");
+    alert("Failed to load quests. Please try refreshing the page.");
+    return quests;
+  }
+
+  const questsData = await questsResponse.json();
+
+  for (const rank of Object.keys(questsData.ranks)) {
+    const questRank = getFromString(rank as keyof typeof QuestRank);
+    if (!questRank) {
+      console.error(`Invalid quest rank: ${rank}`);
+      continue;
+    }
+    const questRankData = questsData.ranks[questRank];
+
+    for (const quest of questRankData) {
+      const id = quest.id;
+      quests[questRank][id] = new Quest(
+        id,
+        questRank,
         quest.title,
         quest.text,
-        1,
-        0,
-        0
       );
     }
   }

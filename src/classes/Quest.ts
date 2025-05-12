@@ -18,9 +18,9 @@ export class Quest {
       rank: QuestRank,
       title: string,
       text: string,
-      maxProgress: number,
-      expReward: number,
-      goldReward: number,
+      maxProgress: number = 1,
+      expReward: number = 0,
+      goldReward: number = 0,
       maxAdventurers: number = 1
     ) {
         this.id = id;
