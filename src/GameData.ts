@@ -8,8 +8,7 @@ export class GameData {
   adventurers: { [key: string]: Adventurer };
   missives: Array<Quest>;
   lastQuestGot: { [key: string]: null | number };
-  lastRecruitAction: null | number;
-  adventurerForHireId: string | null;
+  adventurersForHire: {[key: string]: Adventurer} | null;
 
   constructor(
     data: any,
@@ -18,8 +17,7 @@ export class GameData {
     this.adventurers = data.adventurers ?? {} as { [key: string]: Adventurer };
     this.missives = data.missives ?? [] as Array<Quest>;
     this.lastQuestGot = data.lastQuestGot ?? {} as { [key: string]: null | number };
-    this.lastRecruitAction = data.lastRecruitAction ?? null;
-    this.adventurerForHireId = data.adventurerForHireId ?? null;
+    this.adventurersForHire = data.adventurersForHire ?? null;
   }
 }
 
@@ -39,13 +37,19 @@ export function saveGame(
     adventurers[adventurerId] = adventurer;
   }
 
+  const adventurersForHire = {} as { [key: string]: any };
+  for (const adventurerId in data.adventurersForHire) {
+    const adventurer: {[key: string]: any} = JSON.parse(JSON.stringify(data.adventurersForHire[adventurerId]));
+    delete adventurer.portrait;
+    adventurersForHire[adventurerId] = adventurer;
+  }
+
   window.localStorage.setItem("savedGame", JSON.stringify({
     guild: data.guild,
     adventurers: adventurers,
     missives: data.missives,
     lastQuestGot: data.lastQuestGot,
-    lastRecruitAction: data.lastRecruitAction,
-    adventurerForHireId: data.adventurerForHireId,
+    adventurersForHire: adventurersForHire
   }));
 }
 
@@ -99,38 +103,38 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
   return quests;
 }
 
-export async function loadAdventurersForHire(): Promise<Array<Adventurer>> {
+export async function loadAdventurersForHire(): Promise<{[key: string]: Adventurer}> {
   const response = await fetch("data/adventurers.json");
   if (response.status !== 200) {
     console.error("Failed to load adventurers");
     alert("Failed to load adventurers. Please try refreshing the page.");
-    return [];
+    return {};
   }
   const adventurerData = await response.json();
 
-  const adventurers: Array<Adventurer> = [];
+  const adventurers: {[key: string]: Adventurer} = {};
   for (const adventurer of adventurerData) {
-    adventurers.push(new Adventurer(
+    const loadedAdventurer = new Adventurer(
       adventurer.id,
       adventurer.name,
       adventurer.portrait,
       adventurer.attackExponent,
       adventurer.level,
       adventurer.exp,
-    ));
+    )
+    adventurers[loadedAdventurer.id] = loadedAdventurer;
   }
-
   return adventurers;
 }
 
 export function removeAlreadyHiredAdventurers(
-  adventurers: Array<Adventurer>,
+  adventurers: { [key: string]: Adventurer },
   adventurersHired: { [key: string]: Adventurer }
-): Array<Adventurer> {
-  const adventurersForHire: Array<Adventurer> = [];
-  for (const adventurer of adventurers) {
+): { [key: string]: Adventurer } {
+  const adventurersForHire: { [key: string]: Adventurer } = {};
+  for (const adventurer of Object.values(adventurers)) {
     if (adventurersHired[adventurer.id]) continue;
-    adventurersForHire.push(adventurer);
+    adventurersForHire[adventurer.id] = adventurer;
   }
   return adventurersForHire;
 }

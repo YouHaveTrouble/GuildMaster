@@ -48,10 +48,11 @@ import {version} from "@/../package.json";
     :guild="guild"
     :adventurers="adventurers"
     :quests="missives"
-    :adventurerForHire="adventurerForHire"
+    :adventurersForHire="adventurersForHire"
     :news="news"
     @finalizeQuest="finalizeQuest($event)"
-    @recruitActionTaken="recruitAction($event)"
+    @recruitAdventurer="recruitAdventurer($event)"
+    @dismissRecruit="dismissRecruit($event)"
   />
 </template>
 
@@ -94,9 +95,8 @@ export default defineComponent({
       E: null as null | number,
       F: null as null | number,
     } as { [key: string]: null | number },
-    lastRecruitHandled: null as null | number,
-    adventurerForHire: null as Adventurer | null,
-    adventurersDatabase: {} as Array<Adventurer>,
+    adventurersForHire: {} as { [key: string]: Adventurer },
+    adventurersDatabase: {} as { [key: string]: Adventurer },
     allAdventurers: {} as { [key: string]: Adventurer },
     adventurers: {} as { [key: string]: Adventurer },
     quests: {} as { [key: string]: { [key: string]: Quest } },
@@ -127,31 +127,26 @@ export default defineComponent({
     },
     async checkForNewRecruit(currentTimestamp: number) {
 
-      if (this.lastRecruitHandled == null) {
-        this.lastRecruitHandled = 0;
-      }
-
       if (Object.keys(this.adventurers).length <= 0) {
-        this.adventurerForHire = this.adventurersDatabase[0];
+        const firstAdventurer = this.adventurersDatabase[0]
+        this.adventurersForHire[firstAdventurer.id] = firstAdventurer;
       }
 
-      if (currentTimestamp - this.lastRecruitHandled >= 1000 * 60 * 30 && this.adventurerForHire == null) {
-        this.adventurerForHire = getNewAdventurerForHire(this.adventurersDatabase);
+      // TODO hiring capacity upgrade
+      if (Object.keys(this.adventurersForHire).length < 2) {
+        const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase));
+        if (newAdventurerForHire === null) return;
+        this.adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
       }
     },
-    recruitAction(adventurer: Adventurer | null): void {
-      this.lastRecruitHandled = Number(new Date());
-      this.adventurerForHire = null;
-      if (adventurer === null) return;
-
+    recruitAdventurer(adventurer: Adventurer): void {
       this.adventurers[adventurer.id] = adventurer;
-      for (const id in this.adventurersDatabase) {
-        const databaseAdventurer = this.adventurersDatabase[id];
-        if (databaseAdventurer.id === adventurer.id) {
-          this.adventurersDatabase.splice(Number(id), 1);
-          break;
-        }
-      }
+      delete this.adventurersDatabase[adventurer.id];
+    },
+    dismissRecruit(adventurer: Adventurer): void {
+      if (adventurer == null) return;
+      if (this.adventurersForHire[adventurer.id] == null) return;
+      delete this.adventurersForHire[adventurer.id];
     },
     finalizeQuest(missive: Quest) {
       missive.progressPoints = 0;
@@ -243,17 +238,31 @@ export default defineComponent({
         }
       }
 
-      this.lastRecruitHandled = saveData.lastRecruitAction ?? 0;
+      const recruits = {} as { [key: string]: Adventurer };
 
-      if (saveData.adventurerForHireId != null) {
-        for (const id in this.adventurersDatabase) {
-          const adventurer = this.adventurersDatabase[id];
-          if (adventurer.id === saveData.adventurerForHireId) {
-            this.adventurerForHire = adventurer;
-            return;
-          }
+      for (const id in saveData.adventurersForHire) {
+        const data = saveData.adventurersForHire[id];
+        let portrait: string = "";
+
+        const adventurer = this.allAdventurers[data.id];
+        if (adventurer) {
+          portrait = adventurer.portrait;
+        }
+
+        try {
+          recruits[data.id] = new Adventurer(
+            data.id,
+            data.name,
+            portrait,
+            data.attackExponent ?? 1.1,
+            data.level ?? 1,
+            data.exp ?? 0,
+            data.prestige ?? 0,
+          );
+        } catch (e) {
         }
       }
+      this.adventurersForHire = recruits;
     },
     async updateNews() {
       const result = await fetch("https://raw.githubusercontent.com/YouHaveTrouble/GuildMaster/master/news.txt").catch(() => {
@@ -287,7 +296,7 @@ export default defineComponent({
     });
 
     this.quests = promises[0] as { [key: string]: { [key: string]: Quest } };
-    this.adventurersDatabase = promises[1] as Array<Adventurer>;
+    this.adventurersDatabase = promises[1] as {[key: string]: Adventurer};
     for (const adventurerId in this.adventurersDatabase) {
       const adventurer = this.adventurersDatabase[adventurerId];
       this.allAdventurers[adventurer.id] = new Adventurer(adventurer.id, adventurer.name, adventurer.portrait, adventurer.attackExponent, adventurer.level, adventurer.exp, adventurer.prestige);
@@ -308,8 +317,7 @@ export default defineComponent({
         guild: this.guild,
         missives: this.missives,
         lastQuestGot: this.lastQuestGot,
-        lastRecruitAction: this.lastRecruitHandled,
-        adventurerForHireId: this.adventurerForHire?.id ?? null,
+        adventurersForHire: this.adventurersForHire ?? null,
       }));
     }, 10 * 1000));
 
