@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {RouterLink, RouterView} from 'vue-router'
+// @ts-ignore
 import {version} from "@/../package.json";
 </script>
 
