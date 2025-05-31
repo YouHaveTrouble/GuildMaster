@@ -104,6 +104,11 @@ export default defineComponent({
     nextRecruitArrival: new Date() as Date,
     tickCounter: 0 as number,
   }),
+  computed: {
+    recruitmentSlotsFull(): boolean {
+      return Object.keys(this.adventurersForHire).length >= this.guild.recruitmentCapacity.getRecruitmentCapacity();
+    },
+  },
   methods: {
     async updateMissives() {
       for (const missive of this.missives) {
@@ -143,16 +148,22 @@ export default defineComponent({
       if (newAdventurerForHire === null) return;
       this.adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
 
+      this.setNextRecruitArrival(currentTimestamp, cooldownModifier)
+    },
+    setNextRecruitArrival(currentTimestamp: number, cooldownModifier: number = 1): void {
       const timerValue = ((5 + (Math.random() * 15)) * 60 * 1000) * cooldownModifier;
       this.nextRecruitArrival = new Date(currentTimestamp + timerValue);
     },
     recruitAdventurer(adventurer: Adventurer): void {
+      if (adventurer == null) return;
+      if (this.recruitmentSlotsFull) this.setNextRecruitArrival(new Date().getTime())
       this.adventurers[adventurer.id] = adventurer;
       delete this.adventurersForHire[adventurer.id];
       delete this.adventurersDatabase[adventurer.id];
     },
     dismissRecruit(adventurer: Adventurer): void {
       if (adventurer == null) return;
+      if (this.recruitmentSlotsFull) this.setNextRecruitArrival(new Date().getTime())
       if (this.adventurersForHire[adventurer.id] == null) return;
       delete this.adventurersForHire[adventurer.id];
     },
