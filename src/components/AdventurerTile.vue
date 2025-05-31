@@ -48,6 +48,7 @@ export default defineComponent({
   overflow: clip;
   font-size: 5rem;
   line-height: 1;
+  aspect-ratio: 1/1;
   color: rgba(0, 0, 0, 0.75);
   position: relative;
   background: rgb(2,0,36);

@@ -8,16 +8,21 @@ export class GameData {
   adventurers: { [key: string]: Adventurer };
   missives: Array<Quest>;
   lastQuestGot: { [key: string]: null | number };
-  adventurersForHire: {[key: string]: Adventurer} | null;
+  adventurersForHire: {[key: string]: Adventurer};
+  nextRecruitArrival: Date;
 
   constructor(
     data: any,
   ) {
     this.guild = data.guild ?? new Guild(1, 0);
-    this.adventurers = data.adventurers ?? {} as { [key: string]: Adventurer };
+    this.adventurers = data.adventurers ?? {};
     this.missives = data.missives ?? [] as Array<Quest>;
-    this.lastQuestGot = data.lastQuestGot ?? {} as { [key: string]: null | number };
-    this.adventurersForHire = data.adventurersForHire ?? null;
+    this.lastQuestGot = data.lastQuestGot ?? {};
+    this.adventurersForHire = data.adventurersForHire ?? {};
+    this.nextRecruitArrival = data.nextRecruitArrival ? new Date(data.nextRecruitArrival) : new Date();
+    if (isNaN(this.nextRecruitArrival.getTime())) {
+      this.nextRecruitArrival = new Date();
+    }
   }
 }
 
@@ -49,7 +54,8 @@ export function saveGame(
     adventurers: adventurers,
     missives: data.missives,
     lastQuestGot: data.lastQuestGot,
-    adventurersForHire: adventurersForHire
+    adventurersForHire: adventurersForHire,
+    nextRecruitArrival: data.nextRecruitArrival.getTime(),
   }));
 }
 

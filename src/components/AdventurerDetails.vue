@@ -13,7 +13,10 @@
       <p>Exp: {{ adventurer.exp }} / {{ adventurer.getNextLevelExpRequirement() }}</p>
       <p>DPS: {{ formatDamage(adventurer.getDPS()) }}</p>
     </div>
-    <div class="adventurer-upgrades">
+    <div
+      v-if="showPrestigeButton"
+      class="adventurer-upgrades"
+    >
       <button
           class="button metal"
           :disabled="!adventurer.canPrestigeUp()"
@@ -43,6 +46,10 @@ export default defineComponent({
     adventurer: {
       type: Object as PropType<Adventurer | null>,
       required: true,
+    },
+    showPrestigeButton: {
+      type: Boolean,
+      default: true,
     },
   },
   mounted() {

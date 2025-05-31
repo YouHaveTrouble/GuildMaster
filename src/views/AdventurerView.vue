@@ -4,6 +4,7 @@
       :adventurer="selectedAdventurer"
       v-if="selectedAdventurer !== null"
       @closeButtonClicked="selectedAdventurer = null"
+      :show-prestige-button="adventurers[selectedAdventurer?.id] !== undefined"
 
     />
     <AdventurerRecruitment
@@ -11,6 +12,7 @@
       :adventurers-for-hire="adventurersForHire"
       @hireAdventurer="$emit('hireAdventurer', $event)"
       @dismissAdventurer="$emit('dismissAdventurer', $event)"
+      @previewAdventurer="selectedAdventurer = $event"
     />
     <section class="collection panel pinned-paper">
       <h1>

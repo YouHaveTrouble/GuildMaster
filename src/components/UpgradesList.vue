@@ -13,6 +13,19 @@
         Upgrade ({{ formatGold(guild.adventurerCapacity.nextLevelCost) }} gold)
       </button>
     </div>
+    <div class="upgrade">
+      <span>Recruitment capacity (level {{ guild.recruitmentCapacity.level }})</span>
+      <small>Increases the maximum amount of adventurers that await recruitment</small>
+      <button
+        class="button metal"
+        v-if="guild.recruitmentCapacity.nextLevelCost"
+        :disabled="guild.gold < guild.recruitmentCapacity.nextLevelCost || guild.recruitmentCapacity.isMaxLevel()"
+        @click="upgradeRecruitmentCapacity()"
+      >
+        <span v-if="!guild.recruitmentCapacity.isMaxLevel()">Upgrade ({{  formatGold(guild.recruitmentCapacity.nextLevelCost) }} gold)</span>
+        <span v-else>Max level</span>
+      </button>
+    </div>
     <div class="upgrade" v-if="guild.level >= guild.autoFinishQuestsUpgrade.guildLevelRequirement">
       <span>Auto-finish quests (level {{ guild.autoFinishQuestsUpgrade.level - 1 }})</span>
       <small>Automatically finish quests when they are completed.</small>
@@ -74,6 +87,14 @@ export default defineComponent({
       if (this.guild.gold < this.guild.adventurerCapacity.nextLevelCost) return;
       this.guild.gold -= this.guild.adventurerCapacity.nextLevelCost;
       this.guild.adventurerCapacity.upgrade();
+    },
+    upgradeRecruitmentCapacity(): void {
+      if (!this.guild.recruitmentCapacity) return;
+      if (this.guild.recruitmentCapacity.isMaxLevel()) return;
+      if (!this.guild.recruitmentCapacity.nextLevelCost) return;
+      if (this.guild.gold < this.guild.recruitmentCapacity.nextLevelCost) return;
+      this.guild.gold -= this.guild.recruitmentCapacity.nextLevelCost;
+      this.guild.recruitmentCapacity.upgrade();
     },
     upgradeAutoFinishQuests(): void {
       if (!this.guild.autoFinishQuestsUpgrade) return;

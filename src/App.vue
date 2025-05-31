@@ -51,8 +51,8 @@ import {version} from "@/../package.json";
     :adventurersForHire="adventurersForHire"
     :news="news"
     @finalizeQuest="finalizeQuest($event)"
-    @recruitAdventurer="recruitAdventurer($event)"
-    @dismissRecruit="dismissRecruit($event)"
+    @hireAdventurer="recruitAdventurer($event)"
+    @dismissAdventurer="dismissRecruit($event)"
   />
 </template>
 
@@ -101,6 +101,8 @@ export default defineComponent({
     adventurers: {} as { [key: string]: Adventurer },
     quests: {} as { [key: string]: { [key: string]: Quest } },
     missives: [] as Array<Quest>,
+    nextRecruitArrival: new Date() as Date,
+    tickCounter: 0 as number,
   }),
   methods: {
     async updateMissives() {
@@ -123,24 +125,30 @@ export default defineComponent({
         }
       }
 
-
     },
-    async checkForNewRecruit(currentTimestamp: number) {
+    async checkForNewRecruit(currentTimestamp: number, cooldownModifier: number = 1) {
+      const recruitCapacity = this.guild.recruitmentCapacity.getRecruitmentCapacity();
+
+      if (Object.keys(this.adventurersForHire).length >= recruitCapacity) return;
+
+      const deltaTime = this.nextRecruitArrival.getTime() - currentTimestamp;
+      if (deltaTime > 0) return; // not yet time for a new recruit
 
       if (Object.keys(this.adventurers).length <= 0) {
-        const firstAdventurer = this.adventurersDatabase[0]
+        const firstAdventurer = this.adventurersDatabase[0];
         this.adventurersForHire[firstAdventurer.id] = firstAdventurer;
       }
 
-      // TODO hiring capacity upgrade
-      if (Object.keys(this.adventurersForHire).length < 2) {
-        const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase));
-        if (newAdventurerForHire === null) return;
-        this.adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
-      }
+      const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase));
+      if (newAdventurerForHire === null) return;
+      this.adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
+
+      const timerValue = ((5 + (Math.random() * 15)) * 60 * 1000) * cooldownModifier;
+      this.nextRecruitArrival = new Date(currentTimestamp + timerValue);
     },
     recruitAdventurer(adventurer: Adventurer): void {
       this.adventurers[adventurer.id] = adventurer;
+      delete this.adventurersForHire[adventurer.id];
       delete this.adventurersDatabase[adventurer.id];
     },
     dismissRecruit(adventurer: Adventurer): void {
@@ -238,6 +246,8 @@ export default defineComponent({
         }
       }
 
+      this.nextRecruitArrival = saveData.nextRecruitArrival ? new Date(saveData.nextRecruitArrival) : new Date();
+
       const recruits = {} as { [key: string]: Adventurer };
 
       for (const id in saveData.adventurersForHire) {
@@ -296,7 +306,7 @@ export default defineComponent({
     });
 
     this.quests = promises[0] as { [key: string]: { [key: string]: Quest } };
-    this.adventurersDatabase = promises[1] as {[key: string]: Adventurer};
+    this.adventurersDatabase = promises[1] as { [key: string]: Adventurer };
     for (const adventurerId in this.adventurersDatabase) {
       const adventurer = this.adventurersDatabase[adventurerId];
       this.allAdventurers[adventurer.id] = new Adventurer(adventurer.id, adventurer.name, adventurer.portrait, adventurer.attackExponent, adventurer.level, adventurer.exp, adventurer.prestige);
@@ -305,6 +315,17 @@ export default defineComponent({
     console.debug("Game data loaded!")
     this.loadGame();
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
+
+    if (Object.keys(this.adventurersForHire).length < this.guild.recruitmentCapacity.getRecruitmentCapacity()) {
+      // check if more time passed than next recruit arrival and simulate next recruit arrivals up to now
+      const now = new Date();
+      if (this.nextRecruitArrival.getTime() < now.getTime()) {
+        const slotsLeft = 2 - Object.keys(this.adventurersForHire).length;
+        for (let i = 0; i < slotsLeft; i++) {
+          await this.checkForNewRecruit(this.nextRecruitArrival.getTime());
+        }
+      }
+    }
 
     // Wait a second to make sure at least most images load in behind the loader
     setTimeout(() => {
@@ -318,15 +339,17 @@ export default defineComponent({
         missives: this.missives,
         lastQuestGot: this.lastQuestGot,
         adventurersForHire: this.adventurersForHire ?? null,
+        nextRecruitArrival: this.nextRecruitArrival,
       }));
     }, 10 * 1000));
 
     this.gameTickTask = Number(setInterval(() => {
+      this.tickCounter++;
       this.updateMissives();
 
       const now = Number(new Date());
 
-      this.checkForNewRecruit(now);
+      if (this.tickCounter % 8 === 0) this.checkForNewRecruit(now);
 
       for (const id in this.lastQuestGot) {
         const lastTime = this.lastQuestGot[getFromString(id as QuestRank)];

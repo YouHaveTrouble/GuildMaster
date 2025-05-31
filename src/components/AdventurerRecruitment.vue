@@ -1,33 +1,34 @@
 <template>
   <section class="recruit panel pinned-paper">
-    <h1>Applying adventurers</h1>
+    <h1>Applying adventurers
+      {{ `(${Object.keys(adventurersForHire).length}/${guild.recruitmentCapacity.getRecruitmentCapacity()})` }}</h1>
     <div class="adventurers">
-      <div v-for="adventurerForHire in currentlyForHire" :key="adventurerForHire.id">
-        <div class="adventurer-tile">
-          <adventurer-tile class="hire-tile" :adventurer="adventurerForHire"/>
-          <div class="decision">
+      <div class="adventurer-tile" v-for="adventurerForHire in currentlyForHire" :key="adventurerForHire.id">
+        <adventurer-tile
+          class="hire-tile"
+          :adventurer="adventurerForHire"
+          @click="previewAdventurer(adventurerForHire)"
+        />
+        <div class="decision">
           <span
             title="Hire"
             @click="hireAdventurer(adventurerForHire)"
-            :class="{disabled: Object.keys(adventurersForHire).length >= guild.adventurerCapacity.getAdventurerCapacity()}"
+            :class="{disabled: !canRecruitMore}"
           >
             ✔
           </span>
-            <span
-              :title="Object.keys(adventurersForHire).length > 0 ? 'Dismiss' : ''"
-              :class="{disabled: Object.keys(adventurersForHire).length <= 0}"
-              @click="dismissAdventurer(adventurerForHire)"
-            >
+          <span
+            :title="Object.keys(adventurersForHire).length > 0 ? 'Dismiss' : ''"
+            :class="{disabled: Object.keys(adventurersForHire).length <= 0}"
+            @click="dismissAdventurer(adventurerForHire)"
+          >
             ✗
           </span>
-          </div>
         </div>
-
       </div>
       <div v-if="Object.keys(adventurersForHire).length == 0">
-        <span>Noone applied as of now. Check back later!</span>
+        <span>No one applied as of now. Check back later!</span>
       </div>
-
     </div>
   </section>
 </template>
@@ -46,16 +47,22 @@ export default defineComponent({
     currentlyForHire(): Array<Adventurer> {
       return Object.values(this.adventurersForHire);
     },
+    canRecruitMore() {
+      return Object.keys(this.adventurersForHire).length < this.guild.adventurerCapacity.getAdventurerCapacity();
+    },
   },
   methods: {
     hireAdventurer(adventurer: Adventurer): void {
-      if (Object.keys(this.adventurersForHire).length >= this.guild.adventurerCapacity.getAdventurerCapacity()) return;
+      if (!this.canRecruitMore) return;
       this.$emit("hireAdventurer", adventurer);
     },
     dismissAdventurer(adventurer: Adventurer) {
       if (Object.keys(this.adventurersForHire).length <= 0) return;
       this.$emit("dismissAdventurer", adventurer);
-    }
+    },
+    previewAdventurer(adventurer: Adventurer): void {
+      this.$emit("previewAdventurer", adventurer);
+    },
   },
   props: {
     guild: {
@@ -67,7 +74,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["dismissAdventurer", "hireAdventurer"],
+  emits: ["dismissAdventurer", "hireAdventurer", "previewAdventurer"],
 })
 </script>
 
@@ -88,8 +95,10 @@ export default defineComponent({
     gap: 0.25rem;
     font-size: 1.1rem;
     cursor: pointer;
+    padding-block: 1rem;
+    padding-inline: 0.5rem;
 
-    .entry {
+    .hire-tile {
       height: 7rem;
       width: 7rem;
     }
@@ -112,6 +121,8 @@ export default defineComponent({
   align-items: center;
   font-size: 2rem;
   gap: 1rem;
+  line-height: 1;
+  width: 100%;
 
   span {
     cursor: pointer;
