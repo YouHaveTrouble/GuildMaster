@@ -60,7 +60,7 @@ export default defineComponent({
     },
     newRecruitCost(): number {
       const guildLevel = this.guild.level;
-      return Math.max(500, 500 * Math.pow(2, guildLevel - 1));
+      return Math.max(500, 500 * Math.pow(2.2, guildLevel - 1));
     },
     recruitSlotsFilled(): boolean {
       return Object.keys(this.adventurersForHire).length >= this.guild.recruitmentCapacity.getRecruitmentCapacity();
