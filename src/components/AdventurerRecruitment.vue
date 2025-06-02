@@ -32,10 +32,10 @@
     </div>
     <div>
       <button
-        class="button metal"
+        class="button metal find-recruit"
         :disabled="recruitSlotsFilled || guild.gold < newRecruitCost"
         @click="findNewRecruit()"
-      >Find a recruit now {{(`${formatGold(newRecruitCost)} gold`)}}</button>
+      >Find a recruit now {{(`(${formatGold(newRecruitCost)}) gold`)}}</button>
     </div>
   </section>
 </template>
@@ -105,6 +105,10 @@ section {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
+}
+
+.find-recruit {
+  text-wrap: wrap;
 }
 
 .adventurers {
