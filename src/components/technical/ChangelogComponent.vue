@@ -70,9 +70,12 @@ export default defineComponent({
   gap: 1rem;
   max-width: 45rem;
   min-height: 30rem;
-  max-height: 30rem;
   width: 100%;
   overflow-y: auto;
+
+  @media(min-width: 800px) {
+    max-height: 30rem;
+  }
 
   h1 {
     font-size: 3rem;
