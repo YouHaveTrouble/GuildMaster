@@ -101,19 +101,35 @@ export default defineComponent({
 <style scoped lang="scss">
 
 section {
-  min-height: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
 }
 
 .adventurers {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 1rem;
+  scroll-snap-type: x mandatory;
+  overflow-x: scroll;
+  width: 100%;
+  min-height: 12rem;
+
+  @media (min-width: 800px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    width: auto;
+  }
 
   .adventurer-tile {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -122,6 +138,47 @@ section {
     cursor: pointer;
     padding-block: 1rem;
     padding-inline: 0.5rem;
+    min-width: 100%;
+    scroll-snap-align: center;
+
+    &:not(:first-of-type) {
+      &::before {
+        position: absolute;
+        left: 0;
+        top: 4rem;
+        content: "⇠";
+        width: 1rem;
+        height: 1rem;
+        line-height: 1;
+      }
+    }
+
+    &:not(:last-of-type) {
+      &::after {
+        position: absolute;
+        right: 0;
+        top: 4rem;
+        content: "⇢";
+        width: 1rem;
+        height: 1rem;
+        line-height: 1;
+      }
+    }
+
+
+
+    @media (min-width: 800px) {
+      min-width: auto;
+      scroll-snap-align: none;
+
+      &::before {
+        content: none !important;
+      }
+
+      &::after {
+        content: none !important;
+      }
+    }
 
     .hire-tile {
       height: 7rem;

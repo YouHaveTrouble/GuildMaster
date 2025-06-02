@@ -3,11 +3,11 @@
     <h1 v-if="label !== undefined">{{ label }}</h1>
     <section class="missives">
       <QuestMissive
-          v-for="(missive, key) in quests"
-          :key="key"
-          :adventurers="adventurers"
-          :missive="missive"
-          @click="finalizeQuest(missive)"
+        v-for="(missive, key) in quests"
+        :key="key"
+        :adventurers="adventurers"
+        :missive="missive"
+        @click="finalizeQuest(missive)"
       />
     </section>
   </div>
@@ -63,7 +63,7 @@ h1 {
   gap: 1rem;
   padding-block: 0.5rem;
   padding-inline: 5rem;
-  overflow-x: auto;
+  overflow-x: scroll;
   scroll-snap-type: x mandatory;
   width: 100vw;
   max-width: 100%;
