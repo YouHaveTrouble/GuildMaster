@@ -54,6 +54,12 @@ import {version} from "@/../package.json";
     @finalizeQuest="finalizeQuest($event)"
     @hireAdventurer="recruitAdventurer($event)"
     @dismissAdventurer="dismissRecruit($event)"
+    @findNewRecruit="() => {
+      const newAdventurerForHire = getNewAdventurerForHire(Object.values(adventurersDatabase), Object.values(adventurers));
+      if (newAdventurerForHire === null) return;
+      adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
+      setNextRecruitArrival(new Date().getTime())
+    }"
   />
 </template>
 

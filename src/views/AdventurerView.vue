@@ -5,7 +5,6 @@
       v-if="selectedAdventurer !== null"
       @closeButtonClicked="selectedAdventurer = null"
       :show-prestige-button="adventurers[selectedAdventurer?.id] !== undefined"
-
     />
     <AdventurerRecruitment
       :guild="guild"
@@ -13,6 +12,7 @@
       @hireAdventurer="$emit('hireAdventurer', $event)"
       @dismissAdventurer="$emit('dismissAdventurer', $event)"
       @previewAdventurer="selectedAdventurer = $event"
+      @findNewRecruit="$emit('findNewRecruit')"
     />
     <section class="collection panel pinned-paper">
       <h1>
@@ -68,7 +68,7 @@ export default defineComponent({
       }
     },
   },
-  emits: ["hireAdventurer", "dismissAdventurer"],
+  emits: ["hireAdventurer", "dismissAdventurer", "findNewRecruit"],
 
 });
 </script>

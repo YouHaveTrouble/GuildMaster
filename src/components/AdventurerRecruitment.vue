@@ -30,6 +30,13 @@
         <span>No one applied as of now. Check back later!</span>
       </div>
     </div>
+    <div>
+      <button
+        class="button metal"
+        :disabled="recruitSlotsFilled || guild.gold < newRecruitCost"
+        @click="findNewRecruit()"
+      >Find a recruit now {{(`${formatGold(newRecruitCost)} gold`)}}</button>
+    </div>
   </section>
 </template>
 
@@ -39,6 +46,7 @@ import {defineComponent, type PropType} from "vue";
 import AdventurerTile from "@/components/AdventurerTile.vue";
 import type {Guild} from "@/classes/Guild";
 import type {Adventurer} from "@/classes/Adventurer";
+import {formatGold} from "@/classes/NumberMagic";
 
 export default defineComponent({
   name: "RecruitView",
@@ -50,8 +58,16 @@ export default defineComponent({
     canRecruitMore() {
       return Object.keys(this.adventurersForHire).length < this.guild.adventurerCapacity.getAdventurerCapacity();
     },
+    newRecruitCost(): number {
+      const guildLevel = this.guild.level;
+      return Math.max(500, 500 * Math.pow(2, guildLevel - 1));
+    },
+    recruitSlotsFilled(): boolean {
+      return Object.keys(this.adventurersForHire).length >= this.guild.recruitmentCapacity.getRecruitmentCapacity();
+    }
   },
   methods: {
+    formatGold,
     hireAdventurer(adventurer: Adventurer): void {
       if (!this.canRecruitMore) return;
       this.$emit("hireAdventurer", adventurer);
@@ -62,6 +78,10 @@ export default defineComponent({
     },
     previewAdventurer(adventurer: Adventurer): void {
       this.$emit("previewAdventurer", adventurer);
+    },
+    findNewRecruit(): void {
+      if (!this.canRecruitMore) return;
+      this.$emit("findNewRecruit");
     },
   },
   props: {
@@ -74,11 +94,16 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["dismissAdventurer", "hireAdventurer", "previewAdventurer"],
+  emits: ["dismissAdventurer", "hireAdventurer", "previewAdventurer", "findNewRecruit"],
 })
 </script>
 
 <style scoped lang="scss">
+
+section {
+  min-height: 20rem;
+}
+
 .adventurers {
   display: flex;
   flex-direction: row;
