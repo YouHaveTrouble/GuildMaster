@@ -77,6 +77,7 @@ import {getNewAdventurerForHire} from "@/classes/Recruitment";
 import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
 import QuestGoldUpgrade from "@/classes/guildUpgrades/QuestGoldUpgrade";
 import AutoFinishQuestsUpgrade from "@/classes/guildUpgrades/AutoFinishQuestsUpgrade";
+import RecruitmentCapacityUpgrade from "@/classes/guildUpgrades/RecruitmentCapacityUpgrade";
 
 export default defineComponent({
   name: "GuildView",
@@ -145,7 +146,7 @@ export default defineComponent({
         this.adventurersForHire[firstAdventurer.id] = firstAdventurer;
       }
 
-      const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase));
+      const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase), Object.values(this.adventurers));
       if (newAdventurerForHire === null) return;
       this.adventurersForHire[newAdventurerForHire.id] = newAdventurerForHire;
 
@@ -204,6 +205,9 @@ export default defineComponent({
       const guildUpgrades = {} as { [key: string]: GuildUpgrade };
       if (saveData.guild.adventurerCapacity) {
         guildUpgrades.adventurerCapacity = new AdventurerCapacityUpgrade(saveData.guild.adventurerCapacity.level);
+      }
+      if (saveData.guild.recruitmentCapacity) {
+        guildUpgrades.recruitmentCapacity = new RecruitmentCapacityUpgrade(saveData.guild.recruitmentCapacity.level);
       }
       if (saveData.guild.expModifier) {
         guildUpgrades.expModifier = new QuestExpUpgrade(saveData.guild.expModifier.level);
