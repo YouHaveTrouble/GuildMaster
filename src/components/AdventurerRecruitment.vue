@@ -56,7 +56,7 @@ export default defineComponent({
       return Object.values(this.adventurersForHire);
     },
     canRecruitMore() {
-      return Object.keys(this.adventurersForHire).length < this.guild.adventurerCapacity.getAdventurerCapacity();
+      return Object.keys(this.adventurers).length < this.guild.adventurerCapacity.getAdventurerCapacity();
     },
     newRecruitCost(): number {
       const guildLevel = this.guild.level;
@@ -80,7 +80,7 @@ export default defineComponent({
       this.$emit("previewAdventurer", adventurer);
     },
     findNewRecruit(): void {
-      if (!this.canRecruitMore) return;
+      if (this.recruitSlotsFilled) return;
       this.$emit("findNewRecruit");
     },
   },
@@ -90,6 +90,10 @@ export default defineComponent({
       required: true,
     },
     adventurersForHire: {
+      type: Object as PropType<{ [key: string]: Adventurer }>,
+      required: true,
+    },
+    adventurers: {
       type: Object as PropType<{ [key: string]: Adventurer }>,
       required: true,
     },

@@ -9,6 +9,7 @@
     <AdventurerRecruitment
       :guild="guild"
       :adventurers-for-hire="adventurersForHire"
+      :adventurers="adventurers"
       @hireAdventurer="$emit('hireAdventurer', $event)"
       @dismissAdventurer="$emit('dismissAdventurer', $event)"
       @previewAdventurer="selectedAdventurer = $event"
