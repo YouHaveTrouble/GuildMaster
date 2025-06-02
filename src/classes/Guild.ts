@@ -30,7 +30,7 @@ export class Guild {
         this.expModifier = upgrades.expModifier as QuestExpUpgrade ?? new QuestExpUpgrade();
         this.goldModifier = upgrades.goldModifier as QuestGoldUpgrade ?? new QuestGoldUpgrade();
         this.autoFinishQuestsUpgrade = upgrades.autoFinishQuestsUpgrade as AutoFinishQuestsUpgrade ?? new AutoFinishQuestsUpgrade();
-        this.recruitmentCapacity = upgrades.recruitmentCapacityUpgrade as RecruitmentCapacityUpgrade ?? new RecruitmentCapacityUpgrade();
+        this.recruitmentCapacity = upgrades.recruitmentCapacity as RecruitmentCapacityUpgrade ?? new RecruitmentCapacityUpgrade();
     }
 
     upgrade(): void {
