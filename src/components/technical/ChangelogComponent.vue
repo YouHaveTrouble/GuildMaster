@@ -91,7 +91,7 @@ export default defineComponent({
     align-items: center;
     gap: 1rem;
     width: 100%;
-    overflow-y: auto;
+    user-select: text;
   }
 
   .changelog-entry {
