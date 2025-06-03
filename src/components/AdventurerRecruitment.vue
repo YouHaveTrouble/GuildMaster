@@ -19,7 +19,7 @@
           </span>
           <span
             :title="Object.keys(adventurersForHire).length > 0 ? 'Dismiss' : ''"
-            :class="{disabled: Object.keys(adventurersForHire).length <= 0}"
+            :class="{disabled: Object.keys(adventurers).length <= 0}"
             @click="dismissAdventurer(adventurerForHire)"
           >
             ✗
@@ -73,7 +73,7 @@ export default defineComponent({
       this.$emit("hireAdventurer", adventurer);
     },
     dismissAdventurer(adventurer: Adventurer) {
-      if (Object.keys(this.adventurersForHire).length <= 0) return;
+      if (Object.keys(this.adventurers).length <= 0) return;
       this.$emit("dismissAdventurer", adventurer);
     },
     previewAdventurer(adventurer: Adventurer): void {
