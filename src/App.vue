@@ -148,8 +148,10 @@ export default defineComponent({
       if (deltaTime > 0) return; // not yet time for a new recruit
 
       if (Object.keys(this.adventurers).length <= 0) {
-        const firstAdventurer = this.adventurersDatabase[0];
+        const firstAdventurer = this.adventurersDatabase["aldek"];
         this.adventurersForHire[firstAdventurer.id] = firstAdventurer;
+        this.setNextRecruitArrival(currentTimestamp, cooldownModifier)
+        return;
       }
 
       const newAdventurerForHire = getNewAdventurerForHire(Object.values(this.adventurersDatabase), Object.values(this.adventurers));
@@ -338,11 +340,11 @@ export default defineComponent({
     this.loadGame();
     this.adventurersDatabase = removeAlreadyHiredAdventurers(this.adventurersDatabase, this.adventurers);
 
-    if (Object.keys(this.adventurersForHire).length < this.guild.recruitmentCapacity.getRecruitmentCapacity()) {
+    if (Object.keys(this.adventurers).length > 0 && Object.keys(this.adventurersForHire).length < this.guild.recruitmentCapacity.getRecruitmentCapacity()) {
       // check if more time passed than next recruit arrival and simulate next recruit arrivals up to now
       const now = new Date();
       if (this.nextRecruitArrival.getTime() < now.getTime()) {
-        const slotsLeft = 2 - Object.keys(this.adventurersForHire).length;
+        const slotsLeft = this.guild.recruitmentCapacity.getRecruitmentCapacity() - Object.keys(this.adventurersForHire).length;
         for (let i = 0; i < slotsLeft; i++) {
           await this.checkForNewRecruit(this.nextRecruitArrival.getTime());
         }
