@@ -1,6 +1,6 @@
 import {Guild} from "@/classes/Guild";
 import {Adventurer} from "@/classes/Adventurer";
-import {Quest} from "@/classes/Quest";
+import {Quest} from "@/classes/quests/Quest";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
 
 export class GameData {

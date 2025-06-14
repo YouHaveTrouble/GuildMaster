@@ -21,7 +21,7 @@
 import {defineComponent, type PropType} from "vue";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
-import type {Quest} from "@/classes/Quest";
+import type {Quest} from "@/classes/quests/Quest";
 import {Guild} from "@/classes/Guild";
 import QuestMissive from "@/components/QuestMissive.vue";
 import QuestGroup from "@/components/QuestGroup.vue";

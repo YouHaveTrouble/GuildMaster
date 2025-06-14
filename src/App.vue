@@ -66,7 +66,7 @@ import {version} from "@/../package.json";
 <script lang="ts">
 import {defineComponent} from "vue";
 import {Adventurer} from "@/classes/Adventurer";
-import {getQuestWithRewards, Quest} from "@/classes/Quest";
+import {getQuestWithRewards, Quest} from "@/classes/quests/Quest";
 import {Guild} from "@/classes/Guild";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
 import {

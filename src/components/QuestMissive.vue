@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import type {Quest} from "@/classes/Quest";
+import type {Quest} from "@/classes/quests/Quest";
 import AdventurerComponent from "@/components/AdventurerMiniComponent.vue";
 import type {Adventurer} from "@/classes/Adventurer";
 import {defineComponent, type PropType} from "vue";
