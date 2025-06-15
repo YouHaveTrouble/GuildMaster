@@ -1,26 +1,29 @@
 import type {Adventurer} from "@/classes/Adventurer";
 import {PhaseType} from "@/classes/quests/QuestPhaseType";
 
-export default abstract class QuestPhase {
+export default class QuestPhase {
 
-  type: PhaseType;
+  types: Set<PhaseType>;
   points: number;
   maxPoints: number;
 
   constructor(
-    type: PhaseType,
-    maxPoints: number = 1,
+    types: PhaseType[],
+    maxPoints: number,
     points: number = 0,
   ) {
-    this.type = type;
-    this.points = points;
-    this.maxPoints = maxPoints;
+    this.types = new Set<PhaseType>(types);
+    this.points = Math.max(0, points);
+    this.maxPoints = Math.max(1, maxPoints);
   }
 
   /**
    * Get how many points should be added each tick based on adventurers on a task.
    */
-  abstract getPointIncrement(adventurers: Array<Adventurer>): number;
+  getPointIncrement(adventurers: Array<Adventurer>): number {
+    // TODO add point multiplier based on adventurer stats
+    return 1;
+  }
 
   public tick(adventurers: Array<Adventurer> = []) {
     if (this.completed()) return;
@@ -30,6 +33,35 @@ export default abstract class QuestPhase {
 
   public completed(): boolean {
     return this.points >= this.maxPoints;
+  }
+
+  public serialize(): string {
+    return JSON.stringify({
+      types: Array.from(this.types),
+      points: this.points,
+      maxPoints: this.maxPoints,
+    });
+  }
+
+  public static deserialize(data: string): QuestPhase {
+    const parsedData = JSON.parse(data);
+
+    if (typeof parsedData?.points !== 'number') {
+      throw new Error("Invalid data: 'points' must be a number.");
+    }
+    if (typeof parsedData?.maxPoints !== 'number') {
+      throw new Error("Invalid data: 'maxPoints' must be a number.");
+    }
+    if (!Array.isArray(parsedData?.types)) {
+      throw new Error("Invalid data: 'types' must be an array.");
+    }
+
+    const types = parsedData.types.map((type: string) => PhaseType[type as keyof typeof PhaseType]);
+    return new QuestPhase(
+      types,
+      parsedData.maxPoints,
+      parsedData.points
+    );
   }
 
 }
