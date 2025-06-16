@@ -1,5 +1,6 @@
 import type {Adventurer} from "@/classes/Adventurer";
 import {QuestRank} from "@/classes/QuestRank";
+import QuestPhase from "@/classes/quests/QuestPhase";
 
 export class Quest {
     id: string;
@@ -7,9 +8,8 @@ export class Quest {
     title:  string;
     text: string;
     adventurers: Array<Adventurer>;
+    phases: QuestPhase[] = [];
     maxAdventurers: number;
-    progressPoints: number;
-    maxProgress: number;
     expReward: number;
     goldReward: number;
 
@@ -18,7 +18,7 @@ export class Quest {
       rank: QuestRank,
       title: string,
       text: string,
-      maxProgress: number = 1,
+      phases: QuestPhase[],
       expReward: number = 0,
       goldReward: number = 0,
       maxAdventurers: number = 1
@@ -27,16 +27,46 @@ export class Quest {
         this.rank = rank;
         this.title = title;
         this.text = text;
-        this.maxProgress = maxProgress;
         this.expReward = expReward;
         this.goldReward = goldReward;
-        this.progressPoints = 0;
         this.adventurers = [];
         this.maxAdventurers = maxAdventurers;
+        for (const phase of phases) {
+            this.phases.push(new QuestPhase(Array.from(phase.types), phase.maxPoints, phase.points));
+        }
     }
 
     getPercentProgress(): number {
-        return Math.round(this.progressPoints / this.maxProgress * 100);
+        let maxProgress = 0;
+        let progressPoints = 0;
+        for (const phase of this.phases) {
+            maxProgress += phase.maxPoints;
+            progressPoints += phase.points;
+        }
+        return Math.round(progressPoints / maxProgress * 100);
+    }
+
+    isCompleted(): boolean {
+        for (const phase of this.phases) {
+            if (!phase.completed()) return false;
+        }
+        return true;
+    }
+
+    getMaxProgress(): number {
+        let maxProgress = 0;
+        for (const phase of this.phases) {
+            maxProgress += phase.maxPoints;
+        }
+        return maxProgress;
+    }
+
+    getProgress(): number {
+        let progressPoints = 0;
+        for (const phase of this.phases) {
+            progressPoints += phase.points;
+        }
+        return progressPoints;
     }
 
 }
@@ -49,47 +79,47 @@ export class Quest {
  */
 export function getQuestWithRewards(quest: Quest, expModifier: number = 1, goldModifier: number = 1) {
 
-    let maxProgress = 1;
+    let rewardValue = 1;
 
     switch (quest.rank) {
         case QuestRank.S:
             // at level 30 adventurers have ~6513 dps, this will take 30 seconds on level 30
-            maxProgress = 195390;
+            rewardValue = 195390;
             break;
         case QuestRank.A:
             // at level 25 adventurers have ~2051 dps, this will take 15 seconds on level 25
-            maxProgress = 30770;
+            rewardValue = 30770;
             break;
         case QuestRank.B:
             // at level 20 adventurers have ~645 dps, this will take 15 seconds on level 20
-            maxProgress = 9690;
+            rewardValue = 9690;
             break;
         case QuestRank.C:
             // at level 15 adventurers have ~203 dps, this will take 15 seconds on level 15
-            maxProgress = 3045;
+            rewardValue = 3045;
             break;
         case QuestRank.D:
             // at level 10 adventurers have ~64 dps, this will take 15 seconds on level 10
-            maxProgress = 960;
+            rewardValue = 960;
             break;
         case QuestRank.E:
             // at level 5 adventurers have ~20 dps, this will take 15 seconds on level 5
-            maxProgress = 300;
+            rewardValue = 300;
             break;
         case QuestRank.F:
             // at level 1 adventurers have ~8 dps, this will take 15 seconds on level 1
-            maxProgress = 120;
+            rewardValue = 120;
             break;
     }
 
-    let goldReward = Math.floor(maxProgress/6 * goldModifier);
-    let expReward = Math.floor((Math.floor(maxProgress/120) - maxProgress/1000) * expModifier);
+    let goldReward = Math.floor(rewardValue/6 * goldModifier);
+    let expReward = Math.floor((Math.floor(rewardValue/120) - rewardValue/1000) * expModifier);
 
     // add some randomness to the rewards
     goldReward = Math.floor(randomNumberBetween(goldReward * 0.95, goldReward * 1.1));
     expReward = Math.max(1, Math.floor(randomNumberBetween(expReward * 0.95, expReward * 1.2)));
 
-    return new Quest(quest.id, quest.rank, quest.title, quest.text, maxProgress, expReward, goldReward);
+    return new Quest(quest.id, quest.rank, quest.title, quest.text, quest.phases, expReward, goldReward);
 }
 
 function randomNumberBetween(min: number, max: number) {

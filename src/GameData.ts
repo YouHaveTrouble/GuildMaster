@@ -2,6 +2,8 @@ import {Guild} from "@/classes/Guild";
 import {Adventurer} from "@/classes/Adventurer";
 import {Quest} from "@/classes/quests/Quest";
 import {getFromString, QuestRank} from "@/classes/QuestRank";
+import QuestPhase from "@/classes/quests/QuestPhase";
+import {PhaseType} from "@/classes/quests/QuestPhaseType";
 
 export class GameData {
   guild: Guild;
@@ -98,11 +100,36 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
 
     for (const quest of questRankData) {
       const id = quest.id;
+
+      const phases = [] as Array<QuestPhase>;
+      if (Array.isArray(quest?.phases)) {
+        for (const phase of quest.phases) {
+          const phaseTypes: PhaseType[] = [];
+          if (Array.isArray(phase?.types)) {
+            for (const type of phase.types) {
+              const phaseType = PhaseType[type as keyof typeof PhaseType];
+              if (!phaseType) {
+                console.error(`Invalid phase type: ${type}`);
+                continue;
+              }
+              phaseTypes.push(phaseType);
+            }
+          }
+          phases.push(new QuestPhase(
+            phaseTypes,
+            phase.maxPoints,
+            0,
+          ));
+        }
+      }
+
+
       quests[questRank][id] = new Quest(
         id,
         questRank,
         quest.title,
         quest.text,
+        phases,
       );
     }
   }

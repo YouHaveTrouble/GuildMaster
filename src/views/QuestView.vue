@@ -2,17 +2,17 @@
   <section>
     <QuestGroup
         :adventurers="adventurers"
-        :quests="quests.filter(quest => quest.progressPoints < quest.maxProgress)"
+        :quests="quests.filter(quest => quest.getProgress() < quest.getMaxProgress())"
         :finalizeQuest="finalizeQuest"
         label="Quests"
-        v-show="quests.filter(quest => quest.progressPoints < quest.maxProgress).length > 0"
+        v-show="quests.filter(quest => quest.getProgress() < quest.getMaxProgress()).length > 0"
     />
     <QuestGroup
       :finalize-quest="finalizeQuest"
       :adventurers="adventurers"
-      :quests="quests.filter(quest => quest.progressPoints >= quest.maxProgress)"
+      :quests="quests.filter(quest => quest.getProgress() >= quest.getMaxProgress())"
       label="Completed Quests"
-      v-show="quests.filter(quest => quest.progressPoints >= quest.maxProgress).length > 0"
+      v-show="quests.filter(quest => quest.getProgress() >= quest.getMaxProgress()).length > 0"
     />
   </section>
 </template>

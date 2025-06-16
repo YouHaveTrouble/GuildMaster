@@ -84,6 +84,8 @@ import QuestExpUpgrade from "@/classes/guildUpgrades/QuestExpUpgrade";
 import QuestGoldUpgrade from "@/classes/guildUpgrades/QuestGoldUpgrade";
 import AutoFinishQuestsUpgrade from "@/classes/guildUpgrades/AutoFinishQuestsUpgrade";
 import RecruitmentCapacityUpgrade from "@/classes/guildUpgrades/RecruitmentCapacityUpgrade";
+import QuestPhase from "@/classes/quests/QuestPhase";
+import {PhaseType} from "@/classes/quests/QuestPhaseType";
 
 export default defineComponent({
   name: "GuildView",
@@ -121,23 +123,22 @@ export default defineComponent({
     async updateMissives() {
       for (const missive of this.missives) {
         if (missive.adventurers.length < missive.maxAdventurers) {
-          missive.progressPoints = 0;
+          missive.phases.forEach(phase => {
+            phase.points = 0;
+          });
           continue;
         }
-        for (const adventurerId in missive.adventurers) {
-          const adventurer = missive.adventurers[adventurerId];
-          const attack = adventurer.getAttack();
-          adventurer.busy = true;
-          missive.progressPoints = Math.min(missive.progressPoints + attack, missive.maxProgress);
+        for (const phase of missive.phases) {
+          if (phase.completed()) continue;
+          phase.tick(missive.adventurers);
         }
         if (
-          missive.progressPoints >= missive.maxProgress
+          missive.isCompleted()
           && this.guild.autoFinishQuestsUpgrade.getRanksToAutoFinishQuestsIn().includes(missive.rank)
         ) {
           this.finalizeQuest(missive);
         }
       }
-
     },
     async checkForNewRecruit(currentTimestamp: number, cooldownModifier: number = 1) {
       const recruitCapacity = this.guild.recruitmentCapacity.getRecruitmentCapacity();
@@ -178,7 +179,6 @@ export default defineComponent({
       delete this.adventurersForHire[adventurer.id];
     },
     finalizeQuest(missive: Quest) {
-      missive.progressPoints = 0;
       this.guild.gold += missive.goldReward;
       for (const adventurerId in missive.adventurers) {
         const adventurer = missive.adventurers[adventurerId];
@@ -257,9 +257,26 @@ export default defineComponent({
 
       if (Array.isArray(saveData.missives)) {
         for (const data of saveData.missives) {
-          const quest = new Quest(data.id, getFromString(data.rank), data.title, data.text, data.maxProgress, data.expReward, data.goldReward);
-          quest.progressPoints = data.progressPoints;
-          if (data.adventurers.length > 0) {
+          const phases: Array<QuestPhase> = [];
+          if (Array.isArray(data.phases)) {
+            for (const phaseData of data.phases) {
+              const types: Array<PhaseType> = [];
+              if (Array.isArray(phaseData.types)) {
+                for (const type of phaseData.types) {
+                  try {
+                    const phaseType = PhaseType[type as keyof typeof PhaseType];
+                    types.push(phaseType);
+                  } catch (e) {
+                    console.error("Error creating phase type", e);
+                  }
+                }
+              }
+              const phase = new QuestPhase(types, phaseData.maxPoints, phaseData.points);
+              phases.push(phase);
+            }
+          }
+          const quest = new Quest(data.id, getFromString(data.rank), data.title, data.text, phases, data.expReward, data.goldReward);
+          if (Array.isArray(data?.adventurers)) {
             for (const adventurer of data.adventurers) {
               const adventurerId = adventurer.id;
               if (this.adventurers[adventurerId] == null) continue;
