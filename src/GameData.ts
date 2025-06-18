@@ -99,7 +99,7 @@ export async function loadAvailableQuests(): Promise<{ [key: string]: { [key: st
     const questRankData = questsData.ranks[questRank];
 
     for (const quest of questRankData) {
-      const id = quest.id;
+      const id = hash(JSON.stringify(quest));
 
       const phases = [] as Array<QuestPhase>;
       if (Array.isArray(quest?.phases)) {
@@ -170,4 +170,12 @@ export function removeAlreadyHiredAdventurers(
     adventurersForHire[adventurer.id] = adventurer;
   }
   return adventurersForHire;
+}
+
+function hash(str: string): string {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return (hash >>> 0).toString(16);
 }
