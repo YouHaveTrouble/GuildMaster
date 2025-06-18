@@ -200,7 +200,7 @@ export default defineComponent({
       return getQuestWithRewards(questsForRank[randomIdString], this.guild.expModifier.getModifier(), this.guild.goldModifier.getModifier());
     },
     createMissive(questToAdd: Quest) {
-      const quest = JSON.parse(JSON.stringify(questToAdd));
+      const quest = Quest.deserialize(questToAdd.serialize());
       quest.id = Math.random().toString(16).slice(2).toString();
       this.missives.push(quest);
     },

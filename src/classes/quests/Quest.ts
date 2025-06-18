@@ -69,6 +69,38 @@ export class Quest {
         return progressPoints;
     }
 
+    serialize(): {[key: string]: any} {
+        return {
+            id: this.id,
+            rank: this.rank,
+            title: this.title,
+            text: this.text,
+            phases: this.phases.map(phase => phase.serialize()),
+            expReward: this.expReward,
+            goldReward: this.goldReward,
+            maxAdventurers: this.maxAdventurers,
+        };
+    }
+
+    static deserialize(data: {[key: string]: any}): Quest {
+        if (!data || typeof data !== 'object') {
+            throw new Error("Invalid data for Quest deserialization");
+        }
+
+        const phases = (data.phases || []).map((phaseData: any) => QuestPhase.deserialize(phaseData));
+
+        return new Quest(
+            data.id,
+            data.rank,
+            data.title,
+            data.text,
+            phases,
+            data.expReward || 0,
+            data.goldReward || 0,
+            data.maxAdventurers || 1
+        );
+    }
+
 }
 
 /**
