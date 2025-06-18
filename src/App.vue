@@ -258,7 +258,7 @@ export default defineComponent({
       if (Array.isArray(saveData.missives)) {
         for (const data of saveData.missives) {
           const phases: Array<QuestPhase> = [];
-          if (Array.isArray(data.phases)) {
+          if (Array.isArray(data.phases) && data.phases.length > 0) {
             for (const phaseData of data.phases) {
               const types: Array<PhaseType> = [];
               if (Array.isArray(phaseData.types)) {
@@ -274,6 +274,8 @@ export default defineComponent({
               const phase = new QuestPhase(types, phaseData.maxPoints, phaseData.points);
               phases.push(phase);
             }
+          } else {
+            continue; // skip this missive if it has no phases
           }
           const quest = new Quest(data.id, getFromString(data.rank), data.title, data.text, phases, data.expReward, data.goldReward);
           if (Array.isArray(data?.adventurers)) {
