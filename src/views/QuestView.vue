@@ -53,7 +53,7 @@ export default defineComponent({
   methods: {
     // This is a workaround for vue not reporting Quest as Quest in v-for
     finalizeQuest(quest: any | Quest): void {
-      if (quest.progressPoints < quest.maxProgress) return;
+      if (!quest.isCompleted()) return;
       this.$emit('finalizeQuest', quest)
     },
   }
