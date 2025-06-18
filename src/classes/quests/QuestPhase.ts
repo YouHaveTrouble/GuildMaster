@@ -22,7 +22,7 @@ export default class QuestPhase {
    */
   getPointIncrement(adventurers: Array<Adventurer>): number {
     // TODO add point multiplier based on adventurer stats
-    return 1;
+    return 0.25;
   }
 
   public tick(adventurers: Array<Adventurer> = []) {
