@@ -37,7 +37,7 @@
     </div>
     <div class="progressWrap">
       <span class="progress"></span>
-      <span class="percentage">{{ `${progressPercentage.toFixed(2)}%` }}</span>
+      <span class="percentage">{{ `${missive.getPercentProgress().toFixed(2)}%` }}</span>
     </div>
     <h3>Rewards</h3>
     <div class="rewards">
@@ -61,7 +61,7 @@ export default defineComponent({
   components: {Parchment, WaterStain, DrinkStain, AdventurerComponent},
   computed: {
     progressPercentageValue(): string {
-      return `${this.missive.progressPoints / this.missive.maxProgress * 100}%`;
+      return `${this.missive.getPercentProgress()}%`;
     },
     notBusyAdventurers(): Adventurer[] {
       return Object.values(this.adventurers).filter(adventurer => !adventurer.busy);
@@ -94,7 +94,7 @@ export default defineComponent({
   methods: {
     updateProgress() {
       if (this.missive === undefined) return;
-      this.progressPercentage = this.missive.progressPoints / this.missive.maxProgress * 100;
+      this.progressPercentage = this.missive.getPercentProgress();
     },
     randomNumber(min: number, max: number) {
       return Math.random() * (max - min) + min;
