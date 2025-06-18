@@ -131,6 +131,7 @@ export default defineComponent({
         for (const phase of missive.phases) {
           if (phase.completed()) continue;
           phase.tick(missive.adventurers);
+          break;
         }
         if (
           missive.isCompleted()
