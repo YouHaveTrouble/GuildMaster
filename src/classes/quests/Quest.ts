@@ -37,13 +37,10 @@ export class Quest {
     }
 
     getPercentProgress(): number {
-        let maxProgress = 0;
-        let progressPoints = 0;
-        for (const phase of this.phases) {
-            maxProgress += phase.maxPoints;
-            progressPoints += phase.points;
-        }
-        return Math.round(progressPoints / maxProgress * 100);
+        let maxProgress = this.getMaxProgress();
+        let progressPoints = this.getProgress();
+        if (maxProgress === 0) return 0;
+        return progressPoints / maxProgress * 100;
     }
 
     isCompleted(): boolean {
